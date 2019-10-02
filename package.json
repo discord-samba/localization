@@ -1,0 +1,30 @@
+{
+  "name": "@discord-sambo/localization",
+  "version": "0.1.0",
+  "description": "Localization module for Discord-Sambo",
+  "main": "bin/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/discord-sambo/localization.git"
+  },
+  "author": "Zack Campbell",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/discord-sambo/localization/issues"
+  },
+  "homepage": "https://github.com/discord-sambo/localization#readme",
+  "devDependencies": {
+    "@types/node": "^12.7.8",
+    "del": "^5.1.0",
+    "gulp": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-tslint": "^8.1.4",
+    "gulp-typescript": "^5.0.1",
+    "run-sequence": "^2.2.1",
+    "tslint": "^5.20.0",
+    "typescript": "^3.6.3"
+  }
+}
