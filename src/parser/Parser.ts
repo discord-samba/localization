@@ -55,9 +55,6 @@ export class Parser
 					let creatingNode: boolean = true;
 					while (creatingNode)
 					{
-						console.log(currentNode.key);
-						console.log(LocalizationStringChunkKind[this._peekChunkKind(reader)]);
-
 						switch (this._peekChunkKind(reader))
 						{
 							case LocalizationStringChunkKind.Comment:
@@ -110,8 +107,8 @@ export class Parser
 	 */
 	private _peekValidParentKey(reader: StringReader, offset: number = 0): boolean
 	{
-		if (reader.peek(offset - 1) !== '\n' && typeof reader.peek(offset - 1) !== 'undefined')
-			return false;
+		// if (reader.peek(offset - 1) !== '\n' && typeof reader.peek(offset - 1) !== 'undefined')
+		// 	return false;
 
 		if (reader.peek(offset) !== '[')
 			return false;
@@ -136,7 +133,8 @@ export class Parser
 	 */
 	private _consumeParentKey(reader: StringReader, container: string, line: number, column: number): string
 	{
-		if (!this._peekValidParentKey(reader))
+		if (!this._peekValidParentKey(reader)
+			|| (reader.peekBehind() !== '\n' && typeof reader.peekBehind() !== 'undefined'))
 			throw new ParseError(
 				'Localization string key must begin at the start of its own line',
 				container,
@@ -186,7 +184,7 @@ export class Parser
 	 * Peeks the kind of chunk we are looking at so we know how to parse
 	 * it into a proper child node
 	 */
-	public _peekChunkKind(reader: StringReader): LocalizationStringChunkKind
+	private _peekChunkKind(reader: StringReader): LocalizationStringChunkKind
 	{
 		if (reader.peek() === '\\')
 		{
@@ -230,7 +228,7 @@ export class Parser
 	/**
 	 * Consumes a string chunk from the input and returns it
 	 */
-	public _consumeStringChunk(
+	private _consumeStringChunk(
 		parent: LocalizationStringParentNode,
 		reader: StringReader): NodeKindImplStringChunk
 	{
@@ -238,29 +236,36 @@ export class Parser
 
 		while (true)
 		{
+			// Check if we are about to encounter a template or parent string key
 			if (reader.peekSegment(2, 1) === '{{'
-				|| (reader.peek(1) === '[' && this._peekValidParentKey(reader, 1)))
+				|| (reader.peek(1) === '['
+					&& this._peekValidParentKey(reader, 1)))
 			{
+				// If it's not escaped, consume the next character and return this chunk
 				if (reader.peek() !== '\\')
 				{
 					content += reader.consume();
 					break;
 				}
 			
+				// Else consume the backslash and continue
 				reader.consume();
 			}
+
+			// Consume backslash for escaped comments
+			if (reader.peekSegment(3) === '\\##')
+				reader.consume();
 
 			// Break if we encounter a comment on its own line, as this is
 			// its own chunk kind and will be handled separately
 			if (reader.peekSegment(2) === '##' && reader.peekBehind() === '\n')
 				break;
 
-			// Ignore inline comment content, but not escaped comments
+			// Discard inline comment content, but not escaped comments
 			if (reader.peekSegment(2) === '##' && reader.peekBehind() !== '\\')
 				while(reader.peek() !== '\n')
 					reader.consume();
-			
-			// TODO: Consume the backslash for supported escapeables
+
 			content += reader.consume();
 
 			if (reader.eof())
@@ -337,7 +342,7 @@ export class Parser
 	 * Consumes a template from the input, including its content and braces,
 	 * and returns it
 	 */
-	public _consumeTemplate(
+	private _consumeTemplate(
 		parent: LocalizationStringParentNode,
 		reader: StringReader): LocalizationStringChildNode
 	{

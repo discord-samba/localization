@@ -5,8 +5,9 @@
 
 [RESOLVE_TYPE]
 ## Only translate the string return values here
-## Also don't do anything with the default return
-{{!
+aaaaaa
+\## Also don't do anything with the default return
+\{{!
 	switch (args.type)
 	{
 		case 'Command': return 'command';
@@ -22,8 +23,10 @@
 		default: return args.type;
 	}
 !}}
+foo \{{ bar }}
+\[TEST_ESCAPED_KEY]
 
-\[CLEAN_ARG]
+[CLEAN_ARG]
 ## Simple template script to truncate long input `args.arg`,
 ## and overcompensate for URL escaping with an abundance of
 ## zero-width spaces without having to fuss with URL parsing/regex
