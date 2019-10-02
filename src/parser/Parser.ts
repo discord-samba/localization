@@ -107,9 +107,6 @@ export class Parser
 	 */
 	private _peekValidParentKey(reader: StringReader, offset: number = 0): boolean
 	{
-		// if (reader.peek(offset - 1) !== '\n' && typeof reader.peek(offset - 1) !== 'undefined')
-		// 	return false;
-
 		if (reader.peek(offset) !== '[')
 			return false;
 
@@ -133,14 +130,6 @@ export class Parser
 	 */
 	private _consumeParentKey(reader: StringReader, container: string, line: number, column: number): string
 	{
-		if (!this._peekValidParentKey(reader)
-			|| (reader.peekBehind() !== '\n' && typeof reader.peekBehind() !== 'undefined'))
-			throw new ParseError(
-				'Localization string key must begin at the start of its own line',
-				container,
-				reader.line,
-				reader.column);
-
 		// Discard the opening `[`
 		reader.consume();
 
