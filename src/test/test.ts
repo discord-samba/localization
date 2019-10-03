@@ -1,37 +1,9 @@
-import { StringReader } from '../parser/StringReader';
-import { Parser } from '../parser/Parser';
-import * as Path from 'path';
 import * as FS from 'fs';
-import { NodeKindImplStringChunk } from '../classes/NodeKindImplStringChunk';
-
-// import { NodeKindImplScriptTemplate } from '../classes/NodeKindImplScriptTemplate';
-// import { NodeKindImplParentNode } from '../classes/NodeKindImplParentNode';
-
-// let parent: NodeKindImplParentNode = new NodeKindImplParentNode('Foo.lang', 'FOO_BAR_BAZ', 1, 1);
-
-// let a: NodeKindImplScriptTemplate = new NodeKindImplScriptTemplate(`return 1 + 1;`, 2, parent, 1, 1);
-// let b: NodeKindImplScriptTemplate = new NodeKindImplScriptTemplate(`throw new Error('Testing');`, 4, parent, 3, 1);
-// let c: NodeKindImplScriptTemplate = new NodeKindImplScriptTemplate(`foo();
-// bar());
-// baz();
-// boo();`, 6, parent, 5, 1);
-
-// console.log(a);
-// console.log(b);
-// console.log(c);
-// console.log('Tests run');
-// b.fn(null, null);
-
-let reader: StringReader = new StringReader('FooBarBaz\nBooFarFaz');
-console.log(reader.peekSegment(2, 2));
-console.log(reader.peek());
-console.log(reader.consume(3));
-console.log(reader.peek());
-console.log(reader.consume(3));
-console.log(reader.peek());
-console.log(reader.peekBehind());
-console.log(reader.consume(3));
-console.log(reader.peek());
+import * as Path from 'path';
+import { Parser } from '../parser/Parser';
+import { LocalizationCache } from '../LocalizationCache';
+import { Localization } from '../Localization';
+import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 
 function now(): number
 {
@@ -40,45 +12,15 @@ function now(): number
 	return (ns() - (ns() - (process.uptime() * 1e9))) / 1e6;
 }
 
-// let parser: Parser = new Parser();
+const start: number = now();
 
-let start: number = now();
+let nodeList: LocalizationStringParentNode[] =
+	Parser.parse('test_lang.lang', FS.readFileSync(Path.join(__dirname, './test_lang.lang')).toString().replace(/\r\n/g, '\n'));
 
-let foo = 
-// 	parser.parse('en-US.test.lang',
-// `[STRING_TEST]
-// FooBarBaz ## comment
-// BooFarFaz \\## escaped comment
+console.log(now() - start, '\n');
 
-// [TEMPLATE_TEST]
-// Foo{{ bar }}Baz
-
-// [MAYBE_TEST]
-// Foo{{bar?}}baz
-
-// [FORWARD_TEST]
-// Foo{{>bar}}baz
-
-// [SCRIPT_TEST]
-// Foo {{!
-// 	'BAR'	
-// !}} baz
-
-// [SCRIPT_TEST_2]
-// Foo{{!'BARBAR'!}} baz
-
-// [COMMENT_TEST]
-// ## first comment
-// test ## second comment
-// ## third comment
-
-// [TYPES_TEST]
-// ##! foo: string, bar: number
-
-// [ESCAPED_TEMPLATE_TEST]
-// \\{{ foo }}`);
-
-Parser.parse('test_lang.lang', FS.readFileSync(Path.join(__dirname, './test_lang.lang')).toString().replace(/\r\n/g, '\n'));
-console.log(now() - start);
-console.log(foo);
-console.log((foo[0].children[0] as NodeKindImplStringChunk).content);
+LocalizationCache.set('test', 'TEST', nodeList[0]);
+LocalizationCache.set('test', 'TEST2', nodeList[1]);
+console.log(Localization.resource('test', 'TEST', {}), '\n');
+console.log(Localization.resource('test', 'TEST', { bar: 'bar', baz: 'baz', far: 'far' }));
+console.log(nodeList);

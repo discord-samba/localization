@@ -2,6 +2,8 @@ import { LocalizationStringChildNode } from '../interfaces/LocalizationStringChi
 import { LocalizationStringNodeKind } from '../types/LocalizationStringNodeKind';
 import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 import { Script } from 'vm';
+import { TemplateArguments } from '../types/TemplateArguments';
+import { LocalizationResourceProxy } from '../types/LocalizationResourceProxy';
 
 export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 {
@@ -117,7 +119,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 	/**
 	 * Try calling the script template's fn or implFn and return the result
 	 */
-	public fn(args: any, res: any): any
+	public fn(args: TemplateArguments, res: LocalizationResourceProxy): string | undefined
 	{
 		let result: any;
 		let error!: Error;
@@ -133,9 +135,6 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 
 		if (typeof error !== 'undefined')
 			throw error;
-
-		if (typeof result === 'undefined')
-			result = '';
 
 		return result;
 	}
