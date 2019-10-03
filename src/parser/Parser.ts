@@ -10,88 +10,91 @@ import { LocalizationStringParentNode } from '../interfaces/LocalizationStringPa
 import { LocalizationStringChunkKind } from '../types/LocalizationStringChunkKind';
 import { StringReader } from './StringReader';
 import { ParseError } from './ParseError';
+import { LocalizationStringTypesDeclaration } from '../types/LocalizationStringTypesDeclaration';
 
 export class Parser
 {
-	public parse(container: string, input: string): NodeKindImplParentNode[]
+	public static parse(container: string, input: string): NodeKindImplParentNode[]
 	{
-		let nodeList: NodeKindImplParentNode[] = [];
 		const reader: StringReader = new StringReader(input);
+		let nodeList: NodeKindImplParentNode[] = [];
 
 		while (!reader.eof())
 		{
 			let currentNode: NodeKindImplParentNode;
-			switch (reader.peek())
+			switch (Parser._peekChunkKind(reader))
 			{
-				case '#':
-					// Allow header comments before the first key.
-					this._consumeCommentLine(reader);
+				// Allow anything before the first key to be counted as comments
+				case LocalizationStringChunkKind.Comment:
+				case LocalizationStringChunkKind.StringChunk:
+				case LocalizationStringChunkKind.TypesDeclaration:
+				case LocalizationStringChunkKind.Template:
+					Parser._consumeCommentLine(reader);
 					break
 
-				case '[':
-					// Ignore everything at the start of the file until we hit a valid key
+				// If the chunk kind is none, we're looking at EOF
+				case LocalizationStringChunkKind.None:
+					break;
+
+				case LocalizationStringChunkKind.ParentKey:
+					// Enforce escaped square-braced text if text is a valid parent key
 					if (reader.peekBehind() !== '\n' && typeof reader.peekBehind() !== 'undefined')
 						throw new ParseError(
-							'Localization string key must begin at the start of its own line',
+							[
+								'Localization string key must begin at the start of its own line.',
+								'Escape the opening brace if using text in square braces'
+							].join(' '),
 							container,
 							reader.line,
 							reader.column);
 
-					let column: number = reader.column;
-					let line: number = reader.line;
-					let key: string = this._consumeParentKey(reader, container, line, column);
+					const { line, column } = reader;
+					const key: string = Parser._consumeParentKey(container, reader);
 					
 					currentNode = new NodeKindImplParentNode(container, key, line, column);
 					nodeList.push(currentNode);
 
-					// Break if we hit a valid string key without encountering a string body
-					if (reader.peek() === '[' && this._peekValidParentKey(reader))
+					// Error if we hit a valid string key without encountering a string body
+					if (Parser._peekChunkKind(reader) === LocalizationStringChunkKind.ParentKey)
 						throw new ParseError(
 							`Unexpected string key, expected string body`,
 							container,
 							reader.line,
 							reader.column);
 
-					let creatingNode: boolean = true;
-					while (creatingNode)
+					let buildingNode: boolean = true;
+					while (buildingNode)
 					{
-						switch (this._peekChunkKind(reader))
+						switch (Parser._peekChunkKind(reader))
 						{
 							case LocalizationStringChunkKind.Comment:
-								this._consumeCommentLine(reader);
+								Parser._consumeCommentLine(reader);
 								break;
 
 							case LocalizationStringChunkKind.StringChunk:
-								currentNode.addChild(this._consumeStringChunk(currentNode, reader));
+								currentNode.addChild(Parser._consumeStringChunk(currentNode, reader));
 								break;
 
 							case LocalizationStringChunkKind.Template:
-								
-								currentNode.addChild(this._consumeTemplate(currentNode, reader));
+								// TODO: Add functionality to remove the empty line if a maybe
+								//       template or script template are the only thing to occupy
+								//       their line and the maybe template is not filled or the
+								//       script template returns undefined
+								currentNode.addChild(Parser._consumeTemplate(currentNode, reader));
 								break;
 
 							case LocalizationStringChunkKind.TypesDeclaration:
-								// TODO: Handle parameter type validation building.
-								//       Write function to parse until the end of the line. Should return an object
-								//       mapping param names to param types. This can then be appended to the parent
-								//       nodes param types, as multiple type declaration comments should be allowed
-								//       to allow splitting the declaration across multiple lines
-								creatingNode = false;
+								currentNode.addParamTypes(Parser._consumeTypesDeclaration(currentNode, reader));
 								break;
 
+							// Finalize this node when we hit a parent key or EOF
+							case LocalizationStringChunkKind.ParentKey:
 							case LocalizationStringChunkKind.None:
-								creatingNode = false;
+								buildingNode = false;
 								break;
 						}
 					}
 					break;
-
-				// TODO: Handle any other cases? I don't think there will be any.
-				//       If not, break this down into an if-else and save a level
-				//       of indentation
-
-				default:
-					reader.consume();
 			}
 		}
 
@@ -105,7 +108,7 @@ export class Parser
 	 * first character. If using an offset, be sure to set the offset
 	 * to a value that reader.peek(offset) would the opening key brace
 	 */
-	private _peekValidParentKey(reader: StringReader, offset: number = 0): boolean
+	private static _peekValidParentKey(reader: StringReader, offset: number = 0): boolean
 	{
 		if (reader.peek(offset) !== '[')
 			return false;
@@ -116,7 +119,7 @@ export class Parser
 			if (reader.eof(index))
 				return false;
 
-			if (!/[a-zA-Z0-9_]/.test(reader.peek(index)))
+			if (!/[\w]/.test(reader.peek(index)))
 				return false;
 
 			index++;
@@ -128,8 +131,10 @@ export class Parser
 	 * Consumes the key string for a parent node key, including the braces
 	 * and newline, and returns the key
 	 */
-	private _consumeParentKey(reader: StringReader, container: string, line: number, column: number): string
+	private static _consumeParentKey(container: string, reader: StringReader): string
 	{
+		const { line, column } = reader;
+
 		// Discard the opening `[`
 		reader.consume();
 
@@ -143,12 +148,12 @@ export class Parser
 					line,
 					column);
 			
-			if (!/[a-zA-Z0-9_]/.test(reader.peek()))
+			if (!/[\w]/.test(reader.peek()))
 				throw new ParseError(
-					'String key may only contain alpha-numeric characters and underscores',
+					`Unexpected token '${reader.peek()}', expected [a-zA-Z0-9_]`,
 					container,
-					line,
-					column);
+					reader.line,
+					reader.column);
 
 			key += reader.consume();
 		}
@@ -161,7 +166,7 @@ export class Parser
 				`Unexpected token '${reader.peek()}', expected newline`,
 				container,
 				reader.line,
-				reader.column + 1);
+				reader.column);
 
 		// Discard the newline following key
 		reader.consume();
@@ -173,7 +178,7 @@ export class Parser
 	 * Peeks the kind of chunk we are looking at so we know how to parse
 	 * it into a proper child node
 	 */
-	private _peekChunkKind(reader: StringReader): LocalizationStringChunkKind
+	private static _peekChunkKind(reader: StringReader): LocalizationStringChunkKind
 	{
 		if (reader.peek() === '\\')
 		{
@@ -190,11 +195,14 @@ export class Parser
 
 			return LocalizationStringChunkKind.Comment;
 		}
+		
+		if (reader.peek() === '[' && Parser._peekValidParentKey(reader))
+			return LocalizationStringChunkKind.ParentKey;
 
 		if (reader.peekSegment(2) === '{{')
 			return LocalizationStringChunkKind.Template;
 
-		if (reader.peek() === '[' && this._peekValidParentKey(reader) || reader.eof())
+		if (reader.eof())
 			return LocalizationStringChunkKind.None;
 
 		return LocalizationStringChunkKind.StringChunk;
@@ -205,7 +213,7 @@ export class Parser
 	 * Consumes and discards the remainder of the line, including
 	 * the ending newline
 	 */
-	private _consumeCommentLine(reader: StringReader): void
+	private static _consumeCommentLine(reader: StringReader): void
 	{
 		while (reader.peek() !== '\n')
 			reader.consume();
@@ -215,20 +223,128 @@ export class Parser
 	}
 
 	/**
+	 * Consume and discard whitespace until hitting a non-whitespace
+	 * character or newline
+	 */
+	private static _consumeWhitespace(reader: StringReader): void
+	{
+		while (/\s/.test(reader.peek()) && reader.peek() !== '\n')
+			reader.consume();
+	}
+
+	/**
+	 * Consumes a types declaration line, parses ident:type pairs and returns them
+	 */
+	private static _consumeTypesDeclaration(
+		parent: LocalizationStringParentNode,
+		reader: StringReader): LocalizationStringTypesDeclaration
+	{
+		// Discard ##!
+		reader.consume(3);
+		
+		let types: LocalizationStringTypesDeclaration = {};
+		const validKeyChar: RegExp = /\w/;
+		const validType: RegExp = /^(?:[sS]tring|[nN]umber|[bB]oolean|[aA]ny)(?:\[\])?$/;
+
+		while (reader.peek() !== '\n')
+		{
+			let key: string = '';
+			let type: string = '';
+			let optional: boolean = false;
+
+			Parser._consumeWhitespace(reader);
+			
+			// Consume comma and following whitespace
+			if (reader.peek() === ',')
+			{
+				if (Object.keys(types).length === 0)
+					throw new ParseError(
+						`Unexpected token ','`,
+						parent.container,
+						reader.line,
+						reader.column);
+				
+				reader.consume();
+				Parser._consumeWhitespace(reader);
+			}
+
+			while (!/[\s:]/.test(reader.peek()))
+			{
+				if (!validKeyChar.test(reader.peek()))
+					throw new ParseError(
+						`Unexpected token '${reader.peek()}', expected identifier`,
+						parent.container,
+						reader.line,
+						reader.column);
+
+				key += reader.consume();
+
+				if (reader.peek() === '?')
+				{
+					optional = true;
+					reader.consume();
+					break;
+				}
+			}
+
+			Parser._consumeWhitespace(reader);
+
+			if (reader.peek() !== ':')
+				throw new ParseError(
+					`Unexpected token '${reader.peek()}', expected ':'`,
+					parent.container,
+					reader.line,
+					reader.column);
+
+			// Discard separator
+			reader.consume();
+
+			Parser._consumeWhitespace(reader);
+
+			const { line, column } = reader;
+			while (!/[\s,]/.test(reader.peek()))
+				type += reader.consume();
+
+			if (!validType.test(type))
+				throw new ParseError(
+					`Invalid type. Must be one of string, number, boolean, or an array of those`,
+					parent.container,
+					line,
+					column);
+			
+			types[key] = { type, optional };
+
+			Parser._consumeWhitespace(reader);
+			if (reader.peek() !== ',' && reader.peek() !== '\n')
+				throw new ParseError(
+					`Unexpected token '${reader.peek()}', expected ',' or newline`,
+					parent.container,
+					reader.line,
+					reader.column);
+		}
+
+		// Discard ending newline
+		reader.consume();
+
+		return types;
+	}
+
+	/**
 	 * Consumes a string chunk from the input and returns it
 	 */
-	private _consumeStringChunk(
+	private static _consumeStringChunk(
 		parent: LocalizationStringParentNode,
 		reader: StringReader): NodeKindImplStringChunk
 	{
 		let content: string = ''
+		const { line, column } = reader;
 
 		while (true)
 		{
 			// Check if we are about to encounter a template or parent string key
 			if (reader.peekSegment(2, 1) === '{{'
 				|| (reader.peek(1) === '['
-					&& this._peekValidParentKey(reader, 1)))
+					&& Parser._peekValidParentKey(reader, 1)))
 			{
 				// If it's not escaped, consume the next character and return this chunk
 				if (reader.peek() !== '\\')
@@ -262,7 +378,7 @@ export class Parser
 		}
 
 		const node: NodeKindImplStringChunk =
-			new NodeKindImplStringChunk(content, parent, reader.line, reader.column);
+			new NodeKindImplStringChunk(content, parent, line, column);
 
 		return node;
 	}
@@ -270,11 +386,11 @@ export class Parser
 	/**
 	 * Peeks the following chunk for its template kind
 	 */
-	private _peekTemplateKind(reader: StringReader): LocalizationStringTemplateKind
+	private static _peekTemplateKind(reader: StringReader): LocalizationStringTemplateKind
 	{
 		let index: number = 0;
 		let kind: LocalizationStringTemplateKind = LocalizationStringTemplateKind.Invalid;
-		if (!/[a-zA-Z0-9_!>\s]/.test(reader.peek(2)))
+		if (!/[\w!>\s]/.test(reader.peek(2)))
 			return LocalizationStringTemplateKind.Invalid;
 
 		if (reader.peek(2) == '!')
@@ -331,16 +447,16 @@ export class Parser
 	 * Consumes a template from the input, including its content and braces,
 	 * and returns it
 	 */
-	private _consumeTemplate(
+	private static _consumeTemplate(
 		parent: LocalizationStringParentNode,
 		reader: StringReader): LocalizationStringChildNode
 	{
-		switch (this._peekTemplateKind(reader))
+		switch (Parser._peekTemplateKind(reader))
 		{
-			case LocalizationStringTemplateKind.Regular: return this._consumeRegularTemplate(parent, reader);
-			case LocalizationStringTemplateKind.Forward: return this._consumeForwardTemplate(parent, reader);
-			case LocalizationStringTemplateKind.Script: return this._consumeScriptTemplate(parent, reader);
-			case LocalizationStringTemplateKind.Maybe: return this._consumeMaybeTemplate(parent, reader);
+			case LocalizationStringTemplateKind.Regular: return Parser._consumeRegularTemplate(parent, reader);
+			case LocalizationStringTemplateKind.Forward: return Parser._consumeForwardTemplate(parent, reader);
+			case LocalizationStringTemplateKind.Script: return Parser._consumeScriptTemplate(parent, reader);
+			case LocalizationStringTemplateKind.Maybe: return Parser._consumeMaybeTemplate(parent, reader);
 			case LocalizationStringTemplateKind.Invalid:
 				throw new ParseError(
 					'Invalid template',
@@ -354,9 +470,11 @@ export class Parser
 	 * Consume and return a character as a template key segment,
 	 * erroring on invalid characters
 	 */
-	private _consumeTemplateKeyChar(parent: LocalizationStringParentNode, reader: StringReader): string
+	private static _consumeTemplateKeyChar(
+		parent: LocalizationStringParentNode,
+		reader: StringReader): string
 	{
-		if (!/[a-zA-Z0-9_\s]/.test(reader.peek()))
+		if (!/[\w\s]/.test(reader.peek()))
 			throw new ParseError(
 				[
 					'Invalid character in template key. Template keys may',
@@ -373,23 +491,24 @@ export class Parser
 	 * Consumes a regular template from the input, including its content and braces,
 	 * and returns it
 	 */
-	private _consumeRegularTemplate(
+	private static _consumeRegularTemplate(
 		parent: LocalizationStringParentNode,
 		reader: StringReader): NodeKindImplRegularTemplate
 	{
 		let key: string = ''
+		const { line, column } = reader;
 
 		// Discard the opening braces
 		reader.consume(2);
 
 		while (reader.peekSegment(2) !== '}}')
-			key += this._consumeTemplateKeyChar(parent, reader);
+			key += Parser._consumeTemplateKeyChar(parent, reader);
 
 		// Discard the closing braces
 		reader.consume(2);
 
 		let node: NodeKindImplRegularTemplate =
-			new NodeKindImplRegularTemplate(key.trim(), parent, reader.line, reader.column);
+			new NodeKindImplRegularTemplate(key.trim(), parent, line, column);
 
 		return node;
 	}
@@ -398,23 +517,24 @@ export class Parser
 	 * Consumes a forward template from the input, including its content and braces,
 	 * and returns it
 	 */
-	private _consumeForwardTemplate(
+	private static _consumeForwardTemplate(
 		parent: LocalizationStringParentNode,
 		reader: StringReader): NodeKindImplForwardTemplate
 	{
 		let key: string = ''
+		const { line, column } = reader;
 
 		// Discard the opening braces
 		reader.consume(3);
 
 		while (reader.peekSegment(2) !== '}}')
-			key += this._consumeTemplateKeyChar(parent, reader);
+			key += Parser._consumeTemplateKeyChar(parent, reader);
 
 		// Discard the closing braces
 		reader.consume(2);
 
 		let node: NodeKindImplForwardTemplate =
-			new NodeKindImplForwardTemplate(key.trim(), parent, reader.line, reader.column);
+			new NodeKindImplForwardTemplate(key.trim(), parent, line, column);
 
 		return node;
 	}
@@ -423,23 +543,24 @@ export class Parser
 	 * Consumes a maybe template from the input, including its content and braces,
 	 * and returns it
 	 */
-	private _consumeMaybeTemplate(
+	private static _consumeMaybeTemplate(
 		parent: LocalizationStringParentNode,
 		reader: StringReader): NodeKindImplMaybeTemplate
 	{
 		let key: string = ''
+		const { line, column } = reader;
 
 		// Discard the opening braces
 		reader.consume(2);
 
 		while (reader.peekSegment(3) !== '?}}')
-			key += this._consumeTemplateKeyChar(parent, reader);
+			key += Parser._consumeTemplateKeyChar(parent, reader);
 
 		// Discard the closing braces
 		reader.consume(3);
 
 		let node: NodeKindImplMaybeTemplate =
-			new NodeKindImplMaybeTemplate(key.trim(), parent, reader.line, reader.column);
+			new NodeKindImplMaybeTemplate(key.trim(), parent, line, column);
 
 		return node;
 	}
@@ -448,12 +569,13 @@ export class Parser
 	 * Consumes a script template from the input, including its content and braces,
 	 * and returns it
 	 */
-	private _consumeScriptTemplate(
+	private static _consumeScriptTemplate(
 		parent: LocalizationStringParentNode,
 		reader: StringReader): NodeKindImplScriptTemplate
 	{
 		let scriptBody: string = '';
 		let bodyStartLine: number = 0;
+		const { line, column } = reader;
 
 		// Discard the opening braces
 		reader.consume(3);
@@ -470,7 +592,7 @@ export class Parser
 		reader.consume(3);
 
 		let node: NodeKindImplScriptTemplate =
-			new NodeKindImplScriptTemplate(scriptBody, bodyStartLine, parent, reader.line, reader.column);
+			new NodeKindImplScriptTemplate(scriptBody, bodyStartLine, parent, line, column);
 
 		return node;
 	}

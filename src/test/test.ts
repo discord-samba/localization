@@ -2,6 +2,7 @@ import { StringReader } from '../parser/StringReader';
 import { Parser } from '../parser/Parser';
 import * as Path from 'path';
 import * as FS from 'fs';
+import { NodeKindImplStringChunk } from '../classes/NodeKindImplStringChunk';
 
 // import { NodeKindImplScriptTemplate } from '../classes/NodeKindImplScriptTemplate';
 // import { NodeKindImplParentNode } from '../classes/NodeKindImplParentNode';
@@ -32,7 +33,16 @@ console.log(reader.peekBehind());
 console.log(reader.consume(3));
 console.log(reader.peek());
 
-let parser: Parser = new Parser();
+function now(): number
+{
+	type NSFunction = (hr?: [number, number]) => number;
+	const ns: NSFunction = (hr = process.hrtime()) => hr[0] * 1e9 + hr[1];
+	return (ns() - (ns() - (process.uptime() * 1e9))) / 1e6;
+}
+
+// let parser: Parser = new Parser();
+
+let start: number = now();
 
 let foo = 
 // 	parser.parse('en-US.test.lang',
@@ -68,6 +78,7 @@ let foo =
 // [ESCAPED_TEMPLATE_TEST]
 // \\{{ foo }}`);
 
-parser.parse('test_lang.lang', FS.readFileSync(Path.join(__dirname, './test_lang.lang')).toString().replace(/\r\n/g, '\n'));
-
+Parser.parse('test_lang.lang', FS.readFileSync(Path.join(__dirname, './test_lang.lang')).toString().replace(/\r\n/g, '\n'));
+console.log(now() - start);
 console.log(foo);
+console.log((foo[0].children[0] as NodeKindImplStringChunk).content);

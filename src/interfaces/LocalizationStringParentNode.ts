@@ -1,4 +1,5 @@
 import { LocalizationStringChildNode } from './LocalizationStringChildNode';
+import { LocalizationStringTypesDeclaration } from '../types/LocalizationStringTypesDeclaration';
 
 export interface LocalizationStringParentNode
 {
@@ -7,5 +8,5 @@ export interface LocalizationStringParentNode
 	line: number;
 	column: number;
 	children: LocalizationStringChildNode[];
-	paramTypes: { [param: string]: string };
+	paramTypes: LocalizationStringTypesDeclaration;
 }
