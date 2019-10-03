@@ -46,7 +46,8 @@ export class StringReader
 	 */
 	public consume(n: number = 1): string
 	{
-		const result = this._input.substr(this._index, n);
+		const result: string = this._input.substr(this._index, n);
+
 		this._index += n;
 		this.column += n;
 	
@@ -57,6 +58,25 @@ export class StringReader
 		}
 
 		return result;
+	}
+
+	/**
+	 * Same as `StringReader#consume()` but the characters are discarded.
+	 * This will eliminate any lint warnings for unused function returns
+	 * rather than using `consume()` just to advance the reader
+	 */
+	public discard(n: number = 1): void
+	{
+		let discarded: string = this._input.substr(this._index, n);
+
+		this._index += n;
+		this.column += n;
+	
+		if (discarded === '\n' && n === 1)
+		{
+			this.column = 1;
+			this.line++;
+		}
 	}
 
 	/**

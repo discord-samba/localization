@@ -76,12 +76,6 @@ export class Parser
 								break;
 
 							case LocalizationStringChunkKind.Template:
-								// TODO: Add functionality to remove the empty line if a maybe
-								//       template or script template are the only thing to occupy
-								//       their line and the maybe template is not filled or the
-								//       script template returns undefined. This will need to
-								//       be handled in the string builder as there is no way
-								//       of knowing at compile time that this needs to be done
 								currentNode.addChild(Parser._consumeTemplate(currentNode, reader));
 								break;
 
@@ -89,7 +83,7 @@ export class Parser
 								currentNode.addParamTypes(Parser._consumeTypesDeclaration(currentNode, reader));
 								break;
 
-							// Finalize this node when we hit a parent key or EOF
+							// Finalize this node when we hit the next parent key or EOF
 							case LocalizationStringChunkKind.ParentKey:
 							case LocalizationStringChunkKind.None:
 								buildingNode = false;
@@ -108,7 +102,7 @@ export class Parser
 	 * Should be called when reader.peek() returns the opening key brace.
 	 * Can be given an offset to check that many characters ahead for the
 	 * first character. If using an offset, be sure to set the offset
-	 * to a value that reader.peek(offset) would the opening key brace
+	 * to a value that reader.peek(offset) would return the opening key brace
 	 */
 	private static _peekValidParentKey(reader: StringReader, offset: number = 0): boolean
 	{
@@ -138,7 +132,7 @@ export class Parser
 		const { line, column } = reader;
 
 		// Discard the opening `[`
-		reader.consume();
+		reader.discard();
 
 		let key: string = '';
 		while (reader.peek() !== ']')
@@ -161,7 +155,7 @@ export class Parser
 		}
 
 		// Discard the closing `]`
-		reader.consume();
+		reader.discard();
 
 		if (reader.peek() !== '\n')
 			throw new ParseError(
@@ -171,7 +165,7 @@ export class Parser
 				reader.column);
 
 		// Discard the newline following key
-		reader.consume();
+		reader.discard();
 
 		return key;
 	}
@@ -221,17 +215,17 @@ export class Parser
 			reader.consume();
 
 		// Discard newline after comment
-		reader.consume();
+		reader.discard();
 	}
 
 	/**
 	 * Consume and discard whitespace until hitting a non-whitespace
 	 * character or newline
 	 */
-	private static _consumeWhitespace(reader: StringReader): void
+	private static _discardWhitespace(reader: StringReader): void
 	{
 		while (/\s/.test(reader.peek()) && reader.peek() !== '\n')
-			reader.consume();
+			reader.discard();
 	}
 
 	/**
@@ -242,7 +236,7 @@ export class Parser
 		reader: StringReader): LocalizationStringTypesDeclaration
 	{
 		// Discard ##!
-		reader.consume(3);
+		reader.discard(3);
 		
 		let types: LocalizationStringTypesDeclaration = {};
 		const validKeyChar: RegExp = /\w/;
@@ -254,11 +248,12 @@ export class Parser
 			let type: string = '';
 			let optional: boolean = false;
 
-			Parser._consumeWhitespace(reader);
+			Parser._discardWhitespace(reader);
 			
 			// Consume comma and following whitespace
 			if (reader.peek() === ',')
 			{
+				// Error if a comma appears before any identifiers
 				if (Object.keys(types).length === 0)
 					throw new ParseError(
 						`Unexpected token ','`,
@@ -266,9 +261,14 @@ export class Parser
 						reader.line,
 						reader.column);
 				
-				reader.consume();
-				Parser._consumeWhitespace(reader);
+				// Discard comma and whitespace
+				reader.discard();
+				Parser._discardWhitespace(reader);
 			}
+
+			// Capture the identifier position
+			const identLine: number = reader.line;
+			const identColumn: number = reader.column;
 
 			while (!/[\s:]/.test(reader.peek()))
 			{
@@ -284,12 +284,12 @@ export class Parser
 				if (reader.peek() === '?')
 				{
 					optional = true;
-					reader.consume();
+					reader.discard();
 					break;
 				}
 			}
 
-			Parser._consumeWhitespace(reader);
+			Parser._discardWhitespace(reader);
 
 			if (reader.peek() !== ':')
 				throw new ParseError(
@@ -298,12 +298,13 @@ export class Parser
 					reader.line,
 					reader.column);
 
-			// Discard separator
-			reader.consume();
+			// Discard separator and consume whitespace
+			reader.discard();
+			Parser._discardWhitespace(reader);
 
-			Parser._consumeWhitespace(reader);
-
+			// Capture the type position
 			const { line, column } = reader;
+
 			while (!/[\s,]/.test(reader.peek()))
 				type += reader.consume();
 
@@ -314,9 +315,9 @@ export class Parser
 					line,
 					column);
 			
-			types[key] = { type, optional };
+			types[key] = { type, optional, line: identLine, column: identColumn };
 
-			Parser._consumeWhitespace(reader);
+			Parser._discardWhitespace(reader);
 			if (reader.peek() !== ',' && reader.peek() !== '\n')
 				throw new ParseError(
 					`Unexpected token '${reader.peek()}', expected ',' or newline`,
@@ -326,7 +327,7 @@ export class Parser
 		}
 
 		// Discard ending newline
-		reader.consume();
+		reader.discard();
 
 		return types;
 	}
@@ -355,13 +356,13 @@ export class Parser
 					break;
 				}
 			
-				// Else consume the backslash and continue
-				reader.consume();
+				// Else discard the backslash and continue
+				reader.discard();
 			}
 
-			// Consume backslash for escaped comments
+			// Discard backslash for escaped comments
 			if (reader.peekSegment(3) === '\\##')
-				reader.consume();
+				reader.discard();
 
 			// Break if we encounter a comment on its own line, as this is
 			// its own chunk kind and will be handled separately
@@ -371,7 +372,7 @@ export class Parser
 			// Discard inline comment content, but not escaped comments
 			if (reader.peekSegment(2) === '##' && reader.peekBehind() !== '\\')
 				while(reader.peek() !== '\n')
-					reader.consume();
+					reader.discard();
 
 			content += reader.consume();
 
@@ -501,13 +502,13 @@ export class Parser
 		const { line, column } = reader;
 
 		// Discard the opening braces
-		reader.consume(2);
+		reader.discard(2);
 
 		while (reader.peekSegment(2) !== '}}')
 			key += Parser._consumeTemplateKeyChar(parent, reader);
 
 		// Discard the closing braces
-		reader.consume(2);
+		reader.discard(2);
 
 		let node: NodeKindImplRegularTemplate =
 			new NodeKindImplRegularTemplate(key.trim(), parent, line, column);
@@ -527,13 +528,13 @@ export class Parser
 		const { line, column } = reader;
 
 		// Discard the opening braces
-		reader.consume(3);
+		reader.discard(3);
 
 		while (reader.peekSegment(2) !== '}}')
 			key += Parser._consumeTemplateKeyChar(parent, reader);
 
 		// Discard the closing braces
-		reader.consume(2);
+		reader.discard(2);
 
 		let node: NodeKindImplForwardTemplate =
 			new NodeKindImplForwardTemplate(key.trim(), parent, line, column);
@@ -553,13 +554,13 @@ export class Parser
 		const { line, column } = reader;
 
 		// Discard the opening braces
-		reader.consume(2);
+		reader.discard(2);
 
 		while (reader.peekSegment(3) !== '?}}')
 			key += Parser._consumeTemplateKeyChar(parent, reader);
 
 		// Discard the closing braces
-		reader.consume(3);
+		reader.discard(3);
 
 		let node: NodeKindImplMaybeTemplate =
 			new NodeKindImplMaybeTemplate(key.trim(), parent, line, column);
@@ -580,7 +581,7 @@ export class Parser
 		const { line, column } = reader;
 
 		// Discard the opening braces
-		reader.consume(3);
+		reader.discard(3);
 
 		while (reader.peekSegment(3) !== '!}}')
 		{
@@ -591,7 +592,7 @@ export class Parser
 		}
 
 		// Discard the closing braces
-		reader.consume(3);
+		reader.discard(3);
 
 		let node: NodeKindImplScriptTemplate =
 			new NodeKindImplScriptTemplate(scriptBody, bodyStartLine, parent, line, column);

@@ -17,7 +17,7 @@ export class NodeKindImplParentNode implements LocalizationStringParentNode
 
 	public constructor(container: string | undefined, key: string, line: number, column: number)
 	{
-		this.container = container || 'Anonymous';
+		this.container = container ?? 'Anonymous';
 		this.key = key;
 		this.line = line;
 		this.column = column;

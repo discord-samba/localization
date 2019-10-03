@@ -1,7 +1,34 @@
 This is the entire YAMDBF localization string set copied
 directly from the documentation. The only change made is
 to support the removal of angle braces from type declaration
-syntax
+syntax.
+
+Also a couple strings with random tests
+
+[TEST]
+foo
+{{
+	bar
+?}}
+##{{! 1 !}}
+boo
+{{!
+	args.far
+!}}
+{{> TEST2 }}
+## Test loading other resources via scripts
+## Args must be manually forwarded unlike in yamdbf
+{{! res.TEST2(args) !}}
+##{{! throw new Error('Foo') !}}
+faz
+## Empty string results will preserve the isolated line,
+## whereas undefined or null will not
+{{! '' !}}
+a{{! 'b' !}}c
+
+[TEST2]
+## For testing forward templates and forwarded args
+Forward template output {{! args.far !}}
 
 [CMD_BLACKLIST_ERR_NOSELF]
 You can not blacklist your own account.
