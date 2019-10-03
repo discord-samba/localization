@@ -79,7 +79,9 @@ export class Parser
 								// TODO: Add functionality to remove the empty line if a maybe
 								//       template or script template are the only thing to occupy
 								//       their line and the maybe template is not filled or the
-								//       script template returns undefined
+								//       script template returns undefined. This will need to
+								//       be handled in the string builder as there is no way
+								//       of knowing at compile time that this needs to be done
 								currentNode.addChild(Parser._consumeTemplate(currentNode, reader));
 								break;
 
