@@ -74,7 +74,7 @@ export class LocalizationStringBuilder
 			}
 		}
 
-		// Handle maybe templates and script templates with undefined values,
+		// Handle isolated maybe templates and script templates with undefined values
 		for (const [i, result] of results.entries())
 		{
 			if (!maybeKinds.includes(result.kind))
@@ -91,7 +91,12 @@ export class LocalizationStringBuilder
 			}
 		}
 
-		return results.map(r => r.value).join('').trim();
+		// Handle remaining maybe templates with undefined values
+		for (const result of results)
+			if (result.kind === LocalizationStringNodeKind.MaybeTemplate && typeof result.value === 'undefined')
+				result.value = '';
+
+		return results.map(r => `${r.value}`).join('').trim();
 	}
 
 	/**
