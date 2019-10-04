@@ -11,7 +11,7 @@ Also a couple strings with random tests
 ##! any: any[]
 {{ foo }} {{ bar }} {{ baz }}
 {{ boo }} {{ far }} {{ faz }}
-{{> test2 }}
+{{> TEST2 }}
 
 [TEST2]
 ##! arg: string

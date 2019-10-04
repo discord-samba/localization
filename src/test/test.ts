@@ -30,8 +30,10 @@ const args: TemplateArguments = {
 	boo: ['foo', '1', 'baz'],
 	// far: [1, 2, 3],
 	faz: [true, false, true],
-	any: [1, '2', true]
+	any: [1, '2', true],
+	arg: 'arg'
 };
 
 console.log(Localization.resource('test', 'TEST', args), '\n');
+console.log(Localization.resource('test', 'foo', {}));
 console.log(nodeList);

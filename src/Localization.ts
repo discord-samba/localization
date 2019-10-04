@@ -14,6 +14,9 @@ export class Localization
 		if (!LocalizationCache.hasLanguage(language))
 			throw new Error(`No language '${language}' as been loaded`);
 
+		// TODO: Return something if the resource doesn't exist. Used to do
+		//       `lang::key` in YAMDBF. Maybe something else
+
 		const builder: LocalizationStringBuilder = LocalizationCache.get(language, key)!;
 		return builder.build(args, Localization.createResourceProxy(language));
 	}
