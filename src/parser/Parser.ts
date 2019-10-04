@@ -21,7 +21,6 @@ export class Parser
 
 		while (!reader.eof())
 		{
-			let currentNode: NodeKindImplParentNode;
 			switch (Parser._peekChunkKind(reader))
 			{
 				// Allow anything before the first key to be counted as comments
@@ -36,6 +35,7 @@ export class Parser
 				case LocalizationStringChunkKind.None:
 					break;
 
+				// Begin building the current node
 				case LocalizationStringChunkKind.ParentKey:
 					// Enforce escaped square-braced text if text is a valid parent key
 					if (reader.peekBehind() !== '\n' && typeof reader.peekBehind() !== 'undefined')
@@ -51,8 +51,8 @@ export class Parser
 					const { line, column } = reader;
 					const key: string = Parser._consumeParentKey(container, reader);
 					
-					currentNode = new NodeKindImplParentNode(container, key, line, column);
-					nodeList.push(currentNode);
+					let currentNode: NodeKindImplParentNode =
+						new NodeKindImplParentNode(container, key, line, column);
 
 					// Error if we hit a valid string key without encountering a string body
 					if (Parser._peekChunkKind(reader) === LocalizationStringChunkKind.ParentKey)
@@ -62,34 +62,29 @@ export class Parser
 							reader.line,
 							reader.column);
 
-					let buildingNode: boolean = true;
-					while (buildingNode)
+					while (true)
 					{
-						switch (Parser._peekChunkKind(reader))
-						{
-							case LocalizationStringChunkKind.Comment:
-								Parser._consumeCommentLine(reader);
-								break;
+						const kind: LocalizationStringChunkKind = Parser._peekChunkKind(reader);
 
-							case LocalizationStringChunkKind.StringChunk:
-								currentNode.addChild(Parser._consumeStringChunk(currentNode, reader));
-								break;
+						if (kind === LocalizationStringChunkKind.Comment)
+							Parser._consumeCommentLine(reader);
 
-							case LocalizationStringChunkKind.Template:
-								currentNode.addChild(Parser._consumeTemplate(currentNode, reader));
-								break;
+						else if (kind === LocalizationStringChunkKind.TypesDeclaration)
+							currentNode.addParamTypes(Parser._consumeTypesDeclaration(currentNode, reader));
 
-							case LocalizationStringChunkKind.TypesDeclaration:
-								currentNode.addParamTypes(Parser._consumeTypesDeclaration(currentNode, reader));
-								break;
+						else if (kind === LocalizationStringChunkKind.StringChunk)
+							currentNode.addChild(Parser._consumeStringChunk(currentNode, reader));
 
-							// Finalize this node when we hit the next parent key or EOF
-							case LocalizationStringChunkKind.ParentKey:
-							case LocalizationStringChunkKind.None:
-								buildingNode = false;
-								break;
-						}
+						else if (kind === LocalizationStringChunkKind.Template)
+							currentNode.addChild(Parser._consumeTemplate(currentNode, reader));
+
+						// Finalize this node when we hit the next parent key or EOF
+						else if (kind === LocalizationStringChunkKind.ParentKey
+							|| kind === LocalizationStringChunkKind.None)
+							break;
 					}
+
+					nodeList.push(currentNode);
 					break;
 			}
 		}
@@ -219,8 +214,7 @@ export class Parser
 	}
 
 	/**
-	 * Consume and discard whitespace until hitting a non-whitespace
-	 * character or newline
+	 * Discard whitespace until hitting a non-whitespace character or newline
 	 */
 	private static _discardWhitespace(reader: StringReader): void
 	{
@@ -250,7 +244,7 @@ export class Parser
 
 			Parser._discardWhitespace(reader);
 			
-			// Consume comma and following whitespace
+			// Discard comma and following whitespace
 			if (reader.peek() === ',')
 			{
 				// Error if a comma appears before any identifiers
@@ -267,8 +261,7 @@ export class Parser
 			}
 
 			// Capture the identifier position
-			const identLine: number = reader.line;
-			const identColumn: number = reader.column;
+			const { line: identLine, column: identColumn } = reader;
 
 			while (!/[\s:]/.test(reader.peek()))
 			{
@@ -281,6 +274,7 @@ export class Parser
 
 				key += reader.consume();
 
+				// Mark this identifier as optional and discard '?'
 				if (reader.peek() === '?')
 				{
 					optional = true;
@@ -298,7 +292,7 @@ export class Parser
 					reader.line,
 					reader.column);
 
-			// Discard separator and consume whitespace
+			// Discard separator and whitespace
 			reader.discard();
 			Parser._discardWhitespace(reader);
 

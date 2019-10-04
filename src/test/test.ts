@@ -23,4 +23,4 @@ LocalizationCache.set('test', 'TEST', nodeList[0]);
 LocalizationCache.set('test', 'TEST2', nodeList[1]);
 console.log(Localization.resource('test', 'TEST', {}), '\n');
 console.log(Localization.resource('test', 'TEST', { bar: 'bar', baz: 'baz', far: 'far' }));
-console.log(nodeList);
+// console.log(nodeList);
