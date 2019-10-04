@@ -4,6 +4,7 @@ import { Parser } from '../parser/Parser';
 import { LocalizationCache } from '../LocalizationCache';
 import { Localization } from '../Localization';
 import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
+import { TemplateArguments } from '../types/TemplateArguments';
 
 function now(): number
 {
@@ -21,6 +22,16 @@ console.log(now() - start, '\n');
 
 LocalizationCache.set('test', 'TEST', nodeList[0]);
 LocalizationCache.set('test', 'TEST2', nodeList[1]);
-console.log(Localization.resource('test', 'TEST', {}), '\n');
-console.log(Localization.resource('test', 'TEST', { bar: 'bar', baz: 'baz', far: 'far' }));
-// console.log(nodeList);
+
+const args: TemplateArguments = {
+	foo: 'foo',
+	// bar: 1,
+	baz: true,
+	boo: ['foo', '1', 'baz'],
+	// far: [1, 2, 3],
+	faz: [true, false, true],
+	any: [1, '2', true]
+};
+
+console.log(Localization.resource('test', 'TEST', args), '\n');
+console.log(nodeList);

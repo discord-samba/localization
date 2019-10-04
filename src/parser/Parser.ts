@@ -10,7 +10,7 @@ import { LocalizationStringParentNode } from '../interfaces/LocalizationStringPa
 import { LocalizationStringChunkKind } from '../types/LocalizationStringChunkKind';
 import { StringReader } from './StringReader';
 import { ParseError } from './ParseError';
-import { LocalizationStringTypesDeclaration } from '../types/LocalizationStringTypesDeclaration';
+import { LocalizationStringTypeDeclarationMapping } from '../types/LocalizationStringTypeDeclarationMapping';
 
 export class Parser
 {
@@ -75,7 +75,7 @@ export class Parser
 							Parser._consumeCommentLine(reader);
 
 						else if (kind === LocalizationStringChunkKind.TypesDeclaration)
-							currentNode.addParamTypes(Parser._consumeTypesDeclaration(currentNode, reader));
+							currentNode.addParams(Parser._consumeTypesDeclaration(currentNode, reader));
 
 						else if (kind === LocalizationStringChunkKind.StringChunk)
 							currentNode.addChild(Parser._consumeStringChunk(currentNode, reader));
@@ -230,12 +230,12 @@ export class Parser
 	 */
 	private static _consumeTypesDeclaration(
 		parent: LocalizationStringParentNode,
-		reader: StringReader): LocalizationStringTypesDeclaration
+		reader: StringReader): LocalizationStringTypeDeclarationMapping
 	{
 		// Discard ##!
 		reader.discard(3);
 
-		let types: LocalizationStringTypesDeclaration = {};
+		let types: LocalizationStringTypeDeclarationMapping = {};
 		const validKeyChar: RegExp = /\w/;
 		const validType: RegExp = /^(?:[sS]tring|[nN]umber|[bB]oolean|[aA]ny)(?:\[\])?$/;
 
@@ -320,6 +320,7 @@ export class Parser
 					line,
 					column);
 
+			type = type.toLowerCase();
 			types[key] = { type, isOptional, isArrayType, line: identLine, column: identColumn };
 
 			Parser._discardWhitespace(reader);

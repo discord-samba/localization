@@ -1,12 +1,12 @@
 import { LocalizationStringChildNode } from './LocalizationStringChildNode';
-import { LocalizationStringTypesDeclaration } from '../types/LocalizationStringTypesDeclaration';
+import { LocalizationStringTypeDeclarationMapping } from '../types/LocalizationStringTypeDeclarationMapping';
 
 export interface LocalizationStringParentNode
 {
 	container: string;
 	key: string;
 	children: LocalizationStringChildNode[];
-	paramTypes: LocalizationStringTypesDeclaration;
+	params: LocalizationStringTypeDeclarationMapping;
 	line: number;
 	column: number;
 }
