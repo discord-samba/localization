@@ -71,24 +71,23 @@ export class LocalizationStringBuilder
 				case LocalizationStringNodeKind.ScriptTemplate:
 					this._childIs<NodeKindImplScriptTemplate>(child);
 					results.push(this._makeResult(child.kind, child.fn(args, proxy)?.toString()));
-					break;
 			}
 		}
 
+		// Handle maybe templates and script templates with undefined values,
 		for (const [i, result] of results.entries())
 		{
-			// Handle maybe templates and script templates with undefined values,
-			if (maybeKinds.includes(result.kind))
+			if (!maybeKinds.includes(result.kind))
+				continue;
+
+			const prev: LocalizationStringChildResultNode = results[i - 1];
+			const next: LocalizationStringChildResultNode = results[i + 1];
+			if (this._isIsolatedMaybeResult(prev, next) && typeof result.value === 'undefined')
 			{
-				const prev: LocalizationStringChildResultNode = results[i - 1];
-				const next: LocalizationStringChildResultNode = results[i + 1];
-				if (this._isIsolatedMaybeResult(prev, next) && typeof result.value === 'undefined')
-				{
-					// Remove the leading newline from the next node to compensate
-					// for the undefined value of the current node
-					next.value = next.value?.replace(/^\n/, '');
-					result.value = '';
-				}
+				// Remove the leading newline from the next node to compensate
+				// for the undefined value of the current node
+				next.value = next.value?.replace(/^\n/, '');
+				result.value = '';
 			}
 		}
 
@@ -110,7 +109,6 @@ export class LocalizationStringBuilder
 	 */
 	private _isIsolatedMaybeResult(
 		prev: LocalizationStringChildResultNode,
-		// current: LocalizationStringChildResultNode,
 		next: LocalizationStringChildResultNode): boolean
 	{
 		if (this._isValidResult(prev) && this._isValidResult(next))
@@ -134,5 +132,5 @@ export class LocalizationStringBuilder
 	 * Asserts at compile time that the given child node is of type T
 	 */
 	private _childIs<T extends LocalizationStringChildNode>(
-		_child?: LocalizationStringChildNode): asserts _child is T {}
+		_child: LocalizationStringChildNode): asserts _child is T {}
 }

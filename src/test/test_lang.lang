@@ -7,14 +7,10 @@ Also a couple strings with random tests
 
 [TEST]
 foo
-{{
-	bar
-?}}
+{{ bar ?}}
 ##{{! 1 !}}
 boo
-{{!
-	args.far
-!}}
+{{! null !}}
 {{> TEST2 }}
 ## Test loading other resources via scripts
 ## Args must be manually forwarded unlike in yamdbf
