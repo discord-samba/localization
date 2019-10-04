@@ -9,7 +9,7 @@ Also a couple strings with random tests
 foo
 {{ bar ?}}
 ##{{! 1 !}}
-boo
+bo\no\u0041
 {{! null !}}
 {{> TEST2 }}
 ## Test loading other resources via scripts
@@ -103,7 +103,7 @@ The output was too long but the output file failed
 to upload for an unknown reason
 
 [CMD_GROUPS_LIST]
-## <groups: string[], info: string[], disabledGroups: string[]>
+##! groups: string[], info: string[], disabledGroups: string[]
 **Command groups:** (Groups marked with ***** are disabled)
 ```ldif
 {{!

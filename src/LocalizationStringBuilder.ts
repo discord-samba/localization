@@ -65,7 +65,7 @@ export class LocalizationStringBuilder
 					results.push(this._makeResult(
 						child.kind,
 						Localization.resource(this._language, child.forwardKey, args)));
-					
+
 					break;
 
 				case LocalizationStringNodeKind.ScriptTemplate:

@@ -14,9 +14,14 @@ import { LocalizationStringTypesDeclaration } from '../types/LocalizationStringT
 
 export class Parser
 {
+	/**
+	 * Parse the given input into a list of abstract localization string nodes.
+	 * Will automatically convert `\r\n` to `\n`. The container for the first
+	 * argument should be the full file path the input is coming from
+	 */
 	public static parse(container: string, input: string): NodeKindImplParentNode[]
 	{
-		const reader: StringReader = new StringReader(input);
+		const reader: StringReader = new StringReader(input.replace(/\r\n/g, '\n'));
 		let nodeList: NodeKindImplParentNode[] = [];
 
 		while (!reader.eof())
@@ -29,7 +34,7 @@ export class Parser
 				case LocalizationStringChunkKind.TypesDeclaration:
 				case LocalizationStringChunkKind.Template:
 					Parser._consumeCommentLine(reader);
-					break
+					break;
 
 				// If the chunk kind is none, we're looking at EOF
 				case LocalizationStringChunkKind.None:
@@ -50,7 +55,7 @@ export class Parser
 
 					const { line, column } = reader;
 					const key: string = Parser._consumeParentKey(container, reader);
-					
+
 					let currentNode: NodeKindImplParentNode =
 						new NodeKindImplParentNode(container, key, line, column);
 
@@ -89,7 +94,7 @@ export class Parser
 			}
 		}
 
-		return nodeList
+		return nodeList;
 	}
 
 	/**
@@ -138,7 +143,7 @@ export class Parser
 					container,
 					line,
 					column);
-			
+
 			if (!/[\w]/.test(reader.peek()))
 				throw new ParseError(
 					`Unexpected token '${reader.peek()}', expected [a-zA-Z0-9_]`,
@@ -186,7 +191,7 @@ export class Parser
 
 			return LocalizationStringChunkKind.Comment;
 		}
-		
+
 		if (reader.peek() === '[' && Parser._peekValidParentKey(reader))
 			return LocalizationStringChunkKind.ParentKey;
 
@@ -199,7 +204,6 @@ export class Parser
 		return LocalizationStringChunkKind.StringChunk;
 	}
 
-	
 	/**
 	 * Consumes and discards the remainder of the line, including
 	 * the ending newline
@@ -231,7 +235,7 @@ export class Parser
 	{
 		// Discard ##!
 		reader.discard(3);
-		
+
 		let types: LocalizationStringTypesDeclaration = {};
 		const validKeyChar: RegExp = /\w/;
 		const validType: RegExp = /^(?:[sS]tring|[nN]umber|[bB]oolean|[aA]ny)(?:\[\])?$/;
@@ -240,10 +244,11 @@ export class Parser
 		{
 			let key: string = '';
 			let type: string = '';
-			let optional: boolean = false;
+			let isOptional: boolean = false;
+			let isArrayType: boolean = false;
 
 			Parser._discardWhitespace(reader);
-			
+
 			// Discard comma and following whitespace
 			if (reader.peek() === ',')
 			{
@@ -254,7 +259,7 @@ export class Parser
 						parent.container,
 						reader.line,
 						reader.column);
-				
+
 				// Discard comma and whitespace
 				reader.discard();
 				Parser._discardWhitespace(reader);
@@ -277,7 +282,7 @@ export class Parser
 				// Mark this identifier as optional and discard '?'
 				if (reader.peek() === '?')
 				{
-					optional = true;
+					isOptional = true;
 					reader.discard();
 					break;
 				}
@@ -299,8 +304,15 @@ export class Parser
 			// Capture the type position
 			const { line, column } = reader;
 
-			while (!/[\s,]/.test(reader.peek()))
+			while (!/[\[\s,]/.test(reader.peek()))
 				type += reader.consume();
+
+			// Mark as array type and discard array marker
+			if (reader.peekSegment(2) === '[]')
+			{
+				reader.discard(2);
+				isArrayType = true;
+			}
 
 			if (!validType.test(type))
 				throw new ParseError(
@@ -308,8 +320,8 @@ export class Parser
 					parent.container,
 					line,
 					column);
-			
-			types[key] = { type, optional, line: identLine, column: identColumn };
+
+			types[key] = { type, isOptional, isArrayType, line: identLine, column: identColumn };
 
 			Parser._discardWhitespace(reader);
 			if (reader.peek() !== ',' && reader.peek() !== '\n')
@@ -333,7 +345,7 @@ export class Parser
 		parent: LocalizationStringParentNode,
 		reader: StringReader): NodeKindImplStringChunk
 	{
-		let content: string = ''
+		let content: string = '';
 		const { line, column } = reader;
 
 		while (true)
@@ -349,7 +361,7 @@ export class Parser
 					content += reader.consume();
 					break;
 				}
-			
+
 				// Else discard the backslash and continue
 				reader.discard();
 			}
@@ -365,13 +377,32 @@ export class Parser
 
 			// Discard inline comment content, but not escaped comments
 			if (reader.peekSegment(2) === '##' && reader.peekBehind() !== '\\')
-				while(reader.peek() !== '\n')
+				while (reader.peek() !== '\n')
 					reader.discard();
 
 			content += reader.consume();
 
 			if (reader.eof())
 				break;
+		}
+
+		// Replace escape chars with their equivalents. Expand this
+		// list if desired, but I don't think any others will be
+		// necessary for formatting purposes within localization files
+		content = content
+			.replace(/\\n/g, '\n')
+			.replace(/\\t/g, '\t');
+
+		// Replace unicode escape chars with their equivalents
+		const unicode: RegExp = /\\u([0-9a-zA-Z]{4})/;
+		const allUnicode: RegExp = new RegExp(unicode.source, 'g');
+		if (unicode.test(content))
+		{
+			for (const match of content.match(allUnicode)!)
+			{
+				const hex: string = match.match(unicode)![1];
+				content = content.replace(`\\u${hex}`, String.fromCodePoint(parseInt(hex, 16)));
+			}
 		}
 
 		const node: NodeKindImplStringChunk =
@@ -390,10 +421,10 @@ export class Parser
 		if (!/[\w!>\s]/.test(reader.peek(2)))
 			return LocalizationStringTemplateKind.Invalid;
 
-		if (reader.peek(2) == '!')
+		if (reader.peek(2) === '!')
 			kind = LocalizationStringTemplateKind.Script;
 
-		if (reader.peek(2) == '>')
+		if (reader.peek(2) === '>')
 			kind = LocalizationStringTemplateKind.Forward;
 
 		while (true)
@@ -404,8 +435,8 @@ export class Parser
 				{
 					if (kind !== LocalizationStringTemplateKind.Script)
 						kind = LocalizationStringTemplateKind.Invalid;
-					
-					break
+
+					break;
 				}
 
 				if (kind === LocalizationStringTemplateKind.Script)
@@ -413,7 +444,7 @@ export class Parser
 					if (reader.peek(index - 1) !== '!')
 						kind = LocalizationStringTemplateKind.Invalid;
 
-					break
+					break;
 				}
 
 				if (reader.peek(index - 1) === '?')
@@ -426,17 +457,17 @@ export class Parser
 				}
 
 				else if (kind !== LocalizationStringTemplateKind.Forward)
-					kind = LocalizationStringTemplateKind.Regular
+					kind = LocalizationStringTemplateKind.Regular;
 
 				break;
 			}
 
-			index++
+			index++;
 
 			if (reader.eof(index))
 				return LocalizationStringTemplateKind.Invalid;
 		}
-		
+
 		return kind;
 	}
 
@@ -492,7 +523,7 @@ export class Parser
 		parent: LocalizationStringParentNode,
 		reader: StringReader): NodeKindImplRegularTemplate
 	{
-		let key: string = ''
+		let key: string = '';
 		const { line, column } = reader;
 
 		// Discard the opening braces
@@ -518,7 +549,7 @@ export class Parser
 		parent: LocalizationStringParentNode,
 		reader: StringReader): NodeKindImplForwardTemplate
 	{
-		let key: string = ''
+		let key: string = '';
 		const { line, column } = reader;
 
 		// Discard the opening braces
@@ -544,7 +575,7 @@ export class Parser
 		parent: LocalizationStringParentNode,
 		reader: StringReader): NodeKindImplMaybeTemplate
 	{
-		let key: string = ''
+		let key: string = '';
 		const { line, column } = reader;
 
 		// Discard the opening braces
@@ -580,7 +611,7 @@ export class Parser
 		while (reader.peekSegment(3) !== '!}}')
 		{
 			if (bodyStartLine === 0 && !/\s/.test(reader.peek()))
-				bodyStartLine = reader.line
+				bodyStartLine = reader.line;
 
 			scriptBody += reader.consume();
 		}

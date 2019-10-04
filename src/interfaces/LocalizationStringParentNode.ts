@@ -3,7 +3,7 @@ import { LocalizationStringTypesDeclaration } from '../types/LocalizationStringT
 
 export interface LocalizationStringParentNode
 {
-	container: string
+	container: string;
 	key: string;
 	children: LocalizationStringChildNode[];
 	paramTypes: LocalizationStringTypesDeclaration;

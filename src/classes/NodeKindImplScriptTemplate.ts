@@ -54,10 +54,11 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 		// Defer syntax error handling to the vm Script because
 		// it will actually detail the code in question in the error
 		try { fn = new Function('args', 'res', fnBody); } catch {}
-		
+
 		let error!: Error;
-	
+
 		// Compile the script and capture the error for editing, if any
+		// tslint:disable:no-unused-expression
 		try { new Script(NodeKindImplScriptTemplate._functionWrap(fnBody)); }
 		catch (err) { error = err; }
 
@@ -68,7 +69,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 				.filter((_, i) => i < 5);
 
 			let scriptLine: string = `${parseInt(errStackLines[0].split(':')[1]) - 3 + this.bodyStartLine}`;
-			
+
 			// If the error is an unexpected `}`, chances are the line will be off
 			// since it is affected by the braces of the function wrapper itself
 			// which aren't present in the .lang file so we'll just give the line

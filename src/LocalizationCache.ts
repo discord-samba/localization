@@ -9,17 +9,17 @@ import { LocalizationResourceProxy } from './types/LocalizationResourceProxy';
  */
 export class LocalizationCache
 {
-	private static _instance: LocalizationCache;
+	private static _staticInstance: LocalizationCache;
 
 	private _cache: Map<string, Map<string, LocalizationStringBuilder>>;
 	private _proxyCache: Map<string, LocalizationResourceProxy>;
 
 	private constructor()
 	{
-		if (typeof LocalizationCache._instance !== 'undefined')
+		if (typeof LocalizationCache._staticInstance !== 'undefined')
 			throw new Error('Cannot create multiple instances of LocalizationCache');
 
-		LocalizationCache._instance = this;
+		LocalizationCache._staticInstance = this;
 		this._cache = new Map();
 		this._proxyCache = new Map();
 	}
@@ -27,9 +27,9 @@ export class LocalizationCache
 	/**
 	 * Returns the instance of the LocalizationCache singleton
 	 */
-	public static instance(): LocalizationCache
+	private static _instance(): LocalizationCache
 	{
-		return LocalizationCache._instance ?? new LocalizationCache();
+		return LocalizationCache._staticInstance ?? new LocalizationCache();
 	}
 
 	/**
@@ -37,7 +37,7 @@ export class LocalizationCache
 	 */
 	public static hasLanguage(language: string): boolean
 	{
-		return LocalizationCache.instance()._cache.has(language);
+		return LocalizationCache._instance()._cache.has(language);
 	}
 
 	/**
@@ -48,8 +48,8 @@ export class LocalizationCache
 	{
 		if (!LocalizationCache.hasLanguage(language))
 			return false;
-		
-		return LocalizationCache.instance()._cache.get(language)!.has(key);
+
+		return LocalizationCache._instance()._cache.get(language)!.has(key);
 	}
 
 	/**
@@ -60,8 +60,8 @@ export class LocalizationCache
 	{
 		if (!LocalizationCache.hasLanguage(language))
 			return;
-	
-		return LocalizationCache.instance()._cache.get(language)!.get(key);
+
+		return LocalizationCache._instance()._cache.get(language)!.get(key);
 	}
 
 	/**
@@ -71,9 +71,9 @@ export class LocalizationCache
 	public static set(language: string, key: string, node: LocalizationStringParentNode): void
 	{
 		if (!LocalizationCache.hasLanguage(language))
-			LocalizationCache.instance()._cache.set(language, new Map());
+			LocalizationCache._instance()._cache.set(language, new Map());
 
-		LocalizationCache.instance()._cache.get(language)!
+		LocalizationCache._instance()._cache.get(language)!
 			.set(key, new LocalizationStringBuilder(language, node));
 	}
 
@@ -82,7 +82,7 @@ export class LocalizationCache
 	 */
 	public static hasProxy(language: string): boolean
 	{
-		return LocalizationCache.instance()._proxyCache.has(language);
+		return LocalizationCache._instance()._proxyCache.has(language);
 	}
 
 	/**
@@ -90,7 +90,7 @@ export class LocalizationCache
 	 */
 	public static getProxy(language: string): LocalizationResourceProxy | undefined
 	{
-		return LocalizationCache.instance()._proxyCache.get(language);
+		return LocalizationCache._instance()._proxyCache.get(language);
 	}
 
 	/**
@@ -98,6 +98,6 @@ export class LocalizationCache
 	 */
 	public static setProxy(language: string, proxy: LocalizationResourceProxy): void
 	{
-		LocalizationCache.instance()._proxyCache.set(language, proxy);
+		LocalizationCache._instance()._proxyCache.set(language, proxy);
 	}
 }
