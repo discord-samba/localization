@@ -7,9 +7,9 @@ Also a couple strings with random tests
 
 [TEST]
 foo
-{{ bar ?}}
+{{ bar ?}}{{ bar ?}}{{! '' !}}
 ##{{! 1 !}}
-bo\no\u0041
+b\to\no\u0041
 {{! null !}}
 {{> TEST2 }}
 ## Test loading other resources via scripts

@@ -90,7 +90,6 @@ export class Parser
 					}
 
 					nodeList.push(currentNode);
-					break;
 			}
 		}
 
