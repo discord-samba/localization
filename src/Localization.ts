@@ -1,7 +1,7 @@
-import { TemplateArguments } from './types/TemplateArguments';
-import { LocalizationStringBuilder } from './LocalizationStringBuilder';
 import { LocalizationCache } from './LocalizationCache';
+import { LocalizationStringBuilder } from './LocalizationStringBuilder';
 import { LocalizationResourceProxy } from './types/LocalizationResourceProxy';
+import { TemplateArguments } from './types/TemplateArguments';
 
 export class Localization
 {
@@ -14,7 +14,7 @@ export class Localization
 		if (!LocalizationCache.hasLanguage(language))
 			throw new Error(`No language '${language}' as been loaded`);
 
-		let builder: LocalizationStringBuilder = LocalizationCache.get(language, key)!;
+		const builder: LocalizationStringBuilder = LocalizationCache.get(language, key)!;
 		return builder.build(args, Localization.createResourceProxy(language));
 	}
 
@@ -26,7 +26,7 @@ export class Localization
 	{
 		if (LocalizationCache.hasProxy(language))
 			return LocalizationCache.getProxy(language) as LocalizationResourceProxy<T>;
-	
+
 		const proxy: LocalizationResourceProxy<T> = new Proxy({}, {
 			get: (_, key) => {
 				return (args: TemplateArguments) => Localization.resource(language, key as string, args);

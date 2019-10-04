@@ -50,7 +50,7 @@ export class StringReader
 
 		this._index += n;
 		this.column += n;
-	
+
 		if (result === '\n' && n === 1)
 		{
 			this.column = 1;
@@ -71,7 +71,7 @@ export class StringReader
 
 		this._index += n;
 		this.column += n;
-	
+
 		if (discarded === '\n' && n === 1)
 		{
 			this.column = 1;

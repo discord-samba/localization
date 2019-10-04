@@ -2,7 +2,8 @@ export interface LocalizationStringTypesDeclaration
 {
 	[key: string]: {
 		type: string,
-		optional: boolean,
+		isOptional: boolean,
+		isArrayType: boolean,
 		line: number,
 		column: number
 	};

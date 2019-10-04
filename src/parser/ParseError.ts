@@ -9,7 +9,7 @@ export class ParseError extends Error
 		let stack: string[] = [];
 		stack.push(`${this.name}: ${this.message}`);
 		stack.push(`    at Localization Container (${container}:${line}:${column})`);
-		
+
 		this.stack = stack.join('\n');
 	}
 }
