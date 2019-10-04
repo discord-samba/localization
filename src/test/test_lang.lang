@@ -6,13 +6,16 @@ syntax.
 Also a couple strings with random tests
 
 [TEST]
-##! foo: string, bar?: number, baz: boolean
+##! foo: string, bar: number, baz: boolean
 ##! boo: string[], far?: number[], faz: boolean[]
 ##! any: any[]
 {{ foo }} {{ bar }} {{ baz }}
 {{ boo }} {{ far }} {{ faz }}
+{{> test2 }}
 
 [TEST2]
+##! arg: string
+test two
 
 [CMD_BLACKLIST_ERR_NOSELF]
 You can not blacklist your own account.

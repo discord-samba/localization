@@ -62,6 +62,17 @@ export class LocalizationStringBuilder
 
 				case LocalizationStringNodeKind.ForwardTemplate:
 					this._childIs<NodeKindImplForwardTemplate>(child);
+
+					if (!Localization.resourceExists(this._language, child.forwardKey))
+						throw new LocalizationStringError(
+							[
+								`Localization string key '${child.forwardKey}'`,
+								`does not exist for language '${this._language}'`
+							].join(' '),
+							this._cachedNode.container,
+							child.line,
+							child.column);
+
 					results.push(this._makeResult(
 						child.kind,
 						Localization.resource(this._language, child.forwardKey, args)));

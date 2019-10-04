@@ -19,6 +19,15 @@ export class Localization
 	}
 
 	/**
+	 * Returns whether or not a localization resource exists for the
+	 * given language and given key
+	 */
+	public static resourceExists(language: string, key: string): boolean
+	{
+		return LocalizationCache.has(language, key);
+	}
+
+	/**
 	 * Creates a `LocalizationResourceProxy`. See {@link LocalizationResourceProxy}
 	 * Uses a cached resource proxy if one already exists for the given language
 	 */

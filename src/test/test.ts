@@ -14,9 +14,9 @@ function now(): number
 }
 
 const start: number = now();
-
+const container: string = Path.join(__dirname, './test_lang.lang');
 let nodeList: LocalizationStringParentNode[] =
-	Parser.parse('test_lang.lang', FS.readFileSync(Path.join(__dirname, './test_lang.lang')).toString());
+	Parser.parse(container, FS.readFileSync(container).toString());
 
 console.log(now() - start, '\n');
 
@@ -25,7 +25,7 @@ LocalizationCache.set('test', 'TEST2', nodeList[1]);
 
 const args: TemplateArguments = {
 	foo: 'foo',
-	// bar: 1,
+	bar: 1,
 	baz: true,
 	boo: ['foo', '1', 'baz'],
 	// far: [1, 2, 3],
