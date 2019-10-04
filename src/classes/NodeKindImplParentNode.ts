@@ -1,7 +1,7 @@
 import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 import { LocalizationStringNodeKind } from '../types/LocalizationStringNodeKind';
 import { LocalizationStringChildNode } from '../interfaces/LocalizationStringChildNode';
-import { LocalizationStringTypesDeclaration } from '../types/LocalizationStringTypesDeclaration';
+import { LocalizationStringTypeDeclarationMapping } from '../types/LocalizationStringTypeDeclarationMapping';
 
 export class NodeKindImplParentNode implements LocalizationStringParentNode
 {
@@ -13,7 +13,7 @@ export class NodeKindImplParentNode implements LocalizationStringParentNode
 	public line: number;
 	public column: number;
 	public children: LocalizationStringChildNode[];
-	public paramTypes: LocalizationStringTypesDeclaration;
+	public params: LocalizationStringTypeDeclarationMapping;
 
 	public constructor(container: string | undefined, key: string, line: number, column: number)
 	{
@@ -22,7 +22,7 @@ export class NodeKindImplParentNode implements LocalizationStringParentNode
 		this.line = line;
 		this.column = column;
 		this.children = [];
-		this.paramTypes = {};
+		this.params = {};
 	}
 
 	/**
@@ -34,10 +34,10 @@ export class NodeKindImplParentNode implements LocalizationStringParentNode
 	}
 
 	/**
-	 * Append the given param types to this node's current param types mapping
+	 * Append the given param types to this node's current parameter declarations mapping
 	 */
-	public addParamTypes(paramTypes: LocalizationStringTypesDeclaration)
+	public addParams(paramTypes: LocalizationStringTypeDeclarationMapping)
 	{
-		this.paramTypes = { ...this.paramTypes, ...paramTypes };
+		this.params = { ...this.params, ...paramTypes };
 	}
 }

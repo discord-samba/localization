@@ -6,25 +6,13 @@ syntax.
 Also a couple strings with random tests
 
 [TEST]
-foo
-{{ bar ?}}{{ bar ?}}{{! '' !}}
-##{{! 1 !}}
-b\to\no\u0041
-{{! null !}}
-{{> TEST2 }}
-## Test loading other resources via scripts
-## Args must be manually forwarded unlike in yamdbf
-{{! res.TEST2(args) !}}
-##{{! throw new Error('Foo') !}}
-faz
-## Empty string results will preserve the isolated line,
-## whereas undefined or null will not
-{{! '' !}}
-a{{! 'b' !}}c
+##! foo: string, bar?: number, baz: boolean
+##! boo: string[], far?: number[], faz: boolean[]
+##! any: any[]
+{{ foo }} {{ bar }} {{ baz }}
+{{ boo }} {{ far }} {{ faz }}
 
 [TEST2]
-## For testing forward templates and forwarded args
-Forward template output {{! args.far !}}
 
 [CMD_BLACKLIST_ERR_NOSELF]
 You can not blacklist your own account.

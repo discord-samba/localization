@@ -10,6 +10,8 @@ import { Localization } from './Localization';
 import { NodeKindImplMaybeTemplate } from './classes/NodeKindImplMaybeTemplate';
 import { LocalizationStringChildResultNode } from './interfaces/LocalizationStringChildResultNode';
 import { LocalizationResourceProxy } from './types/LocalizationResourceProxy';
+import { LocalizationStringTypeDeclaration } from './types/LocalizationStringTypeDeclaration';
+import { LocalizationStringError } from './LocalizationStringError';
 
 /**
  * Stores a localization string parent node and builds a string
@@ -38,13 +40,11 @@ export class LocalizationStringBuilder
 
 		let results: LocalizationStringChildResultNode[] = [];
 
-		// TODO: Verify types and presence of TemplateArguments based on
-		//       the parent node's type declarations
-		//
-		//       Be sure to use the type declaration's line/column to direct
-		//       the user to the location of the declaration in question
-		//       within the localization file when giving an error
+		// Validate passed arguments if the parent node has any param type declarations
+		if (Object.keys(this._cachedNode.params).length > 0)
+			this._validateArguments(args);
 
+		// Evaluate child node results
 		for (const child of this._cachedNode.children)
 		{
 			switch (child.kind)
@@ -91,12 +91,70 @@ export class LocalizationStringBuilder
 			}
 		}
 
-		// Handle remaining maybe templates with undefined values
+		// Handle remaining non-isolated maybe templates with undefined values
 		for (const result of results)
 			if (result.kind === LocalizationStringNodeKind.MaybeTemplate && typeof result.value === 'undefined')
 				result.value = '';
 
 		return results.map(r => `${r.value}`).join('').trim();
+	}
+
+	/**
+	 * Validate the given arguments in the context of the cached parent node,
+	 * erroring on invalid types and missing required arguments
+	 */
+	private _validateArguments(args: TemplateArguments): void
+	{
+		for (const ident in this._cachedNode.params)
+		{
+			const declaration: LocalizationStringTypeDeclaration = this._cachedNode.params[ident];
+			const expectedType: string = `${declaration.type}${declaration.isArrayType ? '[]' : ''}`;
+
+			if (declaration.isOptional && typeof args[ident] === 'undefined')
+				continue;
+
+			if (typeof args[ident] === 'undefined')
+				throw new LocalizationStringError(
+					`Expected type '${expectedType}', got undefined`,
+					this._cachedNode.container,
+					declaration.line,
+					declaration.column);
+
+			if (declaration.isArrayType)
+			{
+				if (!Array.isArray(args[ident]))
+					throw new LocalizationStringError(
+						`Expected array type, got ${typeof args[ident]}`,
+						this._cachedNode.container,
+						declaration.line,
+						declaration.column);
+
+				for (const arg of args[ident])
+					this._validateType(declaration, arg);
+			}
+			else
+			{
+				this._validateType(declaration, args[ident]);
+			}
+		}
+	}
+
+	/**
+	 * Validate the type of the given value based on the given declaration
+	 */
+	private _validateType(declaration: LocalizationStringTypeDeclaration, value: any): void
+	{
+		if (declaration.type === 'any' || typeof value === declaration.type)
+			return;
+
+		throw new LocalizationStringError(
+			[
+				`Expected type '${declaration.type}'`,
+				`${declaration.isArrayType ? ' in array' : ''}, got ${typeof value}`
+			].join(''),
+			this._cachedNode.container,
+			declaration.line,
+			declaration.column);
 	}
 
 	/**
