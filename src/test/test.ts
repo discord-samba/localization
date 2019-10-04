@@ -15,7 +15,7 @@ function now(): number
 const start: number = now();
 
 let nodeList: LocalizationStringParentNode[] =
-	Parser.parse('test_lang.lang', FS.readFileSync(Path.join(__dirname, './test_lang.lang')).toString().replace(/\r\n/g, '\n'));
+	Parser.parse('test_lang.lang', FS.readFileSync(Path.join(__dirname, './test_lang.lang')).toString());
 
 console.log(now() - start, '\n');
 

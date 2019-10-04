@@ -394,7 +394,7 @@ export class Parser
 			.replace(/\\t/g, '\t');
 
 		// Replace unicode escape chars with their equivalents
-		const unicode: RegExp = /\\u([0-9a-zA-Z]{4})/;
+		const unicode: RegExp = /\\u([0-9a-fA-F]{4})/;
 		const allUnicode: RegExp = new RegExp(unicode.source, 'g');
 		if (unicode.test(content))
 		{
