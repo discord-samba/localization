@@ -119,7 +119,7 @@ export class LocalizationStringBuilder
 		for (const ident in this._cachedNode.params)
 		{
 			const declaration: LocalizationStringTypeDeclaration = this._cachedNode.params[ident];
-			const expectedType: string = `${declaration.type}${declaration.isArrayType ? '[]' : ''}`;
+			const expectedType: string = `${declaration.identType}${declaration.isArrayType ? '[]' : ''}`;
 
 			if (declaration.isOptional && typeof args[ident] === 'undefined')
 				continue;
@@ -155,12 +155,12 @@ export class LocalizationStringBuilder
 	 */
 	private _validateType(declaration: LocalizationStringTypeDeclaration, value: any): void
 	{
-		if (declaration.type === 'any' || typeof value === declaration.type)
+		if (declaration.identType === 'any' || typeof value === declaration.identType)
 			return;
 
 		throw new LocalizationStringError(
 			[
-				`Expected type '${declaration.type}'`,
+				`Expected type '${declaration.identType}'`,
 				`${declaration.isArrayType ? ' in array' : ''}, got ${typeof value}`
 			].join(''),
 			this._cachedNode.container,
