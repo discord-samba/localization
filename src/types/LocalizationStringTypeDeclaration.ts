@@ -1,6 +1,6 @@
 export interface LocalizationStringTypeDeclaration
 {
-	type: string;
+	identType: string;
 	isOptional: boolean;
 	isArrayType: boolean;
 	line: number;

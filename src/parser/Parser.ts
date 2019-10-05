@@ -241,8 +241,8 @@ export class Parser
 
 		while (reader.peek() !== '\n')
 		{
-			let key: string = '';
-			let type: string = '';
+			let ident: string = '';
+			let identType: string = '';
 			let isOptional: boolean = false;
 			let isArrayType: boolean = false;
 
@@ -276,7 +276,7 @@ export class Parser
 						reader.line,
 						reader.column);
 
-				key += reader.consume();
+				ident += reader.consume();
 
 				// Mark this identifier as optional and discard '?'
 				if (reader.peek() === '?')
@@ -304,7 +304,7 @@ export class Parser
 			const { line, column } = reader;
 
 			while (!/[\[\s,]/.test(reader.peek()))
-				type += reader.consume();
+				identType += reader.consume();
 
 			// Mark as array type and discard array marker
 			if (reader.peekSegment(2) === '[]')
@@ -313,15 +313,15 @@ export class Parser
 				isArrayType = true;
 			}
 
-			if (!validType.test(type))
+			if (!validType.test(identType))
 				throw new ParseError(
 					`Invalid type. Must be one of string, number, boolean, or an array of those`,
 					parent.container,
 					line,
 					column);
 
-			type = type.toLowerCase();
-			types[key] = { type, isOptional, isArrayType, line: identLine, column: identColumn };
+			identType = identType.toLowerCase();
+			types[ident] = { identType, isOptional, isArrayType, line: identLine, column: identColumn };
 
 			Parser._discardWhitespace(reader);
 			if (reader.peek() !== ',' && reader.peek() !== '\n')
