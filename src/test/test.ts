@@ -35,5 +35,5 @@ const args: TemplateArguments = {
 };
 
 console.log(Localization.resource('test', 'TEST', args), '\n');
-console.log(Localization.resource('test', 'foo', {}));
+console.log(Localization.resource('test', 'TEST2', args));
 console.log(nodeList);
