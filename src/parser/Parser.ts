@@ -351,9 +351,7 @@ export class Parser
 		while (true)
 		{
 			// Check if we are about to encounter a template or parent string key
-			if (reader.peekSegment(2, 1) === '{{'
-				|| (reader.peek(1) === '['
-					&& Parser._peekValidParentKey(reader, 1)))
+			if (reader.peekSegment(2, 1) === '{{' || Parser._peekValidParentKey(reader, 1))
 			{
 				// If it's not escaped, consume the next character and return this chunk
 				if (reader.peek() !== '\\')
