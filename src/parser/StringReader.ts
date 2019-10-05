@@ -46,15 +46,17 @@ export class StringReader
 	 */
 	public consume(n: number = 1): string
 	{
+		if (n < 1) return '';
 		const result: string = this._input.substr(this._index, n);
 
 		this._index += n;
 		this.column += n;
 
-		if (result === '\n' && n === 1)
+		if (result.includes('\n'))
 		{
-			this.column = 1;
-			this.line++;
+			const split: string[] = result.split('\n');
+			this.line += result.match(/\n/g)!.length;
+			this.column = split[split.length - 1].length + 1;
 		}
 
 		return result;
@@ -67,15 +69,17 @@ export class StringReader
 	 */
 	public discard(n: number = 1): void
 	{
-		let discarded: string = this._input.substr(this._index, n);
+		if (n < 1) return;
+		const discarded: string = this._input.substr(this._index, n);
 
 		this._index += n;
 		this.column += n;
 
-		if (discarded === '\n' && n === 1)
+		if (discarded.includes('\n'))
 		{
-			this.column = 1;
-			this.line++;
+			const split: string[] = discarded.split('\n');
+			this.line += discarded.match(/\n/g)!.length;
+			this.column = split[split.length - 1].length + 1;
 		}
 	}
 
