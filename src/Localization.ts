@@ -19,10 +19,8 @@ export class Localization
 	/**
 	 * Fetches a Localization string resource for the given language
 	 * with the given key. The string will be built using the given arguments.
-	 *
-	 * Don't pass _meta. This will be handled automatically by the module
-	 * and is used to track call location for localization string error reporting
 	 */
+	public static resource(language: string, key: string, args: TemplateArguments): string;
 	public static resource(
 		language: string,
 		key: string,
@@ -31,6 +29,8 @@ export class Localization
 	{
 		if (!LocalizationCache.hasLanguage(language))
 			throw new Error(`No language '${language}' as been loaded`);
+
+		const proxy: LocalizationResourceProxy = Localization.getResourceProxy(language);
 
 		// TODO: Return something if the resource doesn't exist. Used to do
 		//       `lang::key` in YAMDBF. Maybe something else?
@@ -43,8 +43,25 @@ export class Localization
 			_meta._cl = trace.stack.split('\n')[_meta._ip ? 3 : 2];
 		}
 
+		// Create a proxy that will forward _meta to preserve call location
+		// in nested resource calls within template scripts, as well as forward
+		// args so they don't need to be passed manually.
+		//
+		// This completely goes against the entire reasoning behind having
+		// a proxy cache but forwarding the metadata is important if we want
+		// to preserve the call location of the resource string for debugging
+		if (typeof _meta._mp === undefined)
+		{
+			_meta._mp = new Proxy({}, {
+				get: (_, _key: string) => {
+					return (_args: TemplateArguments = args) =>
+						(proxy as any)[_key](_args, _meta);
+				}
+			}) as LocalizationResourceProxy;
+		}
+
 		const builder: LocalizationStringBuilder = LocalizationCache.get(language, key)!;
-		return builder.build(args, Localization.getResourceProxy(language), _meta);
+		return builder.build(args, _meta);
 	}
 
 	/**
@@ -70,7 +87,7 @@ export class Localization
 				return (args: TemplateArguments, _meta: LocalizationResrouceMetaData = {}) =>
 				{
 					_meta._ip = true;
-					return Localization.resource(language, key, args, _meta);
+					return (Localization.resource as any)(language, key, args, _meta);
 				};
 			}
 		}) as LocalizationResourceProxy<T>;

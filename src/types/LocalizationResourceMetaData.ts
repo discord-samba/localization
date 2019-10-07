@@ -1,3 +1,5 @@
+import { LocalizationResourceProxy } from './LocalizationResourceProxy';
+
 export interface LocalizationResrouceMetaData
 {
 	// Call location
@@ -5,4 +7,7 @@ export interface LocalizationResrouceMetaData
 
 	// Is proxy
 	_ip?: boolean;
+
+	// MetaData proxy
+	_mp?: LocalizationResourceProxy;
 }

@@ -9,7 +9,6 @@ import { NodeKindImplScriptTemplate } from './nodeKindImpl/NodeKindImplScriptTem
 import { Localization } from './Localization';
 import { TemplateArguments } from './types/TemplateArguments';
 import { LocalizationStringChildResultNode } from './types/LocalizationStringChildResultNode';
-import { LocalizationResourceProxy } from './types/LocalizationResourceProxy';
 import { LocalizationStringTypeDeclaration } from './types/LocalizationStringTypeDeclaration';
 import { LocalizationStringError } from './LocalizationStringError';
 import { LocalizationResrouceMetaData } from './types/LocalizationResourceMetaData';
@@ -32,10 +31,7 @@ export class LocalizationStringBuilder
 	/**
 	 * Builds the output string from the cached Localization string node
 	 */
-	public build(
-		args: TemplateArguments,
-		proxy: LocalizationResourceProxy,
-		_meta: LocalizationResrouceMetaData): string
+	public build(args: TemplateArguments, _meta: LocalizationResrouceMetaData): string
 	{
 		const maybeKinds: LocalizationStringNodeKind[] = [
 			LocalizationStringNodeKind.MaybeTemplate,
@@ -47,19 +43,6 @@ export class LocalizationStringBuilder
 		// Validate passed arguments if the parent node has any param type declarations
 		if (Object.keys(this._cachedNode.params).length > 0)
 			this._validateArguments(args, _meta);
-
-		// Create a proxy that will forward _meta to preserve call location,
-		// As well as forward args so they don't need to be passed manually.
-		//
-		// This completely goes against the whole reasoning behind having
-		// a proxy cache but forwarding the metadata is important if we want
-		// to preserve the call location of the resource string for debugging
-		const metaProxy: LocalizationResourceProxy = new Proxy({}, {
-			get: (_, key) => {
-				return (_args: TemplateArguments = args) =>
-					(proxy as any)[key](_args, _meta);
-			}
-		}) as LocalizationResourceProxy;
 
 		// Evaluate child node results
 		for (const child of this._cachedNode.children)
@@ -93,13 +76,13 @@ export class LocalizationStringBuilder
 
 					results.push(this._makeResult(
 						child.kind,
-						Localization.resource(this._language, child.forwardKey, args, _meta)));
+						(Localization.resource as any)(this._language, child.forwardKey, args, _meta)));
 
 					break;
 
 				case LocalizationStringNodeKind.ScriptTemplate:
 					this._childIs<NodeKindImplScriptTemplate>(child);
-					results.push(this._makeResult(child.kind, child.fn(args, metaProxy, _meta)?.toString()));
+					results.push(this._makeResult(child.kind, child.fn(args, _meta)?.toString()));
 			}
 		}
 
