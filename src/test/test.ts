@@ -5,6 +5,7 @@ import { LocalizationCache } from '../LocalizationCache';
 import { Localization } from '../Localization';
 import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 import { TemplateArguments } from '../types/TemplateArguments';
+import { LocalizationResourceProxy } from '../types/LocalizationResourceProxy';
 
 function now(): number
 {
@@ -33,7 +34,11 @@ const args: TemplateArguments = {
 	any: [1, '2', true],
 	arg: 'arg'
 };
-
 console.log(Localization.resource('test', 'TEST', args), '\n');
-console.log(Localization.resource('test', 'TEST2', args));
+console.log(Localization.resource('test', 'TEST2', args), '\n');
+
+let proxy: LocalizationResourceProxy<any> = Localization.createResourceProxy('test');
+console.log(proxy.TEST(args), '\n');
+console.log(proxy.TEST2(args));
+
 console.log(nodeList);

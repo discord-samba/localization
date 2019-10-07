@@ -12,6 +12,7 @@ import { LocalizationStringChildResultNode } from './interfaces/LocalizationStri
 import { LocalizationResourceProxy } from './types/LocalizationResourceProxy';
 import { LocalizationStringTypeDeclaration } from './types/LocalizationStringTypeDeclaration';
 import { LocalizationStringError } from './LocalizationStringError';
+import { LocalizationResrouceMetaData } from './types/LocalizationResourceMetaData';
 
 /**
  * Stores a localization string parent node and builds a string
@@ -31,7 +32,10 @@ export class LocalizationStringBuilder
 	/**
 	 * Builds the output string from the cached Localization string node
 	 */
-	public build(args: TemplateArguments, proxy: LocalizationResourceProxy): string
+	public build(
+		args: TemplateArguments,
+		proxy: LocalizationResourceProxy,
+		_meta: LocalizationResrouceMetaData): string
 	{
 		const maybeKinds: LocalizationStringNodeKind[] = [
 			LocalizationStringNodeKind.MaybeTemplate,
@@ -42,7 +46,20 @@ export class LocalizationStringBuilder
 
 		// Validate passed arguments if the parent node has any param type declarations
 		if (Object.keys(this._cachedNode.params).length > 0)
-			this._validateArguments(args);
+			this._validateArguments(args, _meta);
+
+		// Create a proxy that will forward _meta to preserve call location,
+		// As well as forward args so they don't need to be passed manually.
+		//
+		// This completely goes against the whole reasoning behind having
+		// a proxy cache but forwarding the metadata is important if we want
+		// to preserve the call location of the resource string for debugging
+		const metaProxy: LocalizationResourceProxy = new Proxy({}, {
+			get: (_, key) => {
+				return (_args: TemplateArguments = args) =>
+					(proxy as any)[key](_args, _meta);
+			}
+		}) as LocalizationResourceProxy;
 
 		// Evaluate child node results
 		for (const child of this._cachedNode.children)
@@ -71,17 +88,18 @@ export class LocalizationStringBuilder
 							].join(' '),
 							this._cachedNode.container,
 							child.line,
-							child.column);
+							child.column,
+							_meta);
 
 					results.push(this._makeResult(
 						child.kind,
-						Localization.resource(this._language, child.forwardKey, args)));
+						Localization.resource(this._language, child.forwardKey, args, _meta)));
 
 					break;
 
 				case LocalizationStringNodeKind.ScriptTemplate:
 					this._childIs<NodeKindImplScriptTemplate>(child);
-					results.push(this._makeResult(child.kind, child.fn(args, proxy)?.toString()));
+					results.push(this._makeResult(child.kind, child.fn(args, metaProxy, _meta)?.toString()));
 			}
 		}
 
@@ -114,7 +132,7 @@ export class LocalizationStringBuilder
 	 * Validate the given arguments in the context of the cached parent node,
 	 * erroring on invalid types and missing required arguments
 	 */
-	private _validateArguments(args: TemplateArguments): void
+	private _validateArguments(args: TemplateArguments, _meta: LocalizationResrouceMetaData): void
 	{
 		for (const ident in this._cachedNode.params)
 		{
@@ -129,7 +147,8 @@ export class LocalizationStringBuilder
 					`Expected type '${expectedType}', got undefined`,
 					this._cachedNode.container,
 					declaration.line,
-					declaration.column);
+					declaration.column,
+					_meta);
 
 			if (declaration.isArrayType)
 			{
@@ -138,14 +157,15 @@ export class LocalizationStringBuilder
 						`Expected array type, got ${typeof args[ident]}`,
 						this._cachedNode.container,
 						declaration.line,
-						declaration.column);
+						declaration.column,
+						_meta);
 
 				for (const arg of args[ident])
-					this._validateType(declaration, arg);
+					this._validateType(declaration, arg, _meta);
 			}
 			else
 			{
-				this._validateType(declaration, args[ident]);
+				this._validateType(declaration, args[ident], _meta);
 			}
 		}
 	}
@@ -153,7 +173,10 @@ export class LocalizationStringBuilder
 	/**
 	 * Validate the type of the given value based on the given declaration
 	 */
-	private _validateType(declaration: LocalizationStringTypeDeclaration, value: any): void
+	private _validateType(
+		declaration: LocalizationStringTypeDeclaration,
+		value: any,
+		_meta: LocalizationResrouceMetaData): void
 	{
 		if (declaration.identType === 'any' || typeof value === declaration.identType)
 			return;
@@ -165,7 +188,8 @@ export class LocalizationStringBuilder
 			].join(''),
 			this._cachedNode.container,
 			declaration.line,
-			declaration.column);
+			declaration.column,
+			_meta);
 	}
 
 	/**

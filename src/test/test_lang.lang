@@ -15,7 +15,7 @@ Also a couple strings with random tests
 
 [TEST2]
 ##! arg: string
-test two
+test two {{ arg }}
 
 [CMD_BLACKLIST_ERR_NOSELF]
 You can not blacklist your own account.
