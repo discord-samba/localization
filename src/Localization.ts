@@ -9,7 +9,7 @@ export class Localization
 	 * Fetches a Localization string resource for the given language
 	 * with the given key. The string will be built using the given arguments
 	 */
-	public static resource(language: string, key: string, args: TemplateArguments): string
+	public static resource(language: string, key: string, args: TemplateArguments = {}): string
 	{
 		if (!LocalizationCache.hasLanguage(language))
 			throw new Error(`No language '${language}' as been loaded`);

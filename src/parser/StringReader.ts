@@ -55,7 +55,7 @@ export class StringReader
 		if (result.includes('\n'))
 		{
 			const split: string[] = result.split('\n');
-			this.line += result.match(/\n/g)!.length;
+			this.line += split.length - 1;
 			this.column = split[split.length - 1].length + 1;
 		}
 
@@ -78,7 +78,7 @@ export class StringReader
 		if (discarded.includes('\n'))
 		{
 			const split: string[] = discarded.split('\n');
-			this.line += discarded.match(/\n/g)!.length;
+			this.line += split.length - 1;
 			this.column = split[split.length - 1].length + 1;
 		}
 	}
