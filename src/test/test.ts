@@ -34,10 +34,11 @@ const args: TemplateArguments = {
 	any: [1, '2', true],
 	arg: 'arg'
 };
+
 console.log(Localization.resource('test', 'TEST', args), '\n');
 console.log(Localization.resource('test', 'TEST2', args), '\n');
 
-let proxy: LocalizationResourceProxy<any> = Localization.createResourceProxy('test');
+let proxy: LocalizationResourceProxy<any> = Localization.getResourceProxy('test');
 console.log(proxy.TEST(args), '\n');
 console.log(proxy.TEST2(args));
 
