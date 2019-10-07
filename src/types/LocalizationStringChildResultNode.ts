@@ -1,4 +1,4 @@
-import { LocalizationStringNodeKind } from '../types/LocalizationStringNodeKind';
+import { LocalizationStringNodeKind } from './LocalizationStringNodeKind';
 
 export interface LocalizationStringChildResultNode
 {

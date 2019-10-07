@@ -1,11 +1,11 @@
 import { LocalizationStringTemplateKind } from '../types/LocalizationStringTemplateKind';
 import { LocalizationStringChildNode } from '../interfaces/LocalizationStringChildNode';
-import { NodeKindImplParentNode } from '../classes/NodeKindImplParentNode';
-import { NodeKindImplStringChunk } from '../classes/NodeKindImplStringChunk';
-import { NodeKindImplRegularTemplate } from '../classes/NodeKindImplRegularTemplate';
-import { NodeKindImplForwardTemplate } from '../classes/NodeKindImplForwardTemplate';
-import { NodeKindImplMaybeTemplate } from '../classes/NodeKindImplMaybeTemplate';
-import { NodeKindImplScriptTemplate } from '../classes/NodeKindImplScriptTemplate';
+import { NodeKindImplParentNode } from '../nodeKindImpl/NodeKindImplParentNode';
+import { NodeKindImplStringChunk } from '../nodeKindImpl/NodeKindImplStringChunk';
+import { NodeKindImplRegularTemplate } from '../nodeKindImpl/NodeKindImplRegularTemplate';
+import { NodeKindImplForwardTemplate } from '../nodeKindImpl/NodeKindImplForwardTemplate';
+import { NodeKindImplMaybeTemplate } from '../nodeKindImpl/NodeKindImplMaybeTemplate';
+import { NodeKindImplScriptTemplate } from '../nodeKindImpl/NodeKindImplScriptTemplate';
 import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 import { LocalizationStringChunkKind } from '../types/LocalizationStringChunkKind';
 import { StringReader } from './StringReader';
