@@ -3,14 +3,24 @@ import { LocalizationStringBuilder } from './LocalizationStringBuilder';
 import { LocalizationResourceProxy } from './types/LocalizationResourceProxy';
 import { TemplateArguments } from './types/TemplateArguments';
 import { LocalizationResrouceMetaData } from './types/LocalizationResourceMetaData';
+import { LocalizationFileLoader } from './loader/LocalizationFileLoader';
 
 export class Localization
 {
 	/**
+	 * Load all .lang files in the given directory (and subdirectories)
+	 * as the given language, parsing them and caching to the LocalizationCache
+	 */
+	public static loadFromDirectory(language: string, dir: string): void
+	{
+		LocalizationFileLoader.loadFromDirectory(language, dir);
+	}
+
+	/**
 	 * Fetches a Localization string resource for the given language
 	 * with the given key. The string will be built using the given arguments.
 	 *
-	 * Don't pass _meta, this will be handled automatically by the module
+	 * Don't pass _meta. This will be handled automatically by the module
 	 * and is used to track call location for localization string error reporting
 	 */
 	public static resource(
