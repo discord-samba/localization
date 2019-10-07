@@ -1,9 +1,10 @@
+import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 import { LocalizationStringChildNode } from '../interfaces/LocalizationStringChildNode';
 import { LocalizationStringNodeKind } from '../types/LocalizationStringNodeKind';
-import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
-import { Script } from 'vm';
-import { TemplateArguments } from '../types/TemplateArguments';
 import { LocalizationResourceProxy } from '../types/LocalizationResourceProxy';
+import { LocalizationResrouceMetaData } from '../types/LocalizationResourceMetaData';
+import { TemplateArguments } from '../types/TemplateArguments';
+import { Script } from 'vm';
 
 export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 {
@@ -68,7 +69,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 				.split('\n')
 				.filter((_, i) => i < 5);
 
-			let scriptLine: string = `${parseInt(errStackLines[0].split(':')[1]) - 3 + this.bodyStartLine}`;
+			let scriptLine: number = parseInt(errStackLines[0].split(':')[1]) - 3 + this.bodyStartLine;
 
 			// If the error is an unexpected `}`, chances are the line will be off
 			// since it is affected by the braces of the function wrapper itself
@@ -76,10 +77,10 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 			// the script starts on. Accounting for all possible cases with `}` to
 			// give an accurate line just isn't worth it.
 			if (/Unexpected token }/.test(errStackLines[4]))
-				scriptLine = ` Script starting at line ${this.bodyStartLine}`;
+				scriptLine = this.line;
 
-			errStackLines[0] = `${this.parent.container}::${this.parent.key}:${scriptLine}`;
-			errStackLines.push(`    at Template Script (${this.parent.container}::${this.parent.key})`);
+			errStackLines[0] = `Error compiling template script:\n`;
+			errStackLines.push(`    at Template Script (${this.parent.container}:${scriptLine})`);
 
 			error.stack = errStackLines.join('\n');
 
@@ -102,7 +103,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 	 * Create a new Error from the given Error that reports the file/key
 	 * of the script template that the error was thrown from
 	 */
-	private _newErr(err: Error): Error
+	private _newErr(err: Error, _meta: LocalizationResrouceMetaData): Error
 	{
 		let error: Error = new Error();
 
@@ -110,7 +111,9 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 
 		let stack: string[] = [];
 		stack.push(`TemplateScriptError: ${error.message}`);
-		stack.push(`    at Template Script (${this.parent.container}::${this.parent.key}:${this.line})`);
+		stack.push(`    at Template Script (${this.parent.container}:${this.line})`);
+		if (typeof _meta._cl !== 'undefined')
+			stack.push(_meta._cl);
 
 		error.stack = stack.join('\n');
 
@@ -120,18 +123,21 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 	/**
 	 * Try calling the script template's fn or implFn and return the result
 	 */
-	public fn(args: TemplateArguments, res: LocalizationResourceProxy): string | undefined
+	public fn(
+		args: TemplateArguments,
+		res: LocalizationResourceProxy,
+		_meta: LocalizationResrouceMetaData): string | undefined
 	{
 		let result: any;
 		let error!: Error;
 
 		try { result = this._fn(args, res); }
-		catch (err) { error = this._newErr(err); }
+		catch (err) { error = this._newErr(err, _meta); }
 
 		if (typeof result === 'undefined' && typeof this._impFn !== 'undefined')
 		{
 			try { result = this._impFn(args, res); }
-			catch (err) { error = this._newErr(err); }
+			catch (err) { error = this._newErr(err, _meta); }
 		}
 
 		if (typeof error !== 'undefined')
