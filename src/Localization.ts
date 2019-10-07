@@ -34,7 +34,7 @@ export class Localization
 		}
 
 		const builder: LocalizationStringBuilder = LocalizationCache.get(language, key)!;
-		return builder.build(args, Localization.createResourceProxy(language), _meta);
+		return builder.build(args, Localization.getResourceProxy(language), _meta);
 	}
 
 	/**
@@ -47,10 +47,10 @@ export class Localization
 	}
 
 	/**
-	 * Creates a `LocalizationResourceProxy`. See {@link LocalizationResourceProxy}
+	 * Gets a `LocalizationResourceProxy`. See {@link LocalizationResourceProxy}
 	 * Uses a cached resource proxy if one already exists for the given language
 	 */
-	public static createResourceProxy<T = {}>(language: string): LocalizationResourceProxy<T>
+	public static getResourceProxy<T = {}>(language: string): LocalizationResourceProxy<T>
 	{
 		if (LocalizationCache.hasProxy(language))
 			return LocalizationCache.getProxy(language) as LocalizationResourceProxy<T>;
