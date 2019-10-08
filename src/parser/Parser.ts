@@ -51,7 +51,8 @@ export class Parser
 							].join(' '),
 							container,
 							reader.line,
-							reader.column);
+							reader.column
+						);
 
 					const { line, column } = reader;
 					const key: string = Parser._consumeParentKey(container, reader);
@@ -65,7 +66,8 @@ export class Parser
 							`Unexpected string key, expected string body`,
 							container,
 							reader.line,
-							reader.column);
+							reader.column
+						);
 
 					while (true)
 					{
@@ -141,14 +143,16 @@ export class Parser
 					'Failed to find closing string key brace',
 					container,
 					line,
-					column);
+					column
+				);
 
 			if (!/[\w]/.test(reader.peek()))
 				throw new ParseError(
 					`Unexpected token '${reader.peek()}', expected [a-zA-Z0-9_]`,
 					container,
 					reader.line,
-					reader.column);
+					reader.column
+			);
 
 			key += reader.consume();
 		}
@@ -161,7 +165,8 @@ export class Parser
 				`Unexpected token '${reader.peek()}', expected newline`,
 				container,
 				reader.line,
-				reader.column);
+				reader.column
+			);
 
 		// Discard the newline following key
 		reader.discard();
@@ -230,7 +235,8 @@ export class Parser
 	 */
 	private static _consumeTypesDeclaration(
 		parent: LocalizationStringParentNode,
-		reader: StringReader): LocalizationStringTypeDeclarationMapping
+		reader: StringReader
+	): LocalizationStringTypeDeclarationMapping
 	{
 		// Discard ##!
 		reader.discard(3);
@@ -257,7 +263,8 @@ export class Parser
 						`Unexpected token ','`,
 						parent.container,
 						reader.line,
-						reader.column);
+						reader.column
+					);
 
 				// Discard comma and whitespace
 				reader.discard();
@@ -274,7 +281,8 @@ export class Parser
 						`Unexpected token '${reader.peek()}', expected identifier`,
 						parent.container,
 						reader.line,
-						reader.column);
+						reader.column
+					);
 
 				ident += reader.consume();
 
@@ -294,7 +302,8 @@ export class Parser
 					`Unexpected token '${reader.peek()}', expected ':'`,
 					parent.container,
 					reader.line,
-					reader.column);
+					reader.column
+				);
 
 			// Discard separator and whitespace
 			reader.discard();
@@ -303,7 +312,7 @@ export class Parser
 			// Capture the type position
 			const { line, column } = reader;
 
-			while (!/[\[\s,]/.test(reader.peek()))
+			while (!/[[\s,]/.test(reader.peek()))
 				identType += reader.consume();
 
 			// Mark as array type and discard array marker
@@ -318,7 +327,8 @@ export class Parser
 					`Invalid type. Must be one of string, number, boolean, or an array of those`,
 					parent.container,
 					line,
-					column);
+					column
+				);
 
 			identType = identType.toLowerCase();
 			types[ident] = { identType, isOptional, isArrayType, line: identLine, column: identColumn };
@@ -329,7 +339,8 @@ export class Parser
 					`Unexpected token '${reader.peek()}', expected ',' or newline`,
 					parent.container,
 					reader.line,
-					reader.column);
+					reader.column
+				);
 		}
 
 		// Discard ending newline
@@ -343,7 +354,8 @@ export class Parser
 	 */
 	private static _consumeStringChunk(
 		parent: LocalizationStringParentNode,
-		reader: StringReader): NodeKindImplStringChunk
+		reader: StringReader
+	): NodeKindImplStringChunk
 	{
 		let content: string = '';
 		const { line, column } = reader;
@@ -475,7 +487,8 @@ export class Parser
 	 */
 	private static _consumeTemplate(
 		parent: LocalizationStringParentNode,
-		reader: StringReader): LocalizationStringChildNode
+		reader: StringReader
+	): LocalizationStringChildNode
 	{
 		switch (Parser._peekTemplateKind(reader))
 		{
@@ -488,7 +501,8 @@ export class Parser
 					'Invalid template',
 					parent.container!,
 					reader.line,
-					reader.column);
+					reader.column
+				);
 		}
 	}
 
@@ -498,7 +512,8 @@ export class Parser
 	 */
 	private static _consumeTemplateKeyChar(
 		parent: LocalizationStringParentNode,
-		reader: StringReader): string
+		reader: StringReader
+	): string
 	{
 		if (!/[\w\s]/.test(reader.peek()))
 			throw new ParseError(
@@ -508,7 +523,8 @@ export class Parser
 				].join(' '),
 				parent.container,
 				reader.line,
-				reader.column);
+				reader.column
+			);
 
 		return reader.consume();
 	}
@@ -519,7 +535,8 @@ export class Parser
 	 */
 	private static _consumeRegularTemplate(
 		parent: LocalizationStringParentNode,
-		reader: StringReader): NodeKindImplRegularTemplate
+		reader: StringReader
+	): NodeKindImplRegularTemplate
 	{
 		let key: string = '';
 		const { line, column } = reader;
@@ -545,7 +562,8 @@ export class Parser
 	 */
 	private static _consumeForwardTemplate(
 		parent: LocalizationStringParentNode,
-		reader: StringReader): NodeKindImplForwardTemplate
+		reader: StringReader
+	): NodeKindImplForwardTemplate
 	{
 		let key: string = '';
 		const { line, column } = reader;
@@ -571,7 +589,8 @@ export class Parser
 	 */
 	private static _consumeMaybeTemplate(
 		parent: LocalizationStringParentNode,
-		reader: StringReader): NodeKindImplMaybeTemplate
+		reader: StringReader
+	): NodeKindImplMaybeTemplate
 	{
 		let key: string = '';
 		const { line, column } = reader;
@@ -597,7 +616,8 @@ export class Parser
 	 */
 	private static _consumeScriptTemplate(
 		parent: LocalizationStringParentNode,
-		reader: StringReader): NodeKindImplScriptTemplate
+		reader: StringReader
+	): NodeKindImplScriptTemplate
 	{
 		let scriptBody: string = '';
 		let bodyStartLine: number = 0;

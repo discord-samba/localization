@@ -19,7 +19,10 @@
   "devDependencies": {
     "@types/glob": "^7.1.1",
     "@types/node": "^12.7.8",
+    "@typescript-eslint/eslint-plugin": "^2.3.3",
+    "@typescript-eslint/parser": "^2.3.3",
     "del": "^5.1.0",
+    "eslint": "^6.5.1",
     "gulp": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
     "gulp-tslint": "^8.1.4",

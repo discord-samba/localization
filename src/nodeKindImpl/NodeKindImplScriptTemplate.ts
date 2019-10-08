@@ -27,7 +27,8 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 		bodyStartLine: number,
 		parent: LocalizationStringParentNode,
 		line: number,
-		column: number)
+		column: number
+	)
 	{
 		this.bodyStartLine = bodyStartLine;
 		this.parent = parent;
@@ -53,12 +54,14 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 		let fn!: Function;
 		// Defer syntax error handling to the vm Script because
 		// it will actually detail the code in question in the error
-		try { fn = new Function('args', 'res', fnBody); } catch {}
+		// eslint-disable-next-line no-new-func
+		try { fn = new Function('args', 'res', fnBody); }
+		catch {}
 
 		let error!: Error;
 
 		// Compile the script and capture the error for editing, if any
-		// tslint:disable:no-unused-expression
+		// eslint-disable-next-line no-new, no-unused-expressions
 		try { new Script(NodeKindImplScriptTemplate._functionWrap(fnBody)); }
 		catch (err) { error = err; }
 
@@ -90,6 +93,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 		try
 		{
 			const newFnBody: string = `return ${fnBody.replace(/^[\s]+/, '')}`;
+			// eslint-disable-next-line no-new-func
 			const implicitReturnFn: Function = new Function('args', 'res', newFnBody);
 			this._impFn = implicitReturnFn;
 		}
