@@ -179,25 +179,127 @@
 		"no-path-concat": "error",
 		"no-new-require": "error",
 		// Stylistic Issues ///////////////////////////////////////////////////
-		"array-bracket-newline": ["warn", "consistent"],
-		"array-bracket-spacing": ["warn", "never"],
-		"array-element-newline": ["warn", "consistent"],
-		"block-spacing": ["error", "always"],
-		"brace-style": ["error", "allman", { "allowSingleLine": true }],
-		"camelcase": ["warn", { "properties": "always" }],
-		"capitalized-comments": ["warn", "always", { "ignoreConsecutiveComments": true}],
-		"comma-dangle": ["warn", "only-multiline"],
-		"comma-spacing": ["warn", { "before": false, "after": true }],
-		"comma-style": ["warn", "last"],
-		"computed-property-spacing": ["warn", "never"],
-		"eol-last":"warn",
-		"func-call-spacing":["error", "never"],
-		"func-names": ["error", "as-needed"],
-		"func-style": ["error", "declaration", {"allowArrowFunctions": true}],
-		"function-call-argument-newline": ["error", "consistent"],
-		"function-paren-newline": ["error", "consistent"],
+		"array-bracket-newline": [
+			"warn",
+			"consistent"
+		],
+		"array-bracket-spacing": [
+			"warn",
+			"never"
+		],
+		"array-element-newline": [
+			"warn",
+			"consistent"
+		],
+		"block-spacing": [
+			"error",
+			"always"
+		],
+		"brace-style": [
+			"error",
+			"allman",
+			{
+				"allowSingleLine": true
+			}
+		],
+		"camelcase": [
+			"warn",
+			{
+				"properties": "always"
+			}
+		],
+		"capitalized-comments": [
+			"warn",
+			"always",
+			{
+				"ignoreConsecutiveComments": true
+			}
+		],
+		"comma-dangle": [
+			"warn",
+			"only-multiline"
+		],
+		"comma-spacing": [
+			"warn",
+			{
+				"before": false,
+				"after": true
+			}
+		],
+		"comma-style": [
+			"warn",
+			"last"
+		],
+		"computed-property-spacing": [
+			"warn",
+			"never"
+		],
+		"eol-last": "warn",
+		"func-call-spacing": [
+			"error",
+			"never"
+		],
+		"func-names": [
+			"error",
+			"as-needed"
+		],
+		"func-style": [
+			"error",
+			"declaration",
+			{
+				"allowArrowFunctions": true
+			}
+		],
+		"function-call-argument-newline": [
+			"error",
+			"consistent"
+		],
+		"function-paren-newline": [
+			"error",
+			"consistent"
+		],
 		// "id-blacklist": ["error"], // Add later if necessary?
+		"indent": [
+			"error",
+			"tab",
+			{
+				"SwitchCase": 1
+			}
+		],
+		"key-spacing": "error",
+		"keyword-spacing": "error",
+		"line-comment-position": [
+			"error",
+			"above"
+		],
+		"lines-around-comment": [
+			"warn",
+			{
+				"beforeLineComment": true,
+				"allowBlockStart": true,
+				"allowBlockEnd": true,
+				"allowClassStart": true,
+				"allowClassEnd": true,
+				"allowObjectStart": true,
+				"allowObjectEnd": true,
+				// Just to ignore that one comment on the switch in Parser, as this
+				// should be covered by allowBlockStart but it isn't for some reason
+				"ignorePattern": "Allow"
+			}
+		],
+		"lines-between-class-members": [
+			"warn",
+			"always",
+			{
+				"exceptAfterSingleLine": true
+			}
+		],
+		"max-len": [
+			"warn",
+			120
+		],
 
-		"no-var": "error"
+		"no-var": "error",
+		"semi": "error"
 	}
 }
