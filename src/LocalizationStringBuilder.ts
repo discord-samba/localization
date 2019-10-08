@@ -72,11 +72,13 @@ export class LocalizationStringBuilder
 							this._cachedNode.container,
 							child.line,
 							child.column,
-							_meta);
+							_meta
+						);
 
 					results.push(this._makeResult(
 						child.kind,
-						(Localization.resource as any)(this._language, child.forwardKey, args, _meta)));
+						(Localization.resource as any)(this._language, child.forwardKey, args, _meta)
+					));
 
 					break;
 
@@ -117,7 +119,7 @@ export class LocalizationStringBuilder
 	 */
 	private _validateArguments(args: TemplateArguments, _meta: LocalizationResrouceMetaData): void
 	{
-		for (const ident in this._cachedNode.params)
+		for (const ident of Object.keys(this._cachedNode.params))
 		{
 			const declaration: LocalizationStringTypeDeclaration = this._cachedNode.params[ident];
 			const expectedType: string = `${declaration.identType}${declaration.isArrayType ? '[]' : ''}`;
@@ -131,7 +133,8 @@ export class LocalizationStringBuilder
 					this._cachedNode.container,
 					declaration.line,
 					declaration.column,
-					_meta);
+					_meta
+				);
 
 			if (declaration.isArrayType)
 			{
@@ -141,7 +144,8 @@ export class LocalizationStringBuilder
 						this._cachedNode.container,
 						declaration.line,
 						declaration.column,
-						_meta);
+						_meta
+					);
 
 				for (const arg of args[ident])
 					this._validateType(declaration, arg, _meta);
@@ -159,7 +163,8 @@ export class LocalizationStringBuilder
 	private _validateType(
 		declaration: LocalizationStringTypeDeclaration,
 		value: any,
-		_meta: LocalizationResrouceMetaData): void
+		_meta: LocalizationResrouceMetaData
+	): void
 	{
 		if (declaration.identType === 'any' || typeof value === declaration.identType)
 			return;
@@ -172,7 +177,8 @@ export class LocalizationStringBuilder
 			this._cachedNode.container,
 			declaration.line,
 			declaration.column,
-			_meta);
+			_meta
+		);
 	}
 
 	/**
@@ -190,7 +196,8 @@ export class LocalizationStringBuilder
 	 */
 	private _isIsolatedMaybeResult(
 		prev: LocalizationStringChildResultNode,
-		next: LocalizationStringChildResultNode): boolean
+		next: LocalizationStringChildResultNode
+	): boolean
 	{
 		if (this._isValidResult(prev) && this._isValidResult(next))
 			return prev.value!.endsWith('\n') && next.value!.startsWith('\n');
@@ -213,5 +220,6 @@ export class LocalizationStringBuilder
 	 * Asserts at compile time that the given child node is of type T
 	 */
 	private _childIs<T extends LocalizationStringChildNode>(
-		_child: LocalizationStringChildNode): asserts _child is T {}
+		_child: LocalizationStringChildNode
+	): asserts _child is T {}
 }

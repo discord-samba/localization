@@ -25,7 +25,8 @@ export class Localization
 		language: string,
 		key: string,
 		args: TemplateArguments = {},
-		_meta: LocalizationResrouceMetaData = {}): string
+		_meta: LocalizationResrouceMetaData = {}
+	): string
 	{
 		if (!LocalizationCache.hasLanguage(language))
 			throw new Error(`No language '${language}' as been loaded`);
@@ -50,10 +51,11 @@ export class Localization
 		// This completely goes against the entire reasoning behind having
 		// a proxy cache but forwarding the metadata is important if we want
 		// to preserve the call location of the resource string for debugging
-		if (typeof _meta._mp === undefined)
+		if (typeof _meta._mp === 'undefined')
 		{
 			_meta._mp = new Proxy({}, {
-				get: (_, _key: string) => {
+				get: (_, _key: string) =>
+				{
 					return (_args: TemplateArguments = args) =>
 						(proxy as any)[_key](_args, _meta);
 				}
@@ -83,7 +85,8 @@ export class Localization
 			return LocalizationCache.getProxy(language) as LocalizationResourceProxy<T>;
 
 		const proxy: LocalizationResourceProxy<T> = new Proxy({}, {
-			get: (_, key: string) => {
+			get: (_, key: string) =>
+			{
 				return (args: TemplateArguments, _meta: LocalizationResrouceMetaData = {}) =>
 				{
 					_meta._ip = true;

@@ -2,11 +2,12 @@ import * as FS from 'fs';
 
 export class ParseError extends Error
 {
-	public name: string = this.constructor.name;
+	public name: string;
 
 	public constructor(message: string, container: string, line: number, column: number)
 	{
 		super(message);
+		this.name = this.constructor.name;
 
 		let fileContents!: string;
 		try { fileContents = FS.readFileSync(container)?.toString(); }
