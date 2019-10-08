@@ -52,6 +52,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 	private _createFunction(fnBody: string): void
 	{
 		let fn!: Function;
+
 		// Defer syntax error handling to the vm Script because
 		// it will actually detail the code in question in the error
 		// eslint-disable-next-line no-new-func

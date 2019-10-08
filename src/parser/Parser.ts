@@ -152,7 +152,7 @@ export class Parser
 					container,
 					reader.line,
 					reader.column
-			);
+				);
 
 			key += reader.consume();
 		}
