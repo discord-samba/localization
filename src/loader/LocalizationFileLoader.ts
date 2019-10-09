@@ -1,9 +1,9 @@
-import * as Path from 'path';
-import * as Glob from 'glob';
 import * as FS from 'fs';
-import { Parser } from '../parser/Parser';
-import { NodeKindImplParentNode } from '../nodeKindImpl/NodeKindImplParentNode';
+import * as Glob from 'glob';
+import * as Path from 'path';
 import { LocalizationCache } from '../LocalizationCache';
+import { NodeKindImplParentNode } from '../nodeKindImpl/NodeKindImplParentNode';
+import { Parser } from '../parser/Parser';
 
 export class LocalizationFileLoader
 {

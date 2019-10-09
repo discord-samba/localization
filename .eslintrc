@@ -80,7 +80,8 @@
 		"no-caller": "error",
 		"no-div-regex": "warn",
 		"no-else-return": "error",
-		"no-empty-function": [
+		"no-empty-function": "off",
+		"@typescript-eslint/no-empty-function": [
 			"error",
 			{
 				"allow": [
@@ -116,7 +117,8 @@
 		"no-param-reassign": "error",
 		"no-proto": "error",
 		"no-redeclare": "error",
-		// "no-restricted-properties" [], // Add later if necessary?
+		// Add later if necessary
+		// "no-restricted-properties" [],
 		"no-return-assign": "error",
 		"no-return-await": "error",
 		"no-script-url": "error",
@@ -158,10 +160,12 @@
 		// Variables //////////////////////////////////////////////////////////
 		"no-delete-var": "error",
 		"no-label-var": "error",
-		// "no-restricted-globals": [] // Add later if necessary?
+		// Add later if necessary
+		// "no-restricted-globals": []
 		"no-shadow": "error",
 		"no-shadow-restricted-names": "error",
-		// "no-undef":"error", // Disallows "Proxy", don't want to use /* global */ comments
+		// Disallows "Proxy", don't want to use /* global */ comments
+		// "no-undef": "error",
 		"no-undef-init": "error",
 		"no-undefined": "error",
 		"no-unused-vars": "off",
@@ -195,14 +199,16 @@
 			"error",
 			"always"
 		],
-		"brace-style": [
+		"brace-style": "off",
+		"@typescript-eslint/brace-style": [
 			"error",
 			"allman",
 			{
 				"allowSingleLine": true
 			}
 		],
-		"camelcase": [
+		"camelcase": "off",
+		"@typescript-eslint/camelcase": [
 			"warn",
 			{
 				"properties": "always"
@@ -235,7 +241,8 @@
 			"never"
 		],
 		"eol-last": "warn",
-		"func-call-spacing": [
+		"func-call-spacing": "off",
+		"@typescript-eslint/func-call-spacing": [
 			"error",
 			"never"
 		],
@@ -258,12 +265,14 @@
 			"error",
 			"consistent"
 		],
-		// "id-blacklist": ["error"], // Add later if necessary?
+		// Add later if necessary?
+		// "id-blacklist": ["error"],
 		"indent": [
 			"error",
 			"tab",
 			{
 				"SwitchCase": 1
+				// "ignoredNodes": [""]
 			}
 		],
 		"key-spacing": "error",
@@ -282,9 +291,9 @@
 				"allowClassEnd": true,
 				"allowObjectStart": true,
 				"allowObjectEnd": true,
-				// Just to ignore that one comment on the switch in Parser, as this
-				// should be covered by allowBlockStart but it isn't for some reason
-				"ignorePattern": "Allow"
+				// Exceptions for specific comments that should be covered by
+				// allowBlockStart but aren't for some reason
+				"ignorePattern": "Allow|Call"
 			}
 		],
 		"lines-between-class-members": [
@@ -298,8 +307,306 @@
 			"warn",
 			120
 		],
-
+		"new-cap": [
+			"error",
+			{
+				"capIsNew": false,
+				"properties": false
+			}
+		],
+		"new-parens": "error",
+		"newline-per-chained-call": [
+			"warn",
+			{
+				"ignoreChainWithDepth": 2
+			}
+		],
+		"no-array-constructor": "error",
+		"no-inline-comments": "warn",
+		"no-lonely-if": "warn",
+		"no-mixed-operators": "warn",
+		"no-new-object": "error",
+		"no-trailing-spaces": "warn",
+		"no-unneeded-ternary": "warn",
+		"no-whitespace-before-property": "error",
+		"nonblock-statement-body-position": [
+			"warn",
+			"any",
+			{
+				"overrides": {
+					"while": "below",
+					"for": "below"
+				}
+			}
+		],
+		"object-curly-newline": [
+			"warn",
+			{
+				"consistent": true
+			}
+		],
+		"object-curly-spacing": [
+			"warn",
+			"always"
+		],
+		"object-property-newline": [
+			"warn",
+			{
+				"allowAllPropertiesOnSameLine": true
+			}
+		],
+		"one-var-declaration-per-line": [
+			"warn",
+			"always"
+		],
+		"operator-assignment": "warn",
+		"operator-linebreak": [
+			"error",
+			"before",
+			{
+				"overrides": {
+					"=": "after"
+				}
+			}
+		],
+		"padded-blocks": [
+			"error",
+			"never"
+		],
+		"prefer-object-spread": "warn",
+		"quotes": [
+			"error",
+			"single"
+		],
+		"semi": "error",
+		"semi-spacing": [
+			"warn",
+			{
+				"after": true
+			}
+		],
+		"semi-style": [
+			"error",
+			"last"
+		],
+		"space-before-blocks": [
+			"error",
+			"always"
+		],
+		"space-before-function-paren": [
+			"error",
+			"never"
+		],
+		"space-in-parens": [
+			"error",
+			"never"
+		],
+		"space-infix-ops": "error",
+		"space-unary-ops": "error",
+		"spaced-comment": [
+			"error",
+			"always"
+		],
+		"switch-colon-spacing": [
+			"error",
+			{
+				"after": true,
+				"before": false
+			}
+		],
+		"template-tag-spacing": [
+			"error",
+			"never"
+		],
+		"unicode-bom": [
+			"error",
+			"never"
+		],
+		// ECMAScript 6 ///////////////////////////////////////////////////////
+		"arrow-body-style": [
+			"warn",
+			"as-needed"
+		],
+		"arrow-parens": [
+			"warn",
+			"as-needed"
+		],
+		"arrow-spacing": [
+			"error",
+			{
+				"before": true,
+				"after": true
+			}
+		],
+		"constructor-super": "error",
+		"generator-star-spacing": [
+			"error",
+			{
+				"before": true,
+				"after": false
+			}
+		],
+		"no-class-assign": "error",
+		"no-confusing-arrow": [
+			"error",
+			{
+				"allowParens": true
+			}
+		],
+		"no-const-assign": "error",
+		// This interferes with method overloading in Typescript, sadly
+		// "no-dupe-class-members": "error",
+		"no-duplicate-imports": "error",
+		"no-new-symbol": "error",
+		"no-this-before-super": "error",
+		"no-useless-computed-key": "warn",
+		"no-useless-constructor": "off",
+		"@typescript-eslint/no-useless-constructor": "error",
+		"no-useless-rename": "error",
 		"no-var": "error",
-		"semi": "error"
+		"object-shorthand": [
+			"error",
+			"always"
+		],
+		"prefer-arrow-callback": "error",
+		"prefer-const": "warn",
+		"prefer-numeric-literals": "warn",
+		"prefer-rest-params": "error",
+		"prefer-spread": "warn",
+		"prefer-template": "warn",
+		"require-yield": "error",
+		"rest-spread-spacing": [
+			"error",
+			"never"
+		],
+		"sort-imports": [
+			"error",
+			{
+				"ignoreCase": false,
+				"ignoreDeclarationSort": false,
+				"ignoreMemberSort": true,
+				"memberSyntaxSortOrder": [
+					"none",
+					"all",
+					"multiple",
+					"single"
+				]
+			}
+		],
+		"symbol-description": "warn",
+		"template-curly-spacing": [
+			"warn",
+			"never"
+		],
+		"yield-star-spacing": [
+			"error",
+			"before"
+		],
+		// Typescript Specifics ///////////////////////////////////////////////
+		"@typescript-eslint/adjacent-overload-signatures": "warn",
+		"@typescript-eslint/array-type": [
+			"error",
+			{
+				"default": "array",
+				"readonly": "array"
+			}
+		],
+		"@typescript-eslint/await-thenable": "warn",
+		"@typescript-eslint/class-name-casing": [
+			"error",
+			{
+				"allowUnderscorePrefix": true
+			}
+		],
+		"@typescript-eslint/consistent-type-assertions": [
+			"error",
+			{
+				"assertionStyle": "as",
+				"objectLiteralTypeAssertions": "allow-as-parameter"
+			}
+		],
+		"@typescript-eslint/consistent-type-definitions": [
+			"error",
+			"interface"
+		],
+		"@typescript-eslint/explicit-function-return-type": [
+			"error"
+		],
+		"@typescript-eslint/explicit-member-accessibility": "error",
+		// Use if we want generic type parameters to conform to a specific pattern
+		// "@typescript-eslint/generic-type-naming": ["warn", "^Pattern"],
+		"@typescript-eslint/member-delimiter-style": [
+			"error",
+			{
+				"multiline": {
+					"delimiter": "semi",
+					"requireLast": true
+				},
+				"singleline": {
+					"delimiter": "semi",
+					"requireLast": false
+				}
+			}
+		],
+		"@typescript-eslint/member-naming": [
+			"error",
+			{
+				"private": "^_"
+			}
+		],
+		"@typescript-eslint/no-array-constructor": "error",
+		"@typescript-eslint/no-empty-interface": [
+			"error",
+			{
+				"allowSingleExtends": false
+			}
+		],
+		// "@typescript-eslint/no-explicit-any": "error",
+		"@typescript-eslint/no-extraneous-class": [
+			"error",
+			{
+				"allowConstructorOnly": false,
+				"allowEmpty": false,
+				"allowStaticOnly": true
+			}
+		],
+		"@typescript-eslint/no-floating-promises": "error",
+		"@typescript-eslint/no-for-in-array": "error",
+		"@typescript-eslint/no-misused-new": "error",
+		"@typescript-eslint/no-misused-promises": "error",
+		"@typescript-eslint/no-namespace": [
+			"error",
+			{
+				"allowDeclarations": true,
+				"allowDefinitionFiles": true
+			}
+		],
+		"@typescript-eslint/no-parameter-properties": "error",
+		"@typescript-eslint/no-this-alias": [
+			"error",
+			{
+				"allowDestructuring": true
+			}
+		],
+		"@typescript-eslint/no-type-alias": [
+			"error",
+			{
+				"allowAliases": "in-unions-and-intersections",
+				"allowCallbacks": "always",
+				"allowLiterals": "in-unions-and-intersections",
+				"allowMappedTypes": "in-unions-and-intersections",
+				"allowTupleTypes": "always"
+			}
+		],
+		"@typescript-eslint/no-unnecessary-qualifier": "warn",
+		"@typescript-eslint/no-unnecessary-type-arguments": "warn",
+		"@typescript-eslint/no-unnecessary-type-assertion": "warn",
+		"@typescript-eslint/no-use-before-define": "error",
+		"@typescript-eslint/prefer-for-of": "warn",
+		"@typescript-eslint/prefer-function-type": "error",
+		"@typescript-eslint/prefer-includes": "warn",
+		// Currently causes an ESLint error.
+		// "@typescript-eslint/prefer-readonly": "warn",
+
 	}
 }

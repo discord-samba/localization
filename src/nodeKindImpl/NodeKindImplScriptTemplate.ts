@@ -1,14 +1,13 @@
-import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
+import { LocalizationResrouceMetaData } from '../types/LocalizationResourceMetaData';
 import { LocalizationStringChildNode } from '../interfaces/LocalizationStringChildNode';
 import { LocalizationStringNodeKind } from '../types/LocalizationStringNodeKind';
-import { LocalizationResrouceMetaData } from '../types/LocalizationResourceMetaData';
-import { TemplateArguments } from '../types/TemplateArguments';
+import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 import { Script } from 'vm';
+import { TemplateArguments } from '../types/TemplateArguments';
 
 export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 {
-	public kind: LocalizationStringNodeKind =
-		LocalizationStringNodeKind.ScriptTemplate;
+	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.ScriptTemplate;
 
 	private _fn!: Function;
 	private _impFn?: Function;
@@ -41,7 +40,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 	/**
 	 * Wrap the given code in a dummy function body
 	 */
-	private static _functionWrap(code: string)
+	private static _functionWrap(code: string): string
 	{
 		return `function _(args, res) {\n${code}\n}`;
 	}
@@ -68,7 +67,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 
 		if (typeof error !== 'undefined')
 		{
-			let errStackLines: string[] = error.stack!
+			const errStackLines: string[] = error.stack!
 				.split('\n')
 				.filter((_, i) => i < 5);
 
@@ -79,10 +78,10 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 			// which aren't present in the .lang file so we'll just give the line
 			// the script starts on. Accounting for all possible cases with `}` to
 			// give an accurate line just isn't worth it.
-			if (/Unexpected token }/.test(errStackLines[4]))
+			if (errStackLines[4].includes('Unexpected token }'))
 				scriptLine = this.line;
 
-			errStackLines[0] = `Error compiling template script:\n`;
+			errStackLines[0] = 'Error compiling template script:\n';
 			errStackLines.push(`    at Template Script (${this.parent.container}:${scriptLine})`);
 
 			error.stack = errStackLines.join('\n');
@@ -109,11 +108,11 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 	 */
 	private _newErr(err: Error, _meta: LocalizationResrouceMetaData): Error
 	{
-		let error: Error = new Error();
+		const error: Error = new Error();
+		const stack: string[] = [];
 
 		error.message = err.message;
 
-		let stack: string[] = [];
 		stack.push(`TemplateScriptError: ${error.message}`);
 		stack.push(`    at Template Script (${this.parent.container}:${this.line})`);
 		if (typeof _meta._cl !== 'undefined')

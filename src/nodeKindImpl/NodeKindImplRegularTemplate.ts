@@ -4,8 +4,7 @@ import { LocalizationStringParentNode } from '../interfaces/LocalizationStringPa
 
 export class NodeKindImplRegularTemplate implements LocalizationStringChildNode
 {
-	public kind: LocalizationStringNodeKind =
-		LocalizationStringNodeKind.RegularTemplate;
+	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.RegularTemplate;
 
 	public key: string;
 	public parent: LocalizationStringParentNode;

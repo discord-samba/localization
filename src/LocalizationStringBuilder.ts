@@ -1,17 +1,17 @@
-import { LocalizationStringParentNode } from './interfaces/LocalizationStringParentNode';
-import { LocalizationStringNodeKind } from './types/LocalizationStringNodeKind';
-import { LocalizationStringChildNode } from './interfaces/LocalizationStringChildNode';
-import { NodeKindImplStringChunk } from './nodeKindImpl/NodeKindImplStringChunk';
-import { NodeKindImplRegularTemplate } from './nodeKindImpl/NodeKindImplRegularTemplate';
-import { NodeKindImplMaybeTemplate } from './nodeKindImpl/NodeKindImplMaybeTemplate';
-import { NodeKindImplForwardTemplate } from './nodeKindImpl/NodeKindImplForwardTemplate';
-import { NodeKindImplScriptTemplate } from './nodeKindImpl/NodeKindImplScriptTemplate';
 import { Localization } from './Localization';
-import { TemplateArguments } from './types/TemplateArguments';
-import { LocalizationStringChildResultNode } from './types/LocalizationStringChildResultNode';
-import { LocalizationStringTypeDeclaration } from './types/LocalizationStringTypeDeclaration';
-import { LocalizationStringError } from './LocalizationStringError';
 import { LocalizationResrouceMetaData } from './types/LocalizationResourceMetaData';
+import { LocalizationStringChildNode } from './interfaces/LocalizationStringChildNode';
+import { LocalizationStringChildResultNode } from './types/LocalizationStringChildResultNode';
+import { LocalizationStringError } from './LocalizationStringError';
+import { LocalizationStringNodeKind } from './types/LocalizationStringNodeKind';
+import { LocalizationStringParentNode } from './interfaces/LocalizationStringParentNode';
+import { LocalizationStringTypeDeclaration } from './types/LocalizationStringTypeDeclaration';
+import { NodeKindImplForwardTemplate } from './nodeKindImpl/NodeKindImplForwardTemplate';
+import { NodeKindImplMaybeTemplate } from './nodeKindImpl/NodeKindImplMaybeTemplate';
+import { NodeKindImplRegularTemplate } from './nodeKindImpl/NodeKindImplRegularTemplate';
+import { NodeKindImplScriptTemplate } from './nodeKindImpl/NodeKindImplScriptTemplate';
+import { NodeKindImplStringChunk } from './nodeKindImpl/NodeKindImplStringChunk';
+import { TemplateArguments } from './types/TemplateArguments';
 
 /**
  * Stores a localization string parent node and builds a string
@@ -38,7 +38,7 @@ export class LocalizationStringBuilder
 			LocalizationStringNodeKind.ScriptTemplate
 		];
 
-		let results: LocalizationStringChildResultNode[] = [];
+		const results: LocalizationStringChildResultNode[] = [];
 
 		// Validate passed arguments if the parent node has any param type declarations
 		if (Object.keys(this._cachedNode.params).length > 0)
@@ -110,7 +110,10 @@ export class LocalizationStringBuilder
 			if (result.kind === LocalizationStringNodeKind.MaybeTemplate && typeof result.value === 'undefined')
 				result.value = '';
 
-		return results.map(r => `${r.value}`).join('').trim();
+		return results
+			.map(r => `${r.value}`)
+			.join('')
+			.trim();
 	}
 
 	/**

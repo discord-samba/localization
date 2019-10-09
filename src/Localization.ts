@@ -1,9 +1,9 @@
 import { LocalizationCache } from './LocalizationCache';
-import { LocalizationStringBuilder } from './LocalizationStringBuilder';
-import { LocalizationResourceProxy } from './types/LocalizationResourceProxy';
-import { TemplateArguments } from './types/TemplateArguments';
-import { LocalizationResrouceMetaData } from './types/LocalizationResourceMetaData';
 import { LocalizationFileLoader } from './loader/LocalizationFileLoader';
+import { LocalizationResourceProxy } from './types/LocalizationResourceProxy';
+import { LocalizationResrouceMetaData } from './types/LocalizationResourceMetaData';
+import { LocalizationStringBuilder } from './LocalizationStringBuilder';
+import { TemplateArguments } from './types/TemplateArguments';
 
 export class Localization
 {
@@ -39,7 +39,7 @@ export class Localization
 		// If we don't have call location information, capture it
 		if (typeof _meta._cl === 'undefined')
 		{
-			let trace: any = {};
+			const trace: any = {};
 			Error.captureStackTrace(trace);
 			_meta._cl = trace.stack.split('\n')[_meta._ip ? 3 : 2];
 		}
@@ -55,10 +55,8 @@ export class Localization
 		{
 			_meta._mp = new Proxy({}, {
 				get: (_, _key: string) =>
-				{
-					return (_args: TemplateArguments = args) =>
-						(proxy as any)[_key](_args, _meta);
-				}
+					(_args: TemplateArguments = args): string =>
+						(proxy as any)[_key](_args, _meta)
 			}) as LocalizationResourceProxy;
 		}
 
@@ -86,13 +84,11 @@ export class Localization
 
 		const proxy: LocalizationResourceProxy<T> = new Proxy({}, {
 			get: (_, key: string) =>
-			{
-				return (args: TemplateArguments, _meta: LocalizationResrouceMetaData = {}) =>
+				(args: TemplateArguments, _meta: LocalizationResrouceMetaData = {}): string =>
 				{
 					_meta._ip = true;
 					return (Localization.resource as any)(language, key, args, _meta);
-				};
-			}
+				}
 		}) as LocalizationResourceProxy<T>;
 
 		LocalizationCache.setProxy(language, proxy);

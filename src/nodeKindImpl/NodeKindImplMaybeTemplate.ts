@@ -4,8 +4,7 @@ import { LocalizationStringParentNode } from '../interfaces/LocalizationStringPa
 
 export class NodeKindImplMaybeTemplate implements LocalizationStringChildNode
 {
-	public kind: LocalizationStringNodeKind =
-		LocalizationStringNodeKind.MaybeTemplate;
+	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.MaybeTemplate;
 
 	public key: string;
 	public parent: LocalizationStringParentNode;
