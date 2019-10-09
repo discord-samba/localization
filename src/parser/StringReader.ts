@@ -26,7 +26,7 @@ export class StringReader
 	 * Peeks the next segment of characters, `n` characters long. Can be offset
 	 * to peek further ahead. Defaults to 0 characters of offset
 	 */
-	public peekSegment(n: number = 1, offset: number = 0)
+	public peekSegment(n: number = 1, offset: number = 0): string
 	{
 		return this._input.substr(this._index + offset, n);
 	}

@@ -1,16 +1,16 @@
-import { LocalizationStringTemplateKind } from '../types/LocalizationStringTemplateKind';
 import { LocalizationStringChildNode } from '../interfaces/LocalizationStringChildNode';
-import { NodeKindImplParentNode } from '../nodeKindImpl/NodeKindImplParentNode';
-import { NodeKindImplStringChunk } from '../nodeKindImpl/NodeKindImplStringChunk';
-import { NodeKindImplRegularTemplate } from '../nodeKindImpl/NodeKindImplRegularTemplate';
+import { LocalizationStringChunkKind } from '../types/LocalizationStringChunkKind';
+import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
+import { LocalizationStringTemplateKind } from '../types/LocalizationStringTemplateKind';
+import { LocalizationStringTypeDeclarationMapping } from '../types/LocalizationStringTypeDeclarationMapping';
 import { NodeKindImplForwardTemplate } from '../nodeKindImpl/NodeKindImplForwardTemplate';
 import { NodeKindImplMaybeTemplate } from '../nodeKindImpl/NodeKindImplMaybeTemplate';
+import { NodeKindImplParentNode } from '../nodeKindImpl/NodeKindImplParentNode';
+import { NodeKindImplRegularTemplate } from '../nodeKindImpl/NodeKindImplRegularTemplate';
 import { NodeKindImplScriptTemplate } from '../nodeKindImpl/NodeKindImplScriptTemplate';
-import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
-import { LocalizationStringChunkKind } from '../types/LocalizationStringChunkKind';
-import { StringReader } from './StringReader';
+import { NodeKindImplStringChunk } from '../nodeKindImpl/NodeKindImplStringChunk';
 import { ParseError } from './ParseError';
-import { LocalizationStringTypeDeclarationMapping } from '../types/LocalizationStringTypeDeclarationMapping';
+import { StringReader } from './StringReader';
 
 export class Parser
 {
@@ -22,7 +22,7 @@ export class Parser
 	public static parse(container: string, input: string): NodeKindImplParentNode[]
 	{
 		const reader: StringReader = new StringReader(input.replace(/\r\n/g, '\n'));
-		let nodeList: NodeKindImplParentNode[] = [];
+		const nodeList: NodeKindImplParentNode[] = [];
 
 		while (!reader.eof())
 		{
@@ -57,13 +57,13 @@ export class Parser
 					const { line, column } = reader;
 					const key: string = Parser._consumeParentKey(container, reader);
 
-					let currentNode: NodeKindImplParentNode =
+					const currentNode: NodeKindImplParentNode =
 						new NodeKindImplParentNode(container, key, line, column);
 
 					// Error if we hit a valid string key without encountering a string body
 					if (Parser._peekChunkKind(reader) === LocalizationStringChunkKind.ParentKey)
 						throw new ParseError(
-							`Unexpected string key, expected string body`,
+							'Unexpected string key, expected string body',
 							container,
 							reader.line,
 							reader.column
@@ -241,7 +241,7 @@ export class Parser
 		// Discard ##!
 		reader.discard(3);
 
-		let types: LocalizationStringTypeDeclarationMapping = {};
+		const types: LocalizationStringTypeDeclarationMapping = {};
 		const validKeyChar: RegExp = /\w/;
 		const validType: RegExp = /^(?:[sS]tring|[nN]umber|[bB]oolean|[aA]ny)(?:\[\])?$/;
 
@@ -260,7 +260,7 @@ export class Parser
 				// Error if a comma appears before any identifiers
 				if (Object.keys(types).length === 0)
 					throw new ParseError(
-						`Unexpected token ','`,
+						'Unexpected token \',\'',
 						parent.container,
 						reader.line,
 						reader.column
@@ -324,7 +324,7 @@ export class Parser
 
 			if (!validType.test(identType))
 				throw new ParseError(
-					`Invalid type. Must be one of string, number, boolean, or an array of those`,
+					'Invalid type. Must be one of string, number, boolean, or an array of those',
 					parent.container,
 					line,
 					column
@@ -499,7 +499,7 @@ export class Parser
 			case LocalizationStringTemplateKind.Invalid:
 				throw new ParseError(
 					'Invalid template',
-					parent.container!,
+					parent.container,
 					reader.line,
 					reader.column
 				);
@@ -550,7 +550,7 @@ export class Parser
 		// Discard the closing braces
 		reader.discard(2);
 
-		let node: NodeKindImplRegularTemplate =
+		const node: NodeKindImplRegularTemplate =
 			new NodeKindImplRegularTemplate(key.trim(), parent, line, column);
 
 		return node;
@@ -577,7 +577,7 @@ export class Parser
 		// Discard the closing braces
 		reader.discard(2);
 
-		let node: NodeKindImplForwardTemplate =
+		const node: NodeKindImplForwardTemplate =
 			new NodeKindImplForwardTemplate(key.trim(), parent, line, column);
 
 		return node;
@@ -604,7 +604,7 @@ export class Parser
 		// Discard the closing braces
 		reader.discard(3);
 
-		let node: NodeKindImplMaybeTemplate =
+		const node: NodeKindImplMaybeTemplate =
 			new NodeKindImplMaybeTemplate(key.trim(), parent, line, column);
 
 		return node;
@@ -637,7 +637,7 @@ export class Parser
 		// Discard the closing braces
 		reader.discard(3);
 
-		let node: NodeKindImplScriptTemplate =
+		const node: NodeKindImplScriptTemplate =
 			new NodeKindImplScriptTemplate(scriptBody, bodyStartLine, parent, line, column);
 
 		return node;

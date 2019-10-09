@@ -1,6 +1,6 @@
-import { LocalizationStringParentNode } from './interfaces/LocalizationStringParentNode';
-import { LocalizationStringBuilder } from './LocalizationStringBuilder';
 import { LocalizationResourceProxy } from './types/LocalizationResourceProxy';
+import { LocalizationStringBuilder } from './LocalizationStringBuilder';
+import { LocalizationStringParentNode } from './interfaces/LocalizationStringParentNode';
 
 /**
  * Caches string builders for given `LocalizationStringParentNodes`

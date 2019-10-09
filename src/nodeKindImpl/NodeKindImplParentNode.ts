@@ -1,12 +1,11 @@
-import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
-import { LocalizationStringNodeKind } from '../types/LocalizationStringNodeKind';
 import { LocalizationStringChildNode } from '../interfaces/LocalizationStringChildNode';
+import { LocalizationStringNodeKind } from '../types/LocalizationStringNodeKind';
+import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 import { LocalizationStringTypeDeclarationMapping } from '../types/LocalizationStringTypeDeclarationMapping';
 
 export class NodeKindImplParentNode implements LocalizationStringParentNode
 {
-	public kind: LocalizationStringNodeKind =
-		LocalizationStringNodeKind.Parent;
+	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.Parent;
 
 	public container: string;
 	public key: string;
@@ -36,7 +35,7 @@ export class NodeKindImplParentNode implements LocalizationStringParentNode
 	/**
 	 * Append the given param types to this node's current parameter declarations mapping
 	 */
-	public addParams(paramTypes: LocalizationStringTypeDeclarationMapping)
+	public addParams(paramTypes: LocalizationStringTypeDeclarationMapping): void
 	{
 		this.params = { ...this.params, ...paramTypes };
 	}

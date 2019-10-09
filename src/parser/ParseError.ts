@@ -13,7 +13,7 @@ export class ParseError extends Error
 		try { fileContents = FS.readFileSync(container)?.toString(); }
 		catch {}
 
-		let stack: string[] = this.stack?.split('\n') ?? [];
+		const stack: string[] = this.stack?.split('\n') ?? [];
 		stack.push('');
 
 		if (typeof fileContents !== 'undefined')
@@ -21,7 +21,7 @@ export class ParseError extends Error
 			stack.push(`${container}:${line}`);
 			const lines: string[] = fileContents.split('\n');
 			const errorLine: string = ` ${line} | ${lines[line - 1]}`;
-			const arrow: string = ' '.repeat(line.toString().length + column + 3) + '^';
+			const arrow: string = `${' '.repeat(line.toString().length + column + 3)}^`;
 			stack.push('');
 			stack.push(errorLine);
 			stack.push(arrow);

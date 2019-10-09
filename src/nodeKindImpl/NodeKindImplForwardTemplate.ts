@@ -4,8 +4,7 @@ import { LocalizationStringParentNode } from '../interfaces/LocalizationStringPa
 
 export class NodeKindImplForwardTemplate implements LocalizationStringChildNode
 {
-	public kind: LocalizationStringNodeKind =
-		LocalizationStringNodeKind.ForwardTemplate;
+	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.ForwardTemplate;
 
 	public forwardKey: string;
 	public parent: LocalizationStringParentNode;

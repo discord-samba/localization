@@ -4,8 +4,7 @@ import { LocalizationStringParentNode } from '../interfaces/LocalizationStringPa
 
 export class NodeKindImplStringChunk implements LocalizationStringChildNode
 {
-	public kind: LocalizationStringNodeKind =
-		LocalizationStringNodeKind.StringChunk;
+	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.StringChunk;
 
 	public content: string;
 	public parent: LocalizationStringParentNode;
