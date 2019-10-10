@@ -22,16 +22,30 @@ const args: TemplateArguments = {
 	foo: 'foo',
 	bar: 1,
 	baz: true,
-	boo: ['foo', '1', 'baz'],
+	boo: ['foo', '2', 'baz'],
 	// far: [1, 2, 3],
 	faz: [true, false, true],
 	any: [1, '2', true],
 	arg: 'arg'
 };
 
+console.log('---Test regular strings with args---');
 console.log(Localization.resource('test', 'TEST', args), '\n');
 console.log(Localization.resource('test', 'TEST2', args), '\n');
 
+console.log('---Test strings with categories and subcategories---');
+console.log(Localization.resource(['test', 'test'], 'TEST'), '\n');
+console.log(Localization.resource(['test', 'test', 'test'], 'TEST', { foo: 'bar' }), '\n');
+
+console.log('---Test regular proxies---')
 let proxy: LocalizationResourceProxy<any> = Localization.getResourceProxy('test');
 console.log(proxy.TEST(args), '\n');
-console.log(proxy.TEST2(args));
+console.log(proxy.TEST2(args), '\n');
+
+console.log('---Test category and subcategory proxies---');
+let testCategoryProxy: LocalizationResourceProxy<any> = Localization.getResourceProxy(['test', 'test']);
+let testSubcategoryProxy: LocalizationResourceProxy<any> = Localization.getResourceProxy(['test', 'test', 'test']);
+console.log('category proxy test: ', testCategoryProxy.TEST(), '\n');
+console.log('subcategory proxy test: ', testSubcategoryProxy.TEST({ foo: 'bar' }));
+
+console.log('\n');

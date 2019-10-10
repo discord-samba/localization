@@ -5,6 +5,8 @@ export interface LocalizationStringParentNode
 {
 	container: string;
 	key: string;
+	category: string;
+	subcategory: string;
 	children: LocalizationStringChildNode[];
 	params: LocalizationStringTypeDeclarationMapping;
 	line: number;

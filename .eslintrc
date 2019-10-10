@@ -566,7 +566,7 @@
 					"requireLast": true
 				},
 				"singleline": {
-					"delimiter": "semi",
+					"delimiter": "comma",
 					"requireLast": false
 				}
 			}
@@ -652,7 +652,12 @@
 		],
 		"@typescript-eslint/require-array-sort-compare": "error",
 		"@typescript-eslint/restrict-plus-operands": "error",
-		"@typescript-eslint/strict-boolean-expressions": "error",
+		"@typescript-eslint/strict-boolean-expressions": [
+			"error",
+			{
+				"ignoreRhs": true
+			}
+		],
 		"@typescript-eslint/triple-slash-reference": [
 			"error",
 			{

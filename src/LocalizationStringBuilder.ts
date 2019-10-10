@@ -39,6 +39,8 @@ export class LocalizationStringBuilder
 		];
 
 		const results: LocalizationStringChildResultNode[] = [];
+		const path: [string, string, string] =
+			[this._language, this._cachedNode.category, this._cachedNode.subcategory];
 
 		// Validate passed arguments if the parent node has any param type declarations
 		if (Object.keys(this._cachedNode.params).length > 0)
@@ -63,7 +65,7 @@ export class LocalizationStringBuilder
 				case LocalizationStringNodeKind.ForwardTemplate:
 					this._childIs<NodeKindImplForwardTemplate>(child);
 
-					if (!Localization.resourceExists(this._language, child.forwardKey))
+					if (!Localization.resourceExists(path, child.forwardKey))
 						throw new LocalizationStringError(
 							[
 								`Localization string key '${child.forwardKey}'`,
@@ -77,7 +79,7 @@ export class LocalizationStringBuilder
 
 					results.push(this._makeResult(
 						child.kind,
-						(Localization.resource as any)(this._language, child.forwardKey, args, _meta)
+						(Localization.resource as any)(path, child.forwardKey, args, _meta)
 					));
 
 					break;

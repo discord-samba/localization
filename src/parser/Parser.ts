@@ -1,5 +1,6 @@
 import { LocalizationStringChildNode } from '../interfaces/LocalizationStringChildNode';
 import { LocalizationStringChunkKind } from '../types/LocalizationStringChunkKind';
+import { LocalizationStringParentKeyData } from '../types/LocalizationStringParentKeyData';
 import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 import { LocalizationStringTemplateKind } from '../types/LocalizationStringTemplateKind';
 import { LocalizationStringTypeDeclarationMapping } from '../types/LocalizationStringTypeDeclarationMapping';
@@ -55,10 +56,11 @@ export class Parser
 						);
 
 					const { line, column } = reader;
-					const key: string = Parser._consumeParentKey(container, reader);
+					const parentKeyData: LocalizationStringParentKeyData =
+						Parser._consumeParentKey(container, reader);
 
 					const currentNode: NodeKindImplParentNode =
-						new NodeKindImplParentNode(container, key, line, column);
+						new NodeKindImplParentNode(container, parentKeyData, line, column);
 
 					// Error if we hit a valid string key without encountering a string body
 					if (Parser._peekChunkKind(reader) === LocalizationStringChunkKind.ParentKey)
@@ -103,7 +105,11 @@ export class Parser
 	 * Should be called when reader.peek() returns the opening key brace.
 	 * Can be given an offset to check that many characters ahead for the
 	 * first character. If using an offset, be sure to set the offset
-	 * to a value that reader.peek(offset) would return the opening key brace
+	 * to a value that reader.peek(offset) would return the opening key brace.
+	 *
+	 * This checks if the parent key contains only valid characters. The
+	 * order/quantity of these characters and whether or not the characters
+	 * follow valid syntax rules is not taken into consideration
 	 */
 	private static _peekValidParentKey(reader: StringReader, offset: number = 0): boolean
 	{
@@ -116,7 +122,7 @@ export class Parser
 			if (reader.eof(index))
 				return false;
 
-			if (!/[\w]/.test(reader.peek(index)))
+			if (!/[():\w]/.test(reader.peek(index)))
 				return false;
 
 			index++;
@@ -125,10 +131,95 @@ export class Parser
 	}
 
 	/**
+	 * Peeks whether or not the following characters make up a valid
+	 * parent node category or category(subcategory) pair
+	 */
+	private static _peekValidParentCategory(reader: StringReader): boolean
+	{
+		let index: number = 0;
+		let categoryText: string = '';
+		while (reader.peek(index) !== ':')
+		{
+			if (reader.eof(index))
+				return false;
+
+			if (reader.peek(index) === ']')
+				return false;
+
+			if (!/[()\w]/.test(reader.peek(index)))
+				return false;
+
+			categoryText += reader.peek(index);
+			index++;
+		}
+
+		if (!/\w+(?:\(\w+\))?/.test(categoryText))
+			return false;
+
+		return true;
+	}
+
+	/**
+	 * Consumes the parent key category and subcategory
+	 */
+	private static _consumeParentCategory(
+		container: string,
+		reader: StringReader
+	): { category: string, subcategory: string }
+	{
+		let category: string = '';
+		let subcategory: string = '';
+
+		while (reader.peek() !== ':')
+		{
+			while (reader.peek() !== '(' && reader.peek() !== ':')
+			{
+				if (!/\w/.test(reader.peek()))
+					throw new ParseError(
+						`Unexpected token '${reader.peek()}'`,
+						container,
+						reader.line,
+						reader.column
+					);
+
+				category += reader.consume();
+			}
+
+			if (reader.peek() === '(')
+			{
+				// Discard the opening '('
+				reader.discard();
+				while (reader.peek() !== ')')
+				{
+					if (!/\w/.test(reader.peek()))
+						throw new ParseError(
+							`Unexpected token '${reader.peek()}'`,
+							container,
+							reader.line,
+							reader.column
+						);
+					subcategory += reader.consume();
+				}
+
+				// Discard the closing ')'
+				reader.discard();
+			}
+		}
+
+		// Set subcategory default if none was found. We don't need
+		// to set a default for category because this method won't
+		// be called if a category isn't found to begin with
+		if (subcategory === '')
+			subcategory = 'default';
+
+		return { category, subcategory };
+	}
+
+	/**
 	 * Consumes the key string for a parent node key, including the braces
 	 * and newline, and returns the key
 	 */
-	private static _consumeParentKey(container: string, reader: StringReader): string
+	private static _consumeParentKey(container: string, reader: StringReader): LocalizationStringParentKeyData
 	{
 		const { line, column } = reader;
 
@@ -136,8 +227,18 @@ export class Parser
 		reader.discard();
 
 		let key: string = '';
+		let category: string = '';
+		let subcategory: string = '';
 		while (reader.peek() !== ']')
 		{
+			if (Parser._peekValidParentCategory(reader))
+			{
+				({ category, subcategory } = Parser._consumeParentCategory(container, reader));
+
+				// Discard category separator ':'
+				reader.discard();
+			}
+
 			if (reader.eof())
 				throw new ParseError(
 					'Failed to find closing string key brace',
@@ -157,6 +258,13 @@ export class Parser
 			key += reader.consume();
 		}
 
+		// Set category and subcategory defaults if none were found
+		if (category === '')
+			category = 'default';
+
+		if (subcategory === '')
+			subcategory = 'default';
+
 		// Discard the closing `]`
 		reader.discard();
 
@@ -168,10 +276,10 @@ export class Parser
 				reader.column
 			);
 
-		// Discard the newline following key
+		// Discard the newline following the localization key
 		reader.discard();
 
-		return key;
+		return { key, category, subcategory };
 	}
 
 	/**

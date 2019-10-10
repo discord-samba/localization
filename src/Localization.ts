@@ -8,7 +8,7 @@ import { TemplateArguments } from './types/TemplateArguments';
 export class Localization
 {
 	/**
-	 * Load all .lang files in the given directory (and subdirectories)
+	 * Load all .lang files in the given directory (and subdirectories therein)
 	 * as the given language, parsing them and caching to the LocalizationCache
 	 */
 	public static loadFromDirectory(language: string, dir: string): void
@@ -17,21 +17,45 @@ export class Localization
 	}
 
 	/**
-	 * Fetches a Localization string resource for the given language
-	 * with the given key. The string will be built using the given arguments.
+	 * Fetches a Localization string resource for the path. The string
+	 * will be built using the given arguments.
+	 *
+	 * Accepts a language string, or accepts a string tuple matching
+	 * any of the following patterns:
+	 *
+	 *     [language, category, subcategory] // Self-explanatory
+	 *     [language, category]              // Defaults to 'default'' subcategory
+	 *     [language]                        // Defaults to 'default' category, 'default' subcategory
 	 */
-	public static resource(language: string, key: string, args: TemplateArguments): string;
 	public static resource(
-		language: string,
+		path: string | [string] | [string, string] | [string, string, string],
+		key: string,
+		args?: TemplateArguments
+	): string;
+
+	// Cast to `any` for passing _meta as TS will reject it otherwise. Only the first
+	// overload is counted in the public method signature, which is desired as _meta
+	// is a mechanic handled internally
+	public static resource(
+		path: string | [string] | [string, string] | [string, string, string],
 		key: string,
 		args: TemplateArguments = {},
 		_meta: LocalizationResrouceMetaData = {}
 	): string
 	{
+		let language: string;
+		let category: string;
+		let subcategory: string;
+
+		if (typeof path === 'string')
+			[language, category, subcategory] = [path, 'default', 'default'];
+		else
+			[language, category = 'default', subcategory = 'default'] = path;
+
 		if (!LocalizationCache.hasLanguage(language))
 			throw new Error(`No language '${language}' as been loaded`);
 
-		const proxy: LocalizationResourceProxy = Localization.getResourceProxy(language);
+		const proxy: LocalizationResourceProxy = Localization.getResourceProxy(path);
 
 		// TODO: Return something if the resource doesn't exist. Used to do
 		//       `lang::key` in YAMDBF. Maybe something else?
@@ -60,38 +84,78 @@ export class Localization
 			}) as LocalizationResourceProxy;
 		}
 
-		const builder: LocalizationStringBuilder = LocalizationCache.get(language, key)!;
+		const builder: LocalizationStringBuilder =
+			LocalizationCache.get([language, category, subcategory], key)!;
+
 		return builder.build(args, _meta);
 	}
 
 	/**
-	 * Returns whether or not a localization resource exists for the
-	 * given language and given key
+	 * Returns whether or not a Localization resource exists for the
+	 * given path.
+	 *
+	 * Accepts a language string, or accepts a string tuple matching
+	 * any of the following patterns:
+	 *
+	 *     [language, category, subcategory] // Self-explanatory
+	 *     [language, category]              // Defaults to 'default'' subcategory
+	 *     [language]                        // Defaults to 'default' category, 'default' subcategory
 	 */
-	public static resourceExists(language: string, key: string): boolean
+	public static resourceExists(
+		path: string | [string] | [string, string] | [string, string, string],
+		key: string
+	): boolean
 	{
-		return LocalizationCache.has(language, key);
+		let language: string;
+		let category: string;
+		let subcategory: string;
+
+		if (typeof path === 'string')
+			[language, category, subcategory] = [path, 'default', 'default'];
+		else
+			[language, category = 'default', subcategory = 'default'] = path;
+
+		return LocalizationCache.has([language, category, subcategory], key);
 	}
 
 	/**
-	 * Gets a `LocalizationResourceProxy`. See {@link LocalizationResourceProxy}
+	 * Gets a `LocalizationResourceProxy` for the given path. See {@link LocalizationResourceProxy}
 	 * Uses a cached resource proxy if one already exists for the given language
+	 *
+	 * Accepts a language string, or accepts a string tuple matching
+	 * any of the following patterns:
+	 *
+	 *     [language, category, subcategory] // Self-explanatory
+	 *     [language, category]              // Defaults to 'default'' subcategory
+	 *     [language]                        // Defaults to 'default' category, 'default' subcategory
 	 */
-	public static getResourceProxy<T = {}>(language: string): LocalizationResourceProxy<T>
+	public static getResourceProxy<T = {}>(
+		path: string | [string] | [string, string] | [string, string, string]
+	): LocalizationResourceProxy<T>
 	{
-		if (LocalizationCache.hasProxy(language))
-			return LocalizationCache.getProxy(language) as LocalizationResourceProxy<T>;
+		let language: string;
+		let category: string;
+		let subcategory: string;
+
+		if (typeof path === 'string')
+			[language, category, subcategory] = [path, 'default', 'default'];
+		else
+			[language, category = 'default', subcategory = 'default'] = path;
+
+		if (LocalizationCache.hasProxy([language, category, subcategory]))
+			return LocalizationCache.getProxy([language, category, subcategory]) as LocalizationResourceProxy<T>;
 
 		const proxy: LocalizationResourceProxy<T> = new Proxy({}, {
 			get: (_, key: string) =>
-				(args: TemplateArguments, _meta: LocalizationResrouceMetaData = {}): string =>
+				(args?: TemplateArguments, _meta: LocalizationResrouceMetaData = {}): string =>
 				{
 					_meta._ip = true;
-					return (Localization.resource as any)(language, key, args, _meta);
+					return (Localization.resource as any)([language, category, subcategory], key, args, _meta);
 				}
 		}) as LocalizationResourceProxy<T>;
 
-		LocalizationCache.setProxy(language, proxy);
+		// Cache the new proxy for future use
+		LocalizationCache.setProxy([language, category, subcategory], proxy);
 
 		return proxy;
 	}

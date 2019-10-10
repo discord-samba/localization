@@ -11,11 +11,39 @@ Also a couple strings with random tests
 ##! any: any[]
 {{ foo }} {{ bar }} {{ baz }}
 {{ boo }} {{ far }} {{ faz }}
-{{> TEST2 }}
+Forwarding \[TEST2]: {{> TEST2 }}
 
 [TEST2]
 ##! arg: string
 test two {{ arg }}
+
+[test:TEST]
+## Having the same keys as keys without specified categories is allowed
+## as they are given the category 'default', and subcategory 'default'.
+##
+## Forward templates will pull from the same category and subcategory
+##
+Regular line: Test category, default subcategory
+Forward with template: {{> TEST2 }}
+
+[test:TEST2]
+Test category, default subcategory, forwarded via template
+
+
+[test(test):TEST]
+## Having the same keys as keys with specified categories but without
+## specified subcategories is allowed, as those are given the subcategory
+## 'default' if only the category is specified.
+##
+## The resource proxy given to script templates is linked to the same
+## category and subcategory
+##
+Regular line: Test category, test subcategory
+Forward with script: {{! res.TEST2() !}} ## Args forwarded automatically
+
+[test(test):TEST2]
+Test category, test subcategory, forwarded via script
+Testing script args forwarding: {{! args.foo !}}
 
 [CMD_BLACKLIST_ERR_NOSELF]
 You can not blacklist your own account.

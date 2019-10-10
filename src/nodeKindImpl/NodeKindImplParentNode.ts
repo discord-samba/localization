@@ -1,5 +1,6 @@
 import { LocalizationStringChildNode } from '../interfaces/LocalizationStringChildNode';
 import { LocalizationStringNodeKind } from '../types/LocalizationStringNodeKind';
+import { LocalizationStringParentKeyData } from '../types/LocalizationStringParentKeyData';
 import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 import { LocalizationStringTypeDeclarationMapping } from '../types/LocalizationStringTypeDeclarationMapping';
 
@@ -9,15 +10,24 @@ export class NodeKindImplParentNode implements LocalizationStringParentNode
 
 	public container: string;
 	public key: string;
+	public category: string;
+	public subcategory: string;
 	public line: number;
 	public column: number;
 	public children: LocalizationStringChildNode[];
 	public params: LocalizationStringTypeDeclarationMapping;
 
-	public constructor(container: string | undefined, key: string, line: number, column: number)
+	public constructor(
+		container: string,
+		data: LocalizationStringParentKeyData,
+		line: number,
+		column: number
+	)
 	{
-		this.container = container ?? 'Anonymous';
-		this.key = key;
+		this.container = container;
+		this.key = data.key;
+		this.category = data.category;
+		this.subcategory = data.subcategory;
 		this.line = line;
 		this.column = column;
 		this.children = [];
