@@ -12,7 +12,7 @@
 		"@typescript-eslint"
 	],
 	"rules": {
-		// Possible Errors ////////////////////////////////////////////////////
+		// Possible Errors ////////////////////////////////////////////////////////////////////////////////////////////
 		"for-direction": "error",
 		"getter-return": "error",
 		"no-async-promise-executor": "error",
@@ -51,11 +51,14 @@
 		"require-atomic-updates": "error",
 		"use-isnan": "error",
 		"valid-typeof": "error",
-		// Best Practices /////////////////////////////////////////////////////
+
+		// Best Practices /////////////////////////////////////////////////////////////////////////////////////////////
 		"accessor-pairs": "error",
 		"array-callback-return": "error",
 		"block-scoped-var": "error",
+
 		// "class-methods-use-this": "warn",
+
 		"complexity": [
 			"warn",
 			20
@@ -117,8 +120,10 @@
 		"no-param-reassign": "error",
 		"no-proto": "error",
 		"no-redeclare": "error",
+
 		// Add later if necessary
 		// "no-restricted-properties" [],
+
 		"no-return-assign": "error",
 		"no-return-await": "error",
 		"no-script-url": "error",
@@ -148,7 +153,8 @@
 		"no-with": "error",
 		"prefer-promise-reject-errors": "warn",
 		"prefer-regex-literals": "warn",
-		"require-await": "warn",
+		"require-await": "off",
+		"@typescript-eslint/require-await": "warn",
 		"wrap-iife": [
 			"error",
 			"inside"
@@ -157,15 +163,20 @@
 			"error",
 			"never"
 		],
-		// Variables //////////////////////////////////////////////////////////
+
+		// Variables //////////////////////////////////////////////////////////////////////////////////////////////////
 		"no-delete-var": "error",
 		"no-label-var": "error",
+
 		// Add later if necessary
 		// "no-restricted-globals": []
+
 		"no-shadow": "error",
 		"no-shadow-restricted-names": "error",
+
 		// Disallows "Proxy", don't want to use /* global */ comments
 		// "no-undef": "error",
+
 		"no-undef-init": "error",
 		"no-undefined": "error",
 		"no-unused-vars": "off",
@@ -179,10 +190,12 @@
 			}
 		],
 		"no-use-before-define": "error",
-		// Node.js and CommonJS ///////////////////////////////////////////////
+
+		// Node.js and CommonJS ///////////////////////////////////////////////////////////////////////////////////////
 		"no-path-concat": "error",
 		"no-new-require": "error",
-		// Stylistic Issues ///////////////////////////////////////////////////
+
+		// Stylistic Issues ///////////////////////////////////////////////////////////////////////////////////////////
 		"array-bracket-newline": [
 			"warn",
 			"consistent"
@@ -265,8 +278,10 @@
 			"error",
 			"consistent"
 		],
+
 		// Add later if necessary?
 		// "id-blacklist": ["error"],
+
 		"indent": [
 			"error",
 			"tab",
@@ -374,11 +389,13 @@
 			"never"
 		],
 		"prefer-object-spread": "warn",
-		"quotes": [
+		"quotes": "off",
+		"@typescript-eslint/quotes": [
 			"error",
 			"single"
 		],
-		"semi": "error",
+		"semi": "off",
+		"@typescript-eslint/semi": "error",
 		"semi-spacing": [
 			"warn",
 			{
@@ -422,7 +439,8 @@
 			"error",
 			"never"
 		],
-		// ECMAScript 6 ///////////////////////////////////////////////////////
+
+		// ECMAScript 6 ///////////////////////////////////////////////////////////////////////////////////////////////
 		"arrow-body-style": [
 			"warn",
 			"as-needed"
@@ -454,8 +472,10 @@
 			}
 		],
 		"no-const-assign": "error",
+
 		// This interferes with method overloading in Typescript, sadly
 		// "no-dupe-class-members": "error",
+
 		"no-duplicate-imports": "error",
 		"no-new-symbol": "error",
 		"no-this-before-super": "error",
@@ -502,7 +522,8 @@
 			"error",
 			"before"
 		],
-		// Typescript Specifics ///////////////////////////////////////////////
+
+		// Typescript Specifics ///////////////////////////////////////////////////////////////////////////////////////
 		"@typescript-eslint/adjacent-overload-signatures": "warn",
 		"@typescript-eslint/array-type": [
 			"error",
@@ -533,8 +554,10 @@
 			"error"
 		],
 		"@typescript-eslint/explicit-member-accessibility": "error",
+
 		// Use if we want generic type parameters to conform to a specific pattern
 		// "@typescript-eslint/generic-type-naming": ["warn", "^Pattern"],
+
 		"@typescript-eslint/member-delimiter-style": [
 			"error",
 			{
@@ -561,7 +584,9 @@
 				"allowSingleExtends": false
 			}
 		],
+
 		// "@typescript-eslint/no-explicit-any": "error",
+
 		"@typescript-eslint/no-extraneous-class": [
 			"error",
 			{
@@ -605,8 +630,53 @@
 		"@typescript-eslint/prefer-for-of": "warn",
 		"@typescript-eslint/prefer-function-type": "error",
 		"@typescript-eslint/prefer-includes": "warn",
+
 		// Currently causes an ESLint error.
 		// "@typescript-eslint/prefer-readonly": "warn",
 
+		// Doesn't understand global regex created by the RegExp constructor
+		// "@typescript-eslint/prefer-regexp-exec": "warn"
+
+		"@typescript-eslint/prefer-string-starts-ends-with": "warn",
+		"@typescript-eslint/promise-function-async": [
+			"error",
+			{
+				"allowedPromiseNames": [
+					"Thenable"
+				],
+				"checkArrowFunctions": true,
+				"checkFunctionDeclarations": true,
+				"checkFunctionExpressions": true,
+				"checkMethodDeclarations": true
+			}
+		],
+		"@typescript-eslint/require-array-sort-compare": "error",
+		"@typescript-eslint/restrict-plus-operands": "error",
+		"@typescript-eslint/strict-boolean-expressions": "error",
+		"@typescript-eslint/triple-slash-reference": [
+			"error",
+			{
+				"path": "never",
+				"types": "never",
+				"lib": "never"
+			}
+		],
+		"@typescript-eslint/type-annotation-spacing": "error",
+		"@typescript-eslint/typedef": [
+			"error",
+			{
+				"arrayDestructuring": false,
+				"objectDestructuring": false,
+				"arrowParameter": false,
+				"variableDeclaration": true
+			}
+		],
+		"@typescript-eslint/unbound-method": [
+			"error",
+			{
+				"ignoreStatic": true
+			}
+		],
+		"@typescript-eslint/unified-signatures": "warn"
 	}
 }
