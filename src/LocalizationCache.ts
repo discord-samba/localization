@@ -5,14 +5,14 @@ import { LocalizationStringParentNode } from './interfaces/LocalizationStringPar
 /**
  * Caches string builders for given `LocalizationStringParentNodes`
  * for given languages and `LocalizationResourceProxy` instances
- * for given languages as well
+ * for given languages as well.
  */
 export class LocalizationCache
 {
 	private static _staticInstance: LocalizationCache;
 
-	private _cache: Map<string, Map<string, LocalizationStringBuilder>>;
-	private _proxyCache: Map<string, LocalizationResourceProxy>;
+	private _cache: Map<string, Map<string, Map<string, Map<string, LocalizationStringBuilder>>>>;
+	private _proxyCache: Map<string, Map<string, Map<string, LocalizationResourceProxy>>>;
 
 	private constructor()
 	{
@@ -29,75 +29,164 @@ export class LocalizationCache
 	 */
 	private static _instance(): LocalizationCache
 	{
-		return LocalizationCache._staticInstance ?? new LocalizationCache();
+		// Go back to this when eslint stops breaking on ??
+		// // return LocalizationCache._staticInstance ?? new LocalizationCache();
+		return typeof LocalizationCache._staticInstance === 'undefined'
+			? new LocalizationCache()
+			: LocalizationCache._staticInstance;
 	}
 
 	/**
-	 * Returns whether or we have a cache for the given language
+	 * Returns whether or not the cache has the given language
 	 */
 	public static hasLanguage(language: string): boolean
 	{
-		return LocalizationCache._instance()._cache.has(language);
+		return LocalizationCache._instance()._cache
+			.has(language);
+	}
+
+	/**
+	 * Returns whether or not the cache has the given category
+	 * for the given language
+	 */
+	public static hasCategory(language: string, category: string): boolean
+	{
+		return Boolean(
+			LocalizationCache._instance()._cache
+				.get(language)
+				?.has(category)
+		);
+	}
+
+	/**
+	 * Returns whether or not the cache has the given subcategory
+	 * for the given category for the given language
+	 */
+	public static hasSubcategory(language: string, category: string, subcategory: string): boolean
+	{
+		return Boolean(
+			LocalizationCache._instance()._cache
+				.get(language)
+				?.get(category)
+				?.has(subcategory)
+		);
 	}
 
 	/**
 	 * Returns whether or not we have a string builder for the given
-	 * key for the given language
+	 * key for the given language with the given category and subcategory.
 	 */
-	public static has(language: string, key: string): boolean
+	public static has(path: [string, string, string], key: string): boolean
 	{
-		if (!LocalizationCache.hasLanguage(language))
-			return false;
-
-		return LocalizationCache._instance()._cache.get(language)!.has(key);
+		const [language, category = 'default', subcategory = 'default'] = path;
+		return Boolean(
+			LocalizationCache._instance()._cache
+				.get(language)
+				?.get(category)
+				?.get(subcategory)
+				?.has(key)
+		);
 	}
 
 	/**
 	 * Returns a `LocalizationStringBuilder` with the given language
-	 * and key if it exists
+	 * and key for category 'default' if it exists
 	 */
-	public static get(language: string, key: string): LocalizationStringBuilder | undefined
+	public static get(path: [string, string, string], key: string): LocalizationStringBuilder | undefined
 	{
-		if (!LocalizationCache.hasLanguage(language))
-			return;
-
-		return LocalizationCache._instance()._cache.get(language)!.get(key);
+		const [language, category = 'default', subcategory = 'default'] = path;
+		return LocalizationCache._instance()._cache
+			.get(language)
+			?.get(category)
+			?.get(subcategory)
+			?.get(key);
 	}
 
 	/**
-	 * Adds a node to the cache as a builder with the given key for the given language.
-	 * Also adds a cache for the given language if it doesn't already exist
+	 * Adds a node to the cache as a builder with the given key for the given
+	 * language, category, and subcategory. If the category, subcategory, or both
+	 * are not given, they will be 'default'.
+	 *
+	 * Creates the caches for language, category, and subcategory if they don't
+	 * already exist
 	 */
-	public static set(language: string, key: string, node: LocalizationStringParentNode): void
+	public static set(path: [string, string, string], key: string, node: LocalizationStringParentNode): void
 	{
-		if (!LocalizationCache.hasLanguage(language))
-			LocalizationCache._instance()._cache.set(language, new Map());
+		const [language, category = 'default', subcategory = 'default'] = path;
 
-		LocalizationCache._instance()._cache.get(language)!
+		// Create language cache if it doesn't exist
+		if (!LocalizationCache.hasLanguage(language))
+			LocalizationCache._instance()._cache
+				.set(language, new Map());
+
+		// Create category cache if it doesn't exist
+		if (!LocalizationCache.hasCategory(language, category))
+			LocalizationCache._instance()._cache
+				.get(language)!
+				.set(category, new Map());
+
+		// Create subcategory cache if it doesn't exist
+		if (!LocalizationCache.hasSubcategory(language, category, subcategory))
+			LocalizationCache._instance()._cache
+				.get(language)!
+				.get(category)!
+				.set(subcategory, new Map());
+
+		LocalizationCache._instance()._cache
+			.get(language)!
+			.get(category)!
+			.get(subcategory)!
 			.set(key, new LocalizationStringBuilder(language, node));
 	}
 
 	/**
-	 * Returns whether or not we have a cached proxy for the given language
+	 * Returns whether or not we have a cached proxy for the given path
 	 */
-	public static hasProxy(language: string): boolean
+	public static hasProxy(path: [string, string, string]): boolean
 	{
-		return LocalizationCache._instance()._proxyCache.has(language);
+		const [language, category = 'default', subcategory = 'default'] = path;
+		return Boolean(
+			LocalizationCache._instance()._proxyCache
+				.get(language)
+				?.get(category)
+				?.has(subcategory)
+		);
 	}
 
 	/**
-	 * Returns a proxy for the given language if it exists
+	 * Returns a proxy for the given path if it exists
 	 */
-	public static getProxy(language: string): LocalizationResourceProxy | undefined
+	public static getProxy(path: [string, string, string]): LocalizationResourceProxy | undefined
 	{
-		return LocalizationCache._instance()._proxyCache.get(language);
+		const [language, category = 'default', subcategory = 'default'] = path;
+		return LocalizationCache._instance()._proxyCache
+			.get(language)
+			?.get(category)
+			?.get(subcategory);
 	}
 
 	/**
-	 * Adds a proxy to the proxy cache for the given language
+	 * Adds a proxy to the proxy cache for the given path, creating
+	 * language and category if they don't exist
 	 */
-	public static setProxy(language: string, proxy: LocalizationResourceProxy): void
+	public static setProxy(path: [string, string, string], proxy: LocalizationResourceProxy): void
 	{
-		LocalizationCache._instance()._proxyCache.set(language, proxy);
+		const [language, category = 'default', subcategory = 'default'] = path;
+
+		// Create the proxy language cache if it doesn't exist
+		if (!LocalizationCache._instance()._proxyCache.has(language))
+			LocalizationCache._instance()._proxyCache
+				.set(language, new Map());
+
+		// Create the proxy category cache if it doesn't exist
+		if (!LocalizationCache._instance()._proxyCache.get(language)!.has(category))
+			LocalizationCache._instance()._proxyCache
+				.get(language)!
+				.set(category, new Map());
+
+		LocalizationCache._instance()._proxyCache
+			.get(language)!
+			.get(category)!
+			.set(subcategory, proxy);
 	}
 }

@@ -21,7 +21,7 @@ export class LocalizationFileLoader
 
 			const nodeList: NodeKindImplParentNode[] = Parser.parse(file, fileContent);
 			for (const node of nodeList)
-				LocalizationCache.set(language, node.key, node);
+				LocalizationCache.set([language, node.category, node.subcategory], node.key, node);
 		}
 	}
 }

@@ -17,5 +17,6 @@
         "bin",
         "examples",
         "scripts"
-    ]
+	],
+	"include": ["src"]
 }
