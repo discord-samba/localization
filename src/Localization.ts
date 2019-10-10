@@ -41,7 +41,7 @@ export class Localization
 		{
 			const trace: any = {};
 			Error.captureStackTrace(trace);
-			_meta._cl = trace.stack.split('\n')[_meta._ip ? 3 : 2];
+			_meta._cl = trace.stack.split('\n')[_meta._ip! ? 3 : 2];
 		}
 
 		// Create a proxy that will forward _meta to preserve call location
