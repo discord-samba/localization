@@ -57,7 +57,7 @@ export class Parser
 
 					const { line, column } = reader;
 					const parentKeyData: LocalizationStringParentKeyData =
-						Parser._consumeParentKey(container, reader);
+						Parser._consumeParentNodeKey(container, reader);
 
 					const currentNode: NodeKindImplParentNode =
 						new NodeKindImplParentNode(container, parentKeyData, line, column);
@@ -111,7 +111,7 @@ export class Parser
 	 * order/quantity of these characters and whether or not the characters
 	 * follow valid syntax rules is not taken into consideration
 	 */
-	private static _peekValidParentKey(reader: StringReader, offset: number = 0): boolean
+	private static _peekValidParentNodeKey(reader: StringReader, offset: number = 0): boolean
 	{
 		if (reader.peek(offset) !== '[')
 			return false;
@@ -134,7 +134,7 @@ export class Parser
 	 * Peeks whether or not the following characters make up a valid
 	 * parent node category or category(subcategory) pair
 	 */
-	private static _peekValidParentCategory(reader: StringReader): boolean
+	private static _peekValidParentNodeCategory(reader: StringReader): boolean
 	{
 		let index: number = 0;
 		let categoryText: string = '';
@@ -160,9 +160,9 @@ export class Parser
 	}
 
 	/**
-	 * Consumes the parent key category and subcategory
+	 * Consumes the parent node category and subcategory
 	 */
-	private static _consumeParentCategory(
+	private static _consumeParentNodeCategory(
 		container: string,
 		reader: StringReader
 	): { category: string, subcategory: string }
@@ -176,7 +176,7 @@ export class Parser
 			{
 				if (!/\w/.test(reader.peek()))
 					throw new ParseError(
-						`Unexpected token '${reader.peek()}'`,
+						`Unexpected token '${reader.peek()}', expected [a-zA-Z0-9_]`,
 						container,
 						reader.line,
 						reader.column
@@ -193,11 +193,12 @@ export class Parser
 				{
 					if (!/\w/.test(reader.peek()))
 						throw new ParseError(
-							`Unexpected token '${reader.peek()}'`,
+							`Unexpected token '${reader.peek()}', expected [a-zA-Z0-9_]`,
 							container,
 							reader.line,
 							reader.column
 						);
+
 					subcategory += reader.consume();
 				}
 
@@ -217,23 +218,24 @@ export class Parser
 
 	/**
 	 * Consumes the key string for a parent node key, including the braces
-	 * and newline, and returns the key
+	 * and newline, and returns the key, category, and subcategory
 	 */
-	private static _consumeParentKey(container: string, reader: StringReader): LocalizationStringParentKeyData
+	private static _consumeParentNodeKey(container: string, reader: StringReader): LocalizationStringParentKeyData
 	{
 		const { line, column } = reader;
-
-		// Discard the opening `[`
-		reader.discard();
 
 		let key: string = '';
 		let category: string = '';
 		let subcategory: string = '';
+
+		// Discard the opening `[`
+		reader.discard();
+
 		while (reader.peek() !== ']')
 		{
-			if (Parser._peekValidParentCategory(reader))
+			if (Parser._peekValidParentNodeCategory(reader))
 			{
-				({ category, subcategory } = Parser._consumeParentCategory(container, reader));
+				({ category, subcategory } = Parser._consumeParentNodeCategory(container, reader));
 
 				// Discard category separator ':'
 				reader.discard();
@@ -241,7 +243,7 @@ export class Parser
 
 			if (reader.eof())
 				throw new ParseError(
-					'Failed to find closing string key brace',
+					'Unterminated Localization string key',
 					container,
 					line,
 					column
@@ -268,16 +270,10 @@ export class Parser
 		// Discard the closing `]`
 		reader.discard();
 
-		if (reader.peek() !== '\n')
-			throw new ParseError(
-				`Unexpected token '${reader.peek()}', expected newline`,
-				container,
-				reader.line,
-				reader.column
-			);
-
-		// Discard the newline following the localization key
-		reader.discard();
+		// Discard whitespace after key and newline if it exists
+		Parser._discardWhitespace(reader);
+		if (reader.peek() === '\n')
+			reader.discard();
 
 		return { key, category, subcategory };
 	}
@@ -304,7 +300,7 @@ export class Parser
 			return LocalizationStringChunkKind.Comment;
 		}
 
-		if (reader.peek() === '[' && Parser._peekValidParentKey(reader))
+		if (reader.peek() === '[' && Parser._peekValidParentNodeKey(reader))
 			return LocalizationStringChunkKind.ParentKey;
 
 		if (reader.peekSegment(2) === '{{')
@@ -471,7 +467,7 @@ export class Parser
 		while (true)
 		{
 			// Check if we are about to encounter a template or parent string key
-			if (reader.peekSegment(2, 1) === '{{' || Parser._peekValidParentKey(reader, 1))
+			if (reader.peekSegment(2, 1) === '{{' || Parser._peekValidParentNodeKey(reader, 1))
 			{
 				// If it's not escaped, consume the next character and return this chunk
 				if (reader.peek() !== '\\')
