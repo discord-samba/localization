@@ -5,15 +5,6 @@ import { TemplateArguments } from '../types/TemplateArguments';
 import { LocalizationResourceProxy } from '../types/LocalizationResourceProxy';
 import { LocalizationFileLoader } from '../loader/LocalizationFileLoader';
 
-let json = require('../../docs.json');
-console.log(Object.keys(json).length);
-
-for (const node of json.children)
-{
-	if (node.flags.isPrivate)
-		console.log(node.name);
-}
-
 function now(): number
 {
 	type NSFunction = (hr?: [number, number]) => number;
