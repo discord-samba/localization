@@ -1,5 +1,8 @@
 import * as FS from 'fs';
 
+/**
+ * Represents a parse-time error in the Localization engine
+ */
 export class ParseError extends Error
 {
 	public name: string;
@@ -13,7 +16,9 @@ export class ParseError extends Error
 		try { fileContents = FS.readFileSync(container)?.toString(); }
 		catch {}
 
-		const stack: string[] = this.stack?.split('\n') ?? [];
+		// Switch back to this when typescript-eslint no longer errors on ??
+		// // const stack: string[] = this.stack?.split('\n') ?? [];
+		const stack: string[] = Boolean(this.stack?.split('\n')) ? this.stack?.split('\n')! : [];
 		stack.push('');
 
 		if (typeof fileContents !== 'undefined')

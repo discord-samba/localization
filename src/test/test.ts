@@ -45,7 +45,11 @@ console.log(proxy.TEST2(args), '\n');
 console.log('---Test category and subcategory proxies---');
 let testCategoryProxy: LocalizationResourceProxy<any> = Localization.getResourceProxy(['test', 'test']);
 let testSubcategoryProxy: LocalizationResourceProxy<any> = Localization.getResourceProxy(['test', 'test', 'test']);
-console.log('category proxy test: ', testCategoryProxy.TEST(), '\n');
-console.log('subcategory proxy test: ', testSubcategoryProxy.TEST({ foo: 'bar' }));
+console.log('Category proxy test: ', testCategoryProxy.TEST(), '\n');
+console.log('Subcategory proxy test: ', testSubcategoryProxy.TEST({ foo: 'bar' }), '\n');
+
+console.log('---Test one-line strings---');
+console.log(Localization.resource('test', 'FOO'));
+console.log(Localization.resource('test', 'BAR'));
 
 console.log('\n');

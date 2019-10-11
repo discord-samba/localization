@@ -3,7 +3,11 @@ directly from the documentation. The only change made is
 to support the removal of angle braces from type declaration
 syntax.
 
-Also a couple strings with random tests
+Also a few strings for random tests
+
+## Some one-line strings
+[FOO] Foo BAR baz
+[BAR] Boo FAR faz
 
 [TEST]
 ##! foo: string, bar: number, baz: boolean
@@ -29,7 +33,6 @@ Forward with template: {{> TEST2 }}
 [test:TEST2]
 Test category, default subcategory, forwarded via template
 
-
 [test(test):TEST]
 ## Having the same keys as keys with specified categories but without
 ## specified subcategories is allowed, as those are given the subcategory
@@ -44,6 +47,10 @@ Forward with script: {{! res.TEST2() !}} ## Args forwarded automatically
 [test(test):TEST2]
 Test category, test subcategory, forwarded via script
 Testing script args forwarding: {{! args.foo !}}
+
+#######################################################################################################################
+## Begin original YAMDBF strings ######################################################################################
+#######################################################################################################################
 
 [CMD_BLACKLIST_ERR_NOSELF]
 You can not blacklist your own account.

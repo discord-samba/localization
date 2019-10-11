@@ -619,7 +619,7 @@
 				"allowAliases": "in-unions-and-intersections",
 				"allowCallbacks": "always",
 				"allowLiterals": "in-unions-and-intersections",
-				"allowMappedTypes": "in-unions-and-intersections",
+				"allowMappedTypes": "always",
 				"allowTupleTypes": "always"
 			}
 		],

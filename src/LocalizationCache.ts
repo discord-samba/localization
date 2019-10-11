@@ -29,7 +29,7 @@ export class LocalizationCache
 	 */
 	private static _instance(): LocalizationCache
 	{
-		// Go back to this when eslint stops breaking on ??
+		// Switch back to this when typescript-eslint no longer errors on ??
 		// // return LocalizationCache._staticInstance ?? new LocalizationCache();
 		return typeof LocalizationCache._staticInstance === 'undefined'
 			? new LocalizationCache()
