@@ -5,6 +5,11 @@ import { LocalizationResrouceMetaData } from './types/LocalizationResourceMetaDa
 import { LocalizationStringBuilder } from './LocalizationStringBuilder';
 import { TemplateArguments } from './types/TemplateArguments';
 
+/**
+ * This is the main class of the Localization module. This class contains all
+ * the static methods that will be used for leveraging localization within
+ * your project
+ */
 export class Localization
 {
 	/**
@@ -17,7 +22,7 @@ export class Localization
 	}
 
 	/**
-	 * Fetches a Localization string resource for the path. The string
+	 * Fetches a Localization string resource for the given path. The string
 	 * will be built using the given arguments.
 	 *
 	 * Accepts a language string, or accepts a string tuple matching
@@ -63,9 +68,9 @@ export class Localization
 		// If we don't have call location information, capture it
 		if (typeof _meta._cl === 'undefined')
 		{
-			const trace: any = {};
+			const trace: { stack: string } = { stack: '' };
 			Error.captureStackTrace(trace);
-			_meta._cl = trace.stack.split('\n')[_meta._ip! ? 3 : 2];
+			_meta._cl = trace.stack.split('\n').slice(_meta._ip! ? 3 : 2)!.join('\n');
 		}
 
 		// Create a proxy that will forward _meta to preserve call location
