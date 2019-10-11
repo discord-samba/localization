@@ -23,9 +23,7 @@ export class LocalizationStringError extends Error
 		try { fileContents = FS.readFileSync(container)?.toString(); }
 		catch {}
 
-		// Switch back to this when typescript-eslint no longer errors on ??
-		// // const stack: string[] = this.stack?.split('\n') ?? [];
-		const stack: string[] = Boolean(this.stack?.split('\n')) ? this.stack?.split('\n')! : [];
+		const stack: string[] = [];
 		stack.push('');
 
 		if (typeof fileContents !== 'undefined')

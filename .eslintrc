@@ -340,6 +340,12 @@
 		"no-inline-comments": "warn",
 		"no-lonely-if": "warn",
 		"no-mixed-operators": "warn",
+		"no-multiple-empty-lines": [
+			"warn",
+			{
+				"max": 1
+			}
+		],
 		"no-new-object": "error",
 		"no-trailing-spaces": "warn",
 		"no-unneeded-ternary": "warn",

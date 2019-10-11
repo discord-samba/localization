@@ -29,6 +29,7 @@
     "gulp-typescript": "^5.0.1",
     "run-sequence": "^2.2.1",
     "tslint": "^5.20.0",
+    "typedoc": "^0.15.0",
     "typescript": "^3.7.0-beta"
   },
   "dependencies": {
