@@ -10,6 +10,10 @@ import { Parser } from '../parser/Parser';
  */
 export class LocalizationFileLoader
 {
+	// TODO: Write a method to load a single file for a given language.
+	//       Use this method within loadFromDirectory for doing the actual
+	//       loading of .lang files
+
 	public static loadFromDirectory(language: string, dir: string): void
 	{
 		const resolvedDir: string = Path.resolve(dir);
