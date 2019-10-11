@@ -2,6 +2,12 @@ import { LocalizationStringChildNode } from '../interfaces/LocalizationStringChi
 import { LocalizationStringNodeKind } from '../types/LocalizationStringNodeKind';
 import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 
+/**
+ * Represents an abstract Localization resource node for a regular template
+ * that will have a value provided for it at runtime
+ *
+ * @private
+ */
 export class NodeKindImplRegularTemplate implements LocalizationStringChildNode
 {
 	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.RegularTemplate;

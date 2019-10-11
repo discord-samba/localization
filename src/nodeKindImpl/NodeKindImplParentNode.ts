@@ -4,6 +4,12 @@ import { LocalizationStringParentKeyData } from '../types/LocalizationStringPare
 import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 import { LocalizationStringTypeDeclarationMapping } from '../types/LocalizationStringTypeDeclarationMapping';
 
+/**
+ * Represents an abstract Localization resource parent node, of which all other
+ * nodes comprising that Localization resource are children
+ *
+ * @private
+ */
 export class NodeKindImplParentNode implements LocalizationStringParentNode
 {
 	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.Parent;

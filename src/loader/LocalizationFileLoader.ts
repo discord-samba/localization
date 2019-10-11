@@ -5,6 +5,9 @@ import { LocalizationCache } from '../LocalizationCache';
 import { NodeKindImplParentNode } from '../nodeKindImpl/NodeKindImplParentNode';
 import { Parser } from '../parser/Parser';
 
+/**
+ * @private
+ */
 export class LocalizationFileLoader
 {
 	public static loadFromDirectory(language: string, dir: string): void

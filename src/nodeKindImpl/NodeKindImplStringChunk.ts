@@ -2,6 +2,12 @@ import { LocalizationStringChildNode } from '../interfaces/LocalizationStringChi
 import { LocalizationStringNodeKind } from '../types/LocalizationStringNodeKind';
 import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 
+/**
+ * Represents an abstract Localization resource node containing raw text without
+ * any special localization syntax
+ *
+ * @private
+ */
 export class NodeKindImplStringChunk implements LocalizationStringChildNode
 {
 	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.StringChunk;

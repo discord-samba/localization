@@ -15,7 +15,7 @@ Also a few strings for random tests
 ##! any: any[]
 {{ foo }} {{ bar }} {{ baz }}
 {{ boo }} {{ far }} {{ faz }}
-Forwarding \[TEST2]: {{> TEST2 }}
+Forwarding \[TEST2]: {{; TEST2 }}
 
 [TEST2]
 ##! arg: string

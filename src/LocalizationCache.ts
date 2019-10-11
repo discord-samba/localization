@@ -6,6 +6,8 @@ import { LocalizationStringParentNode } from './interfaces/LocalizationStringPar
  * Caches string builders for given `LocalizationStringParentNodes`
  * for given languages and `LocalizationResourceProxy` instances
  * for given languages as well.
+ *
+ * @private
  */
 export class LocalizationCache
 {

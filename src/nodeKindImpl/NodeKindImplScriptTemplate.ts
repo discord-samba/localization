@@ -5,6 +5,13 @@ import { LocalizationStringParentNode } from '../interfaces/LocalizationStringPa
 import { Script } from 'vm';
 import { TemplateArguments } from '../types/TemplateArguments';
 
+/**
+ * Represents an abstract Localization resource node that holds a script
+ * embedded in a Localization resource which will be executed when the
+ * resource is loaded at runtime
+ *
+ * @private
+ */
 export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 {
 	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.ScriptTemplate;

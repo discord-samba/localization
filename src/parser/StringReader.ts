@@ -1,3 +1,6 @@
+/**
+ * @private
+ */
 export class StringReader
 {
 	private _input: string;
