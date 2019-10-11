@@ -1,3 +1,8 @@
+/**
+ * Represents a Localization resource argument type declaration
+ *
+ * @private
+ */
 export interface LocalizationStringTypeDeclaration
 {
 	identType: string;

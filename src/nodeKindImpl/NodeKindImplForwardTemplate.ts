@@ -2,6 +2,13 @@ import { LocalizationStringChildNode } from '../interfaces/LocalizationStringChi
 import { LocalizationStringNodeKind } from '../types/LocalizationStringNodeKind';
 import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 
+/**
+ * Represents an abstract Localization resource node for a template that will
+ * load another Localization resource when the resource containing the template
+ * is loaded at runtime
+ *
+ * @private
+ */
 export class NodeKindImplForwardTemplate implements LocalizationStringChildNode
 {
 	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.ForwardTemplate;
