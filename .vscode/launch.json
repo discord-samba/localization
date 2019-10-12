@@ -10,7 +10,7 @@
 			"name": "Launch Program",
 			"program": "${workspaceRoot}/bin/test/test.js",
 			"cwd": "${workspaceRoot}/bin",
-			"preLaunchTask": "build",
+			"preLaunchTask": "build:nolint",
 			"console": "integratedTerminal"
 		},
 		{
