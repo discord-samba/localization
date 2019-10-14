@@ -17,6 +17,11 @@ describe('Loading string resources', () =>
 		expect(proxy.test1()).toBe('foobarbaz');
 	});
 
+	it('Should load a simple one-line string', () =>
+	{
+		expect(Localization.resource(['test', 'oneLine'], 'test1')).toBe('boofarfaz');
+	});
+
 	it('Should handle regular templates', () =>
 	{
 		expect(Localization.resource('test', 'test2', { bar: 'bar' })).toBe('foobarbaz');
