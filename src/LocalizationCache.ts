@@ -15,6 +15,7 @@ export class LocalizationCache
 
 	private _cache: Map<string, Map<string, Map<string, Map<string, LocalizationStringBuilder>>>>;
 	private _proxyCache: Map<string, Map<string, Map<string, LocalizationResourceProxy>>>;
+	private _fallbackLang!: string;
 
 	private constructor()
 	{
@@ -36,6 +37,28 @@ export class LocalizationCache
 		return typeof LocalizationCache._staticInstance === 'undefined'
 			? new LocalizationCache()
 			: LocalizationCache._staticInstance;
+	}
+
+	/**
+	 * The fallback language to be used by the Localization module if a resource
+	 * cannot be found for the given language
+	 */
+	public static get fallbackLanguage(): string
+	{
+		return LocalizationCache._instance()._fallbackLang;
+	}
+
+	public static set fallbackLanguage(language: string)
+	{
+		LocalizationCache._instance()._fallbackLang = language;
+	}
+
+	/**
+	 * Clear the Localization cache
+	 */
+	public static clear(): void
+	{
+		LocalizationCache._instance()._cache.clear();
 	}
 
 	/**
