@@ -18,6 +18,17 @@ describe('Reading strings with StringReader', () =>
 		expect(reader.column).toBe(7);
 	});
 
+	it('Should do nothing if advancing by a negative number', () =>
+	{
+		const reader: StringReader = new StringReader('foobarbaz');
+		expect(reader.consume(-1)).toBe('');
+		expect(reader.line).toBe(1);
+		expect(reader.column).toBe(1);
+		reader.discard(-1);
+		expect(reader.line).toBe(1);
+		expect(reader.column).toBe(1);
+	});
+
 	it('Should properly handle newlines (consume, discard)', () =>
 	{
 		let reader: StringReader = new StringReader('foo\nbar\nbaz');
