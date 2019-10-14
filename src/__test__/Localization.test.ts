@@ -208,7 +208,7 @@ describe('Using argument type declarations', () =>
 		expect(argsProxy.test4({ bar: true })).toBe('footruebaz');
 	});
 
-	it('Should error when not given required argument of type any', () =>
+	it('Should error when not given required argument of type \'any\'', () =>
 	{
 		const fn: Function = () => argsProxy.test4();
 		expect(fn).toThrow(LocalizationStringError);
