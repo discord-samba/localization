@@ -49,3 +49,11 @@ foo{{! bar.join('') !}}baz
 [args:test3]
 ##! bar?: string
 foo{{ bar ?}}baz
+
+[args:test4]
+##! bar: any
+foo{{ bar }}baz
+
+[args:test5]
+##! bar: any[]
+foo{{! args.bar.join('') !}}baz

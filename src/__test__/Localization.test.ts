@@ -200,4 +200,23 @@ describe('Using argument type declarations', () =>
 		expect(fn).toThrow(LocalizationStringError);
 		expect(fn).toThrow('Expected type \'string\', got number');
 	});
+
+	it('Should allow any type for arguments of type \'any\'', () =>
+	{
+		expect(argsProxy.test4({ bar: 'bar' })).toBe('foobarbaz');
+		expect(argsProxy.test4({ bar: 1 })).toBe('foo1baz');
+		expect(argsProxy.test4({ bar: true })).toBe('footruebaz');
+	});
+
+	it('Should error when not given required argument of type any', () =>
+	{
+		const fn: Function = () => argsProxy.test4();
+		expect(fn).toThrow(LocalizationStringError);
+		expect(fn).toThrow('Expected type \'any\', got undefined');
+	});
+
+	it('Should allow any type in array for arguments of type \'any[]\'', () =>
+	{
+		expect(argsProxy.test5({ bar: [1, true, 'three'] })).toBe('foo1truethreebaz');
+	});
 });
