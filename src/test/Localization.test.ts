@@ -7,18 +7,10 @@ Localization.loadFromDirectory('test', Path.join(__dirname, 'locale', 'test'));
 Localization.loadLangFile('fallback', Path.join(__dirname, 'locale', 'fallback', 'test.lang'));
 Localization.setFallbackLanguage('fallback');
 
-const proxy: LocalizationResourceProxy<any> = Localization.getResourceProxy('test');
-const categoryProxy: LocalizationResourceProxy<any> =
-	Localization.getResourceProxy(['test', 'testCat']);
-
-const subcategoryProxy: LocalizationResourceProxy<any> =
-	Localization.getResourceProxy(['test', 'testCat', 'testSub']);
-
-const argsProxy: LocalizationResourceProxy<any> =
-	Localization.getResourceProxy(['test', 'args']);
-
 describe('Loading string resources', () =>
 {
+	const proxy: LocalizationResourceProxy<any> = Localization.getResourceProxy('test');
+
 	it('Should load a simple string', () =>
 	{
 		expect(Localization.resource('test', 'test1')).toBe('foobarbaz');
@@ -112,6 +104,9 @@ describe('Loading string resources', () =>
 
 describe('Using non-default categories', () =>
 {
+	const categoryProxy: LocalizationResourceProxy<any> =
+		Localization.getResourceProxy(['test', 'testCat']);
+
 	it('Should load resources from non-default categories', () =>
 	{
 		expect(Localization.resource(['test', 'testCat'], 'test1')).toBe('fooBARbaz');
@@ -121,6 +116,9 @@ describe('Using non-default categories', () =>
 
 describe('Using non-default subcategories', () =>
 {
+	const subcategoryProxy: LocalizationResourceProxy<any> =
+		Localization.getResourceProxy(['test', 'testCat', 'testSub']);
+
 	it('Should load resources from non-default subcategories', () =>
 	{
 		expect(Localization.resource(['test', 'testCat', 'testSub'], 'test1')).toBe('FOOBARBAZ');
@@ -130,6 +128,9 @@ describe('Using non-default subcategories', () =>
 
 describe('Using argument type declarations', () =>
 {
+	const argsProxy: LocalizationResourceProxy<any> =
+		Localization.getResourceProxy(['test', 'args']);
+
 	it('Should succeed when receiving correct types', () =>
 	{
 		expect(() => argsProxy.test1({ bar: 'bar' })).not.toThrow(LocalizationStringError);
