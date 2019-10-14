@@ -8,9 +8,9 @@ import { LocalizationStringParentNode } from '../interfaces/LocalizationStringPa
  *
  * @private
  */
-export class NodeKindImplMaybeTemplate implements LocalizationStringChildNode
+export class NodeKindImplOptionalTemplate implements LocalizationStringChildNode
 {
-	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.MaybeTemplate;
+	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.OptionalTemplate;
 
 	public key: string;
 	public parent: LocalizationStringParentNode;

@@ -7,7 +7,7 @@ import { LocalizationStringNodeKind } from './types/LocalizationStringNodeKind';
 import { LocalizationStringParentNode } from './interfaces/LocalizationStringParentNode';
 import { LocalizationStringTypeDeclaration } from './types/LocalizationStringTypeDeclaration';
 import { NodeKindImplForwardTemplate } from './nodeKindImpl/NodeKindImplForwardTemplate';
-import { NodeKindImplMaybeTemplate } from './nodeKindImpl/NodeKindImplMaybeTemplate';
+import { NodeKindImplOptionalTemplate } from './nodeKindImpl/NodeKindImplOptionalTemplate';
 import { NodeKindImplRegularTemplate } from './nodeKindImpl/NodeKindImplRegularTemplate';
 import { NodeKindImplScriptTemplate } from './nodeKindImpl/NodeKindImplScriptTemplate';
 import { NodeKindImplStringChunk } from './nodeKindImpl/NodeKindImplStringChunk';
@@ -36,7 +36,7 @@ export class LocalizationStringBuilder
 	public build(args: TemplateArguments, _meta: LocalizationResrouceMetaData): string
 	{
 		const maybeKinds: LocalizationStringNodeKind[] = [
-			LocalizationStringNodeKind.MaybeTemplate,
+			LocalizationStringNodeKind.OptionalTemplate,
 			LocalizationStringNodeKind.ScriptTemplate
 		];
 
@@ -59,8 +59,8 @@ export class LocalizationStringBuilder
 					break;
 
 				case LocalizationStringNodeKind.RegularTemplate:
-				case LocalizationStringNodeKind.MaybeTemplate:
-					this._childIs<NodeKindImplRegularTemplate | NodeKindImplMaybeTemplate>(child);
+				case LocalizationStringNodeKind.OptionalTemplate:
+					this._childIs<NodeKindImplRegularTemplate | NodeKindImplOptionalTemplate>(child);
 					results.push(this._makeResult(child.kind, args[child.key]));
 					break;
 
@@ -92,7 +92,7 @@ export class LocalizationStringBuilder
 			}
 		}
 
-		// Handle isolated maybe templates and script templates with undefined values
+		// Handle isolated optional templates and script templates with undefined values
 		for (const [i, result] of results.entries())
 		{
 			if (!maybeKinds.includes(result.kind))
@@ -109,7 +109,7 @@ export class LocalizationStringBuilder
 			}
 		}
 
-		// Handle remaining non-isolated maybe and script templates with undefined values
+		// Handle remaining non-isolated optional and script templates with undefined values
 		for (const result of results)
 			if (maybeKinds.includes(result.kind) && typeof result.value === 'undefined')
 				result.value = '';
@@ -198,8 +198,8 @@ export class LocalizationStringBuilder
 
 	/**
 	 * Determines whether or not we are expecting an isolated maybe
-	 * result (Maybe Template or Script Template) based on the previous
-	 * and next result nodes
+	 * result (Optional Template or Script Template) based on the
+	 * previous and next result nodes
 	 */
 	private _isIsolatedMaybeResult(
 		prev: LocalizationStringChildResultNode,

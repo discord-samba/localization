@@ -5,7 +5,7 @@ import { LocalizationStringParentNode } from '../interfaces/LocalizationStringPa
 import { LocalizationStringTemplateKind } from '../types/LocalizationStringTemplateKind';
 import { LocalizationStringTypeDeclarationMapping } from '../types/LocalizationStringTypeDeclarationMapping';
 import { NodeKindImplForwardTemplate } from '../nodeKindImpl/NodeKindImplForwardTemplate';
-import { NodeKindImplMaybeTemplate } from '../nodeKindImpl/NodeKindImplMaybeTemplate';
+import { NodeKindImplOptionalTemplate } from '../nodeKindImpl/NodeKindImplOptionalTemplate';
 import { NodeKindImplParentNode } from '../nodeKindImpl/NodeKindImplParentNode';
 import { NodeKindImplRegularTemplate } from '../nodeKindImpl/NodeKindImplRegularTemplate';
 import { NodeKindImplScriptTemplate } from '../nodeKindImpl/NodeKindImplScriptTemplate';
@@ -570,7 +570,7 @@ export class Parser
 						kind = LocalizationStringTemplateKind.Invalid;
 
 					else
-						kind = LocalizationStringTemplateKind.Maybe;
+						kind = LocalizationStringTemplateKind.Optional;
 				}
 
 				else if (kind !== LocalizationStringTemplateKind.Forward)
@@ -602,7 +602,7 @@ export class Parser
 			case LocalizationStringTemplateKind.Regular: return Parser._consumeRegularTemplate(parent, reader);
 			case LocalizationStringTemplateKind.Forward: return Parser._consumeForwardTemplate(parent, reader);
 			case LocalizationStringTemplateKind.Script: return Parser._consumeScriptTemplate(parent, reader);
-			case LocalizationStringTemplateKind.Maybe: return Parser._consumeMaybeTemplate(parent, reader);
+			case LocalizationStringTemplateKind.Optional: return Parser._consumeOptionalTemplate(parent, reader);
 			case LocalizationStringTemplateKind.Invalid:
 				throw new ParseError(
 					'Invalid template',
@@ -691,13 +691,13 @@ export class Parser
 	}
 
 	/**
-	 * Consumes a maybe template from the input, including its content and braces,
+	 * Consumes a optional template from the input, including its content and braces,
 	 * and returns it
 	 */
-	private static _consumeMaybeTemplate(
+	private static _consumeOptionalTemplate(
 		parent: LocalizationStringParentNode,
 		reader: StringReader
-	): NodeKindImplMaybeTemplate
+	): NodeKindImplOptionalTemplate
 	{
 		let key: string = '';
 		const { line, column } = reader;
@@ -711,8 +711,8 @@ export class Parser
 		// Discard the closing braces
 		reader.discard(3);
 
-		const node: NodeKindImplMaybeTemplate =
-			new NodeKindImplMaybeTemplate(key.trim(), parent, line, column);
+		const node: NodeKindImplOptionalTemplate =
+			new NodeKindImplOptionalTemplate(key.trim(), parent, line, column);
 
 		return node;
 	}

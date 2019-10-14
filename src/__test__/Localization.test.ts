@@ -36,7 +36,7 @@ describe('Loading string resources', () =>
 		expect(proxy.test2()).toBe('fooundefinedbaz');
 	});
 
-	it('Should handle maybe templates', () =>
+	it('Should handle optional templates', () =>
 	{
 		expect(Localization.resource('test', 'test3', { bar: 'bar' })).toBe('foobarbaz');
 		expect(Localization.resource('test', 'test3')).toBe('foobaz');
@@ -44,7 +44,7 @@ describe('Loading string resources', () =>
 		expect(proxy.test3()).toBe('foobaz');
 	});
 
-	it('Should properly handle isolated maybe templates', () =>
+	it('Should properly handle isolated optional templates', () =>
 	{
 		expect(Localization.resource('test', 'test4')).toBe('foo\nbaz');
 		expect(Localization.resource('test', 'test4', { bar: '' })).toBe('foo\n\nbaz');
