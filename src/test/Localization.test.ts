@@ -17,14 +17,6 @@ const subcategoryProxy: LocalizationResourceProxy<any> =
 const argsProxy: LocalizationResourceProxy<any> =
 	Localization.getResourceProxy(['test', 'args']);
 
-function captureError<T>(fn: Function): T | undefined
-{
-	let error!: T;
-	try { fn(); }
-	catch (err) { error = err; }
-	return error;
-}
-
 describe('Loading string resources', () =>
 {
 	it('Should load a simple string', () =>
@@ -97,8 +89,7 @@ describe('Loading string resources', () =>
 	{
 		const fn: Function = () => proxy.test10();
 		expect(fn).toThrow(LocalizationStringError);
-		expect(captureError<LocalizationStringError>(fn)?.message)
-			.toBe('Localization string key \'bar\' does not exist for language \'test\'');
+		expect(fn).toThrow('Localization string key \'bar\' does not exist for language \'test\'');
 	});
 
 	it('Should pull from fallback language if no resource is found', () =>
@@ -148,16 +139,14 @@ describe('Using argument type declarations', () =>
 	{
 		const fn: Function = () => argsProxy.test1({ bar: 1 });
 		expect(fn).toThrow(LocalizationStringError);
-		expect(captureError<LocalizationStringError>(fn)?.message)
-			.toBe('Expected type \'string\', got number');
+		expect(fn).toThrow('Expected type \'string\', got number');
 	});
 
 	it('Should error when receiving no arg when one is expected', () =>
 	{
 		const fn: Function = () => argsProxy.test1();
 		expect(fn).toThrow(LocalizationStringError);
-		expect(captureError<LocalizationStringError>(fn)?.message)
-			.toBe('Expected type \'string\', got undefined');
+		expect(fn).toThrow('Expected type \'string\', got undefined');
 	});
 
 	it('Should succeed when receiving a correct array type', () =>
@@ -169,16 +158,14 @@ describe('Using argument type declarations', () =>
 	{
 		const fn: Function = () => argsProxy.test2({ bar: 'bar' });
 		expect(fn).toThrow(LocalizationStringError);
-		expect(captureError<LocalizationStringError>(fn)?.message)
-			.toBe('Expected array type, got string');
+		expect(fn).toThrow('Expected array type, got string');
 	});
 
 	it('Should error when receiving the wrong type within an array', () =>
 	{
 		const fn: Function = () => argsProxy.test2({ bar: [1, 2, 3] });
 		expect(fn).toThrow(LocalizationStringError);
-		expect(captureError<LocalizationStringError>(fn)?.message)
-			.toBe('Expected type \'string\' in array, got number');
+		expect(fn).toThrow('Expected type \'string\' in array, got number');
 	});
 
 	it('Should succeed when not given an optional argument', () =>
@@ -192,7 +179,6 @@ describe('Using argument type declarations', () =>
 	{
 		const fn: Function = () => argsProxy.test3({ bar: 1 });
 		expect(fn).toThrow(LocalizationStringError);
-		expect(captureError<LocalizationStringError>(fn)?.message)
-			.toBe('Expected type \'string\', got number');
+		expect(fn).toThrow('Expected type \'string\', got number');
 	});
 });
