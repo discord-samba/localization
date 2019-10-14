@@ -14,9 +14,10 @@
     },
     "exclude": [
         "node_modules",
-        "bin",
-        "examples",
-        "scripts"
+        "bin"
 	],
-	"include": ["src"]
+	"include": [
+		"src",
+		"jest.config.js"
+	]
 }
