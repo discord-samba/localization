@@ -10,10 +10,27 @@ import { Parser } from '../parser/Parser';
  */
 export class LocalizationFileLoader
 {
-	// TODO: Write a method to load a single file for a given language.
-	//       Use this method within loadFromDirectory for doing the actual
-	//       loading of .lang files
+	/**
+	 * Loads a single .lang file and caches it for the given language
+	 */
+	public static loadLangFile(language: string, file: string): void
+	{
+		if (!file.toLowerCase().endsWith('.lang'))
+			throw new TypeError('Localization files must be in .lang format');
 
+		const resolvedFile: string = Path.resolve(file);
+		const fileContent: string = FS.readFileSync(resolvedFile)?.toString();
+		if (typeof fileContent === 'undefined')
+			throw new Error(`Failed to read localization file: ${resolvedFile}`);
+
+		const nodeList: NodeKindImplParentNode[] = Parser.parse(resolvedFile, fileContent);
+		for (const node of nodeList)
+			LocalizationCache.set([language, node.category, node.subcategory], node.key, node);
+	}
+
+	/**
+	 * Loads all .lang files in the given directory and caches them for the given language
+	 */
 	public static loadFromDirectory(language: string, dir: string): void
 	{
 		const resolvedDir: string = Path.resolve(dir);
@@ -21,14 +38,6 @@ export class LocalizationFileLoader
 		const allLangFiles: string[] = Glob.sync(filesGlob);
 
 		for (const file of allLangFiles)
-		{
-			const fileContent: string = FS.readFileSync(file)?.toString();
-			if (typeof fileContent === 'undefined')
-				continue;
-
-			const nodeList: NodeKindImplParentNode[] = Parser.parse(file, fileContent);
-			for (const node of nodeList)
-				LocalizationCache.set([language, node.category, node.subcategory], node.key, node);
-		}
+			LocalizationFileLoader.loadLangFile(language, file);
 	}
 }

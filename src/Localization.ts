@@ -13,12 +13,29 @@ import { TemplateArguments } from './types/TemplateArguments';
 export class Localization
 {
 	/**
-	 * Load all .lang files in the given directory (and subdirectories therein)
-	 * as the given language, parsing them and caching to the LocalizationCache
+	 * Loads and parses all .lang files in the given directory (and subdirectories
+	 * therein) and caches them under the given language
 	 */
 	public static loadFromDirectory(language: string, dir: string): void
 	{
 		LocalizationFileLoader.loadFromDirectory(language, dir);
+	}
+
+	/**
+	 * Loads and parses the given .lang file, caching it under the given language
+	 */
+	public static loadLangFile(language: string, file: string): void
+	{
+		LocalizationFileLoader.loadLangFile(language, file);
+	}
+
+	/**
+	 * Sets the fallback language to use if a resource doesn't exist for the
+	 * language given to `Localization.resource()`
+	 */
+	public static setFallbackLanguage(language: string): void
+	{
+		LocalizationCache.fallbackLanguage = language;
 	}
 
 	/**
@@ -89,8 +106,14 @@ export class Localization
 			}) as LocalizationResourceProxy;
 		}
 
-		const builder: LocalizationStringBuilder =
+		let builder: LocalizationStringBuilder =
 			LocalizationCache.get([language, category, subcategory], key)!;
+
+		if (typeof builder === 'undefined')
+			builder = LocalizationCache.get([LocalizationCache.fallbackLanguage, category, subcategory], key)!;
+
+		if (typeof builder === 'undefined')
+			return `${language}::${category}::${subcategory}::${key}`;
 
 		return builder.build(args, _meta);
 	}
@@ -105,6 +128,8 @@ export class Localization
 	 *     [language, category, subcategory] // Self-explanatory
 	 *     [language, category]              // Defaults to 'default'' subcategory
 	 *     [language]                        // Defaults to 'default' category, 'default' subcategory
+	 *
+	 * >**NOTE:** Does not check the fallback language
 	 */
 	public static resourceExists(
 		path: string | [string] | [string, string] | [string, string, string],
