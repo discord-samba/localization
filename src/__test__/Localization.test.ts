@@ -11,6 +11,12 @@ describe('Loading string resources', () =>
 {
 	const proxy: LocalizationResourceProxy<any> = Localization.getResourceProxy('test');
 
+	it('Should allow checking if resource exists', () =>
+	{
+		expect(Localization.resourceExists('test', 'test1')).toBe(true);
+		expect(Localization.resourceExists('foo', 'bar')).toBe(false);
+	});
+
 	it('Should load a simple string', () =>
 	{
 		expect(Localization.resource('test', 'test1')).toBe('foobarbaz');
@@ -104,6 +110,13 @@ describe('Loading string resources', () =>
 		expect(foobarProxy.baz()).toBe('test::foo::bar::baz');
 		expect(Localization.resource(['test', 'foo', 'bar'], 'baz'))
 			.toBe('test::foo::bar::baz');
+	});
+
+	it('Should error for non-existant languages', () =>
+	{
+		const fn: Function = () => Localization.resource('foo', 'bar');
+		expect(fn).toThrow(Error);
+		expect(fn).toThrow('No language \'foo\' has been loaded');
 	});
 });
 

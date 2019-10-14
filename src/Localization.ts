@@ -75,12 +75,9 @@ export class Localization
 			[language, category = 'default', subcategory = 'default'] = path;
 
 		if (!LocalizationCache.hasLanguage(language))
-			throw new Error(`No language '${language}' as been loaded`);
+			throw new Error(`No language '${language}' has been loaded`);
 
 		const proxy: LocalizationResourceProxy = Localization.getResourceProxy(path);
-
-		// TODO: Return something if the resource doesn't exist. Used to do
-		//       `lang::key` in YAMDBF. Maybe something else?
 
 		// If we don't have call location information, capture it
 		if (typeof _meta._cl === 'undefined')
