@@ -9,7 +9,7 @@ export enum LocalizationStringNodeKind
 	Parent,
 	StringChunk,
 	RegularTemplate,
-	MaybeTemplate,
+	OptionalTemplate,
 	ForwardTemplate,
 	ScriptTemplate
 }

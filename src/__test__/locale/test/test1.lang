@@ -14,7 +14,7 @@ foobarbaz
 foo{{ bar }}baz
 
 [test3]
-## Test maybe template
+## Test optional template
 ## Should equal: foobarbaz
 ## When bar === 'bar'
 ## Should equal: foobaz
@@ -22,7 +22,7 @@ foo{{ bar }}baz
 foo{{ bar ?}}baz
 
 [test4]
-## Test isolated maybe template
+## Test isolated optional template
 ## Should equal: foo\nbaz
 ## When bar === undefined
 ## Should equal: foo\n\nbaz
