@@ -3,6 +3,8 @@
 ## Should equal: foobarbaz
 foobarbaz
 
+[oneLine:test1] boofarfaz
+
 [test2]
 ## Test regular template
 ## Should equal: foobarbaz
