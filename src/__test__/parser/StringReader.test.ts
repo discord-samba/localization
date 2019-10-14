@@ -18,7 +18,7 @@ describe('Reading strings with StringReader', () =>
 		expect(reader.column).toBe(7);
 	});
 
-	it('Should do nothing if advancing by a negative number', () =>
+	it('Should do nothing if advancing by a negative number (consume, discard)', () =>
 	{
 		const reader: StringReader = new StringReader('foobarbaz');
 		expect(reader.consume(-1)).toBe('');
