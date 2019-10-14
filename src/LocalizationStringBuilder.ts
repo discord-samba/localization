@@ -109,9 +109,9 @@ export class LocalizationStringBuilder
 			}
 		}
 
-		// Handle remaining non-isolated maybe templates with undefined values
+		// Handle remaining non-isolated maybe and script templates with undefined values
 		for (const result of results)
-			if (result.kind === LocalizationStringNodeKind.MaybeTemplate && typeof result.value === 'undefined')
+			if (maybeKinds.includes(result.kind) && typeof result.value === 'undefined')
 				result.value = '';
 
 		return results
