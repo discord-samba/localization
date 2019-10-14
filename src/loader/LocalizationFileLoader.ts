@@ -19,9 +19,13 @@ export class LocalizationFileLoader
 			throw new TypeError('Localization files must be in .lang format');
 
 		const resolvedFile: string = Path.resolve(file);
-		const fileContent: string = FS.readFileSync(resolvedFile)?.toString();
-		if (typeof fileContent === 'undefined')
-			throw new Error(`Failed to read localization file: ${resolvedFile}`);
+
+		let fileContent: string;
+		try { fileContent = FS.readFileSync(resolvedFile)?.toString(); }
+		catch { throw new Error(`Failed to read localization file: ${resolvedFile}`); }
+
+		if (fileContent.trim() === '')
+			throw new Error(`Localization file is empty: ${resolvedFile}`);
 
 		const nodeList: NodeKindImplParentNode[] = Parser.parse(resolvedFile, fileContent);
 		for (const node of nodeList)
