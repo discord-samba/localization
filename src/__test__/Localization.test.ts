@@ -11,7 +11,7 @@ describe('Loading string resources', () =>
 {
 	const proxy: LocalizationResourceProxy<any> = Localization.getResourceProxy('test');
 
-	it('Should allow checking if resource exists', () =>
+	it('Should allow checking if a resource exists', () =>
 	{
 		expect(Localization.resourceExists('test', 'test1')).toBe(true);
 		expect(Localization.resourceExists('foo', 'bar')).toBe(false);

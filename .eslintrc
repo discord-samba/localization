@@ -9,7 +9,7 @@
 		}
 	},
 	"plugins": [
-		"@typescript-eslint"
+		"@typescript-eslint/eslint-plugin"
 	],
 	"rules": {
 		// Possible Errors ////////////////////////////////////////////////////////////////////////////////////////////
