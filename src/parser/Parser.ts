@@ -82,7 +82,7 @@ export class Parser
 							Parser._consumeCommentLine(reader);
 
 						else if (kind === LocalizationStringChunkKind.TypesDeclaration)
-							currentNode.addParams(Parser._consumeTypesDeclaration(currentNode, reader));
+							currentNode.addParams(Parser._consumeTypeDeclarationComment(currentNode, reader));
 
 						else if (kind === LocalizationStringChunkKind.StringChunk)
 							currentNode.addChild(Parser._consumeStringChunk(currentNode, reader));
@@ -121,9 +121,6 @@ export class Parser
 	 * This checks if the parent key contains only valid characters. The
 	 * order/quantity of these characters and whether or not the characters
 	 * follow valid syntax rules is not taken into consideration
-	 *
-	 * Will error for unterminated parent keys, as otherwise this cannot be
-	 * parsed since it should be escaped
 	 */
 	private static _peekValidParentNodeKey(reader: StringReader, offset: number = 0): boolean
 	{
@@ -236,8 +233,6 @@ export class Parser
 	 */
 	private static _consumeParentNodeKey(container: string, reader: StringReader): LocalizationStringParentKeyData
 	{
-		const { line, column } = reader;
-
 		let key: string = '';
 		let category: string = '';
 		let subcategory: string = '';
@@ -332,7 +327,7 @@ export class Parser
 	}
 
 	/**
-	 * Discard whitespace until hitting a non-whitespace character or newline
+	 * Discards whitespace until hitting a non-whitespace character or newline
 	 */
 	private static _discardWhitespace(reader: StringReader): void
 	{
@@ -341,116 +336,195 @@ export class Parser
 	}
 
 	/**
-	 * Consumes a types declaration line, parses ident:type pairs and returns them
+	 * Consumes the declared identifier of a type declaration
 	 */
-	private static _consumeTypesDeclaration(
+	private static _consumeDeclarationIdent(
 		parent: LocalizationStringParentNode,
 		reader: StringReader
-	): LocalizationStringTypeDeclarationMapping
+	): { ident: string, isOptional: boolean, line: number, column: number }
 	{
-		// Discard ##!
-		reader.discard(3);
+		Parser._discardWhitespace(reader);
 
-		const types: LocalizationStringTypeDeclarationMapping = {};
-		const validKeyChar: RegExp = /\w/;
-		const validType: RegExp = /^(?:[sS]tring|[nN]umber|[bB]oolean|[aA]ny)(?:\[\])?$/;
+		let ident: string = '';
+		let isOptional: boolean = false;
+		const { line, column } = reader;
 
-		while (reader.peek() !== '\n')
+		while (/[\w?]/.test(reader.peek()))
 		{
-			let ident: string = '';
-			let identType: string = '';
-			let isOptional: boolean = false;
-			let isArrayType: boolean = false;
-
-			Parser._discardWhitespace(reader);
-
-			// Discard comma and following whitespace
-			if (reader.peek() === ',')
-			{
-				// Error if a comma appears before any identifiers
-				if (Object.keys(types).length === 0)
-					throw new ParseError(
-						'Unexpected token \',\'',
-						parent.container,
-						reader.line,
-						reader.column
-					);
-
-				// Discard comma and whitespace
-				reader.discard();
-				Parser._discardWhitespace(reader);
-			}
-
-			// Capture the identifier position
-			const { line: identLine, column: identColumn } = reader;
-
-			while (!/[\s:]/.test(reader.peek()))
-			{
-				if (!validKeyChar.test(reader.peek()))
-					throw new ParseError(
-						`Unexpected token '${reader.peek()}', expected identifier`,
-						parent.container,
-						reader.line,
-						reader.column
-					);
-
-				ident += reader.consume();
-
-				// Mark this identifier as optional and discard '?'
-				if (reader.peek() === '?')
-				{
-					isOptional = true;
-					reader.discard();
-					break;
-				}
-			}
-
-			Parser._discardWhitespace(reader);
-
-			if (reader.peek() !== ':')
+			if (reader.eof())
 				throw new ParseError(
-					`Unexpected token '${reader.peek()}', expected ':'`,
+					'Unexpected EOF, expected \':\'',
 					parent.container,
 					reader.line,
 					reader.column
 				);
 
-			// Discard separator and whitespace
-			reader.discard();
-			Parser._discardWhitespace(reader);
-
-			// Capture the type position
-			const { line, column } = reader;
-
-			while (!/[[\s,]/.test(reader.peek()))
-				identType += reader.consume();
-
-			// Mark as array type and discard array marker
-			if (reader.peekSegment(2) === '[]')
-			{
-				reader.discard(2);
-				isArrayType = true;
-			}
-
-			if (!validType.test(identType))
+			if (!/\w/.test(reader.peek()) && reader.peek() !== '?')
 				throw new ParseError(
-					'Invalid type. Must be one of string, number, boolean, or an array of those',
+					`Unexpected token '${reader.peek()}, expected identifier`,
 					parent.container,
-					line,
-					column
+					reader.line,
+					reader.column
 				);
 
-			identType = identType.toLowerCase();
-			types[ident] = { identType, isOptional, isArrayType, line: identLine, column: identColumn };
+			if (reader.peek() === '?')
+			{
+				if (ident.length < 1)
+					throw new ParseError(
+						'Unexpected token \'?\', expected identifier',
+						parent.container,
+						reader.line,
+						reader.column
+					);
 
-			Parser._discardWhitespace(reader);
-			if (reader.peek() !== ',' && reader.peek() !== '\n')
+				isOptional = true;
+				reader.discard();
+				break;
+			}
+
+			ident += reader.consume();
+		}
+
+		if (ident.length < 1)
+			throw new ParseError(
+				`Unexpected token '${reader.peek()}', expected identifier`,
+				parent.container,
+				reader.line,
+				reader.column
+			);
+
+		return { ident, isOptional, line, column };
+	}
+
+	/**
+	 * Consume the declared type of a type declaration
+	 */
+	private static _consumeDeclarationType(
+		parent: LocalizationStringParentNode,
+		reader: StringReader
+	): { identType: string, isArrayType: boolean }
+	{
+		const { line, column } = reader;
+
+		let identType: string = '';
+		let isArrayType: boolean = false;
+
+		while (/[a-zA-Z]/.test(reader.peek()) && !reader.eof())
+			identType += reader.consume();
+
+		if (reader.eof())
+			return { identType, isArrayType };
+
+		if (reader.peekSegment(2) === '[]')
+		{
+			isArrayType = true;
+			reader.discard(2);
+		}
+
+		if (reader.peek() === '\n' && identType.length < 1)
+			throw new ParseError(
+				'Unexpected token \'newline\', expected type',
+				parent.container,
+				reader.line,
+				reader.column
+			);
+
+		const validType: RegExp = /^(?:[sS]tring|[nN]umber|[bB]oolean|[aA]ny)(?:\[\])?$/;
+		if (!validType.test(identType))
+			throw new ParseError(
+				'Invalid type. Must be one of string, number, boolean, or an array of those',
+				parent.container,
+				line,
+				column
+			);
+
+		return { identType, isArrayType };
+	}
+
+	/**
+	 * Consumes a types declaration comment, parses all type declarations
+	 * and returns them
+	 */
+	private static _consumeTypeDeclarationComment(
+		parent: LocalizationStringParentNode,
+		reader: StringReader
+	): LocalizationStringTypeDeclarationMapping
+	{
+		// Discard ##! and following whitespace
+		reader.discard(3);
+		Parser._discardWhitespace(reader);
+
+		const types: LocalizationStringTypeDeclarationMapping = {};
+
+		while (reader.peek() !== '\n' && !reader.eof())
+		{
+			if (reader.peek() === ',')
+			{
+				// Error if comma appears before any identifiers
+				if (Object.keys(types).length === 0)
+					throw new ParseError(
+						'Unexpected token \',\', expected identifier',
+						parent.container,
+						reader.line,
+						reader.column
+					);
+
+				// Discard comma and following whitespace
+				reader.discard();
+				Parser._discardWhitespace(reader);
+
+				if (reader.peek() === '\n')
+					throw new ParseError(
+						'Unexpected token \'newline\', expected identifier',
+						parent.container,
+						reader.line,
+						reader.column
+					);
+			}
+			else if (Object.keys(types).length > 0 && reader.peek() !== ',')
+			{
 				throw new ParseError(
 					`Unexpected token '${reader.peek()}', expected ',' or newline`,
 					parent.container,
 					reader.line,
 					reader.column
 				);
+			}
+
+			if (reader.eof())
+				return types;
+
+			const { ident, isOptional, line, column } = Parser._consumeDeclarationIdent(parent, reader);
+
+			// Discard whitespace before separator
+			Parser._discardWhitespace(reader);
+
+			if (reader.peek() !== ':')
+				throw new ParseError(
+					`Unexpected token '${
+						reader.peek() === '\n' ? 'newline' : reader.peek()
+					}', expected ':'`,
+					parent.container,
+					reader.line,
+					reader.column
+				);
+
+			// Discard separator and following whitespace
+			reader.discard();
+			Parser._discardWhitespace(reader);
+
+			const { identType, isArrayType } = Parser._consumeDeclarationType(parent, reader);
+
+			types[ident] = {
+				identType: identType.toLowerCase(),
+				isOptional,
+				isArrayType,
+				line,
+				column
+			};
+
+			// Discard whitespace following this argument type declaration
+			Parser._discardWhitespace(reader);
 		}
 
 		// Discard ending newline
