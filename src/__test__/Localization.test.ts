@@ -5,7 +5,6 @@ import { LocalizationStringError } from '../LocalizationStringError';
 
 Localization.loadFromDirectory('test', Path.join(__dirname, 'locale', 'test'));
 Localization.loadLangFile('fallback', Path.join(__dirname, 'locale', 'fallback', 'test.lang'));
-Localization.setFallbackLanguage('fallback');
 
 describe('Loading string resources', () =>
 {
@@ -97,6 +96,11 @@ describe('Loading string resources', () =>
 
 	it('Should pull from fallback language if no resource is found', () =>
 	{
+		expect(Localization.resource('test', 'foo')).toBe('test::default::default::foo');
+		expect(proxy.foo()).toBe('test::default::default::foo');
+
+		Localization.setFallbackLanguage('fallback');
+
 		// Defined in locale/fallback/test.lang
 		expect(Localization.resource('test', 'foo')).toBe('foobarbaz\nboofarfaz');
 		expect(proxy.foo()).toBe('foobarbaz\nboofarfaz');
