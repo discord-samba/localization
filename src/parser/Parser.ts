@@ -100,6 +100,14 @@ export class Parser
 			}
 		}
 
+		if (nodeList.length < 1)
+			throw new ParseError(
+				'Localization text contained no parsable data',
+				container,
+				reader.line,
+				reader.column
+			);
+
 		return nodeList;
 	}
 
@@ -113,6 +121,9 @@ export class Parser
 	 * This checks if the parent key contains only valid characters. The
 	 * order/quantity of these characters and whether or not the characters
 	 * follow valid syntax rules is not taken into consideration
+	 *
+	 * Will error for unterminated parent keys, as otherwise this cannot be
+	 * parsed since it should be escaped
 	 */
 	private static _peekValidParentNodeKey(reader: StringReader, offset: number = 0): boolean
 	{
@@ -244,14 +255,6 @@ export class Parser
 				reader.discard();
 			}
 
-			if (reader.eof())
-				throw new ParseError(
-					'Unterminated Localization string key',
-					container,
-					line,
-					column
-				);
-
 			if (!/[\w]/.test(reader.peek()))
 				throw new ParseError(
 					`Unexpected token '${reader.peek()}', expected [a-zA-Z0-9_]`,
@@ -321,7 +324,7 @@ export class Parser
 	 */
 	private static _consumeCommentLine(reader: StringReader): void
 	{
-		while (reader.peek() !== '\n')
+		while (reader.peek() !== '\n' && !reader.eof())
 			reader.consume();
 
 		// Discard newline after comment
