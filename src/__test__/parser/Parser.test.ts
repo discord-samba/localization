@@ -208,6 +208,12 @@ describe('Throwing parser errors', () =>
 				.toThrow('Unexpected token \'newline\', expected type');
 		});
 
-		// TODO: Add tests for valid type names in declarations
+		it('Should error when receiving invalid types', () =>
+		{
+			const e: string = 'Invalid type. Must be one of string, number, boolean, or an array of those';
+			expect(() => Parser.parse(c, '[test]\n##! foo: Error')).toThrow(e);
+			expect(() => Parser.parse(c, '[test]\n##! foo: Array')).toThrow(e);
+			expect(() => Parser.parse(c, '[test]\n##! foo: Map[]')).toThrow(e);
+		});
 	});
 });

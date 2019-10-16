@@ -412,9 +412,6 @@ export class Parser
 		while (/[a-zA-Z]/.test(reader.peek()) && !reader.eof())
 			identType += reader.consume();
 
-		if (reader.eof())
-			return { identType, isArrayType };
-
 		if (reader.peekSegment(2) === '[]')
 		{
 			isArrayType = true;
