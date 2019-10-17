@@ -426,8 +426,7 @@ export class Parser
 				reader.column
 			);
 
-		const validType: RegExp = /^(?:[sS]tring|[nN]umber|[bB]oolean|[aA]ny)(?:\[\])?$/;
-		if (!validType.test(identType))
+		if (!/^(?:[Ss]tring|[Nn]umber|[Bb]oolean|[Aa]ny)(?:\[\])?$/.test(identType))
 			throw new ParseError(
 				'Invalid type. Must be one of string, number, boolean, or an array of those',
 				parent.container,
@@ -642,13 +641,13 @@ export class Parser
 				{
 					if (kind === LocalizationStringTemplateKind.Forward)
 						kind = LocalizationStringTemplateKind.Invalid;
-
 					else
 						kind = LocalizationStringTemplateKind.Optional;
 				}
-
 				else if (kind !== LocalizationStringTemplateKind.Forward)
+				{
 					kind = LocalizationStringTemplateKind.Regular;
+				}
 
 				break;
 			}
