@@ -4,7 +4,7 @@
   "description": "Localization module for Discord-Sambo",
   "main": "bin/index.js",
   "scripts": {
-    "test": "jest"
+    "test": "gulp && jest"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/discord-sambo/localization#readme",
   "devDependencies": {
+    "@discord-sambo/eslint-config": "discord-sambo/eslint-config",
     "@types/glob": "^7.1.1",
     "@types/jest": "^24.0.18",
     "@types/node": "^12.7.8",
@@ -36,6 +37,17 @@
   },
   "dependencies": {
     "glob": "^7.1.4"
+  },
+  "eslintConfig": {
+    "extends": "@discord-sambo",
+    "parserOptions": {
+      "project": "tsconfig.json",
+      "ecmaVersion": 11,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "modules": true
+      }
+    }
   },
   "jest": {
     "roots": [

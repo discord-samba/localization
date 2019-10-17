@@ -138,6 +138,13 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@discord-sambo/eslint-config@discord-sambo/eslint-config":
+  version "0.1.0"
+  resolved "https://codeload.github.com/discord-sambo/eslint-config/tar.gz/743e865498baef189b40bc818f7643fba3d05dff"
+  dependencies:
+    "@typescript-eslint/eslint-plugin" "^2.4.0"
+    "@typescript-eslint/parser" "^2.4.0"
+
 "@gulp-sourcemaps/identity-map@1.X":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@gulp-sourcemaps/identity-map/-/identity-map-1.0.2.tgz#1e6fe5d8027b1f285dc0d31762f566bccd73d5a9"
