@@ -4,7 +4,8 @@
   "description": "Localization module for Discord-Sambo",
   "main": "bin/index.js",
   "scripts": {
-    "test": "gulp && jest"
+    "test": "gulp && jest",
+    "docs": "typedoc --mode file --module commonjs --theme minimal --exclude \"./node_modules/**/*.ts\" --out docs/ src"
   },
   "repository": {
     "type": "git",
