@@ -3,6 +3,8 @@ import { LocalizationFileLoader } from './loader/LocalizationFileLoader';
 import { LocalizationResourceProxy } from './types/LocalizationResourceProxy';
 import { LocalizationResrouceMetaData } from './types/LocalizationResourceMetaData';
 import { LocalizationStringBuilder } from './LocalizationStringBuilder';
+import { LocalizationStringError } from './LocalizationStringError';
+import { LocalizationStringParentNode } from './interfaces/LocalizationStringParentNode';
 import { TemplateArguments } from './types/TemplateArguments';
 
 /**
@@ -87,19 +89,43 @@ export class Localization
 			_meta._cl = trace.stack.split('\n').slice(_meta._ip! ? 3 : 2)!.join('\n');
 		}
 
-		// Create a proxy that will forward _meta to preserve call location
-		// in nested resource calls within template scripts, as well as forward
-		// args so they don't need to be passed manually.
-		//
-		// This completely goes against the entire reasoning behind having
-		// a proxy cache but forwarding the metadata is important if we want
-		// to preserve the call location of the resource string for debugging
+		// Define meta call chain if it doesn't exist
+		if (typeof _meta._cc === 'undefined')
+			_meta._cc = [];
+
+		// Push key to the current call chain
+		_meta._cc.push(key);
+
+		// Push the current key
+		_meta._ck = key;
+
+		// Create proxy to forward args and _meta for use in script templates
 		if (typeof _meta._mp === 'undefined')
 		{
 			_meta._mp = new Proxy({}, {
 				get: (_, _key: string) =>
-					(_args: TemplateArguments = args): string =>
-						(proxy as any)[_key](_args, _meta)
+				{
+					// Handle recursion protection for template scripts using the
+					// given resource proxy
+					if (_meta._cc?.includes(_key))
+					{
+						const parent: LocalizationStringParentNode =
+							LocalizationCache.get([language, category, subcategory], key)?.node!;
+
+						throw new LocalizationStringError(
+							'A localization resource cannot refer to any previous parent',
+							parent?.container,
+							parent?.line,
+							parent?.column,
+							_meta
+						);
+					}
+					else
+					{
+						return (_args: TemplateArguments = args): string =>
+							(proxy as any)[_key](_args, _meta);
+					}
+				}
 			}) as LocalizationResourceProxy;
 		}
 

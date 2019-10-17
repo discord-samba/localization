@@ -23,9 +23,7 @@ export class ParseError
 		try { fileContents = FS.readFileSync(container)?.toString(); }
 		catch {}
 
-		// Switch back to this when typescript-eslint no longer errors on ??
-		// // const oldStack: string[] = this.stack?.split('\n') ?? [];
-		const oldStack: string[] = (Boolean(this.stack?.split('\n')) ? this.stack?.split('\n')! : []).slice(1);
+		const oldStack: string[] = this.stack.split('\n').slice(1);
 		const newStack: string[] = [];
 
 		if (typeof fileContents !== 'undefined')

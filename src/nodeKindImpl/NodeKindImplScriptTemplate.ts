@@ -143,6 +143,12 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 
 		if (typeof result === 'undefined' && typeof this._impFn !== 'undefined')
 		{
+			if (typeof _meta._cc !== 'undefined'
+				&& typeof _meta._ck !== 'undefined'
+				&& Array.isArray(_meta._cc)
+				&& _meta._cc[_meta._cc.length - 1] === _meta._ck)
+				_meta._cc.pop();
+
 			try { result = this._impFn(args, _meta._mp); }
 			catch (err) { error = this._newErr(err, _meta); }
 		}

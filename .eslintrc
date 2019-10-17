@@ -19,7 +19,7 @@
 		"no-await-in-loop": "error",
 		"no-compare-neg-zero": "error",
 		"no-cond-assign": "error",
-		"no-console": "error",
+		"no-console": "warn",
 		"no-constant-condition": [
 			"error",
 			{
@@ -557,7 +557,10 @@
 			"interface"
 		],
 		"@typescript-eslint/explicit-function-return-type": [
-			"error"
+			"error",
+			{
+				"allowExpressions": true
+			}
 		],
 		"@typescript-eslint/explicit-member-accessibility": "error",
 
@@ -658,12 +661,17 @@
 		],
 		"@typescript-eslint/require-array-sort-compare": "error",
 		"@typescript-eslint/restrict-plus-operands": "error",
-		"@typescript-eslint/strict-boolean-expressions": [
-			"error",
-			{
-				"ignoreRhs": true
-			}
-		],
+
+		// This causes problems with optional chaining in TS 3.7 in that
+		// it won't treat the expression as a boolean even if the final
+		// chained item is an explicit boolean value at compile time
+		// "@typescript-eslint/strict-boolean-expressions": [
+		// 	"error",
+		// 	{
+		// 		"ignoreRhs": true
+		// 	}
+		// ],
+
 		"@typescript-eslint/triple-slash-reference": [
 			"error",
 			{
