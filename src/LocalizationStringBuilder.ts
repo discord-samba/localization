@@ -21,12 +21,13 @@ import { TemplateArguments } from './types/TemplateArguments';
  */
 export class LocalizationStringBuilder
 {
-	private _cachedNode: LocalizationStringParentNode;
 	private _language: string;
+
+	public node: LocalizationStringParentNode;
 
 	public constructor(language: string, input: LocalizationStringParentNode)
 	{
-		this._cachedNode = input;
+		this.node = input;
 		this._language = language;
 	}
 
@@ -42,14 +43,14 @@ export class LocalizationStringBuilder
 
 		const results: LocalizationStringChildResultNode[] = [];
 		const path: [string, string, string] =
-			[this._language, this._cachedNode.category, this._cachedNode.subcategory];
+			[this._language, this.node.category, this.node.subcategory];
 
 		// Validate passed arguments if the parent node has any param type declarations
-		if (Object.keys(this._cachedNode.params).length > 0)
+		if (Object.keys(this.node.params).length > 0)
 			this._validateArguments(args, _meta);
 
 		// Evaluate child node results
-		for (const child of this._cachedNode.children)
+		for (const child of this.node.children)
 		{
 			switch (child.kind)
 			{
@@ -73,7 +74,18 @@ export class LocalizationStringBuilder
 								`Localization string key '${child.forwardKey}'`,
 								`does not exist for language '${this._language}'`
 							].join(' '),
-							this._cachedNode.container,
+							this.node.container,
+							child.line,
+							child.column,
+							_meta
+						);
+
+					// Recursion protection. Will work as long as _meta is forwarded.
+					// If not, may the Node gods have mercy on your code
+					if (_meta._cc?.includes(child.forwardKey))
+						throw new LocalizationStringError(
+							'A localization resource cannot refer to any previous parent',
+							this.node.container,
 							child.line,
 							child.column,
 							_meta
@@ -126,9 +138,9 @@ export class LocalizationStringBuilder
 	 */
 	private _validateArguments(args: TemplateArguments, _meta: LocalizationResrouceMetaData): void
 	{
-		for (const ident of Object.keys(this._cachedNode.params))
+		for (const ident of Object.keys(this.node.params))
 		{
-			const declaration: LocalizationStringTypeDeclaration = this._cachedNode.params[ident];
+			const declaration: LocalizationStringTypeDeclaration = this.node.params[ident];
 			const expectedType: string = `${declaration.identType}${declaration.isArrayType ? '[]' : ''}`;
 
 			if (declaration.isOptional && typeof args[ident] === 'undefined')
@@ -137,7 +149,7 @@ export class LocalizationStringBuilder
 			if (typeof args[ident] === 'undefined')
 				throw new LocalizationStringError(
 					`Expected type '${expectedType}', got undefined`,
-					this._cachedNode.container,
+					this.node.container,
 					declaration.line,
 					declaration.column,
 					_meta
@@ -148,7 +160,7 @@ export class LocalizationStringBuilder
 				if (!Array.isArray(args[ident]))
 					throw new LocalizationStringError(
 						`Expected array type, got ${typeof args[ident]}`,
-						this._cachedNode.container,
+						this.node.container,
 						declaration.line,
 						declaration.column,
 						_meta
@@ -181,7 +193,7 @@ export class LocalizationStringBuilder
 				`Expected type '${declaration.identType}'`,
 				`${declaration.isArrayType ? ' in array' : ''}, got ${typeof value}`
 			].join(''),
-			this._cachedNode.container,
+			this.node.container,
 			declaration.line,
 			declaration.column,
 			_meta
