@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import * as Path from 'path';
 import { Localization } from '../Localization';
 
