@@ -28,75 +28,87 @@ export class Parser
 		const reader: StringReader = new StringReader(input.replace(/\r\n/g, '\n'));
 		const nodeList: NodeKindImplParentNode[] = [];
 
+		// Chunk kinds that can be discarded as comments before hitting a parent key chunk
+		const headerCommentKinds: LocalizationStringChunkKind[] = [
+			LocalizationStringChunkKind.Comment,
+			LocalizationStringChunkKind.StringChunk,
+			LocalizationStringChunkKind.TypesDeclaration,
+			LocalizationStringChunkKind.Template
+		];
+
+		// Chunk kinds that we should end a parent node on
+		const finalizerKinds: LocalizationStringChunkKind[] = [
+			LocalizationStringChunkKind.ParentKey,
+			LocalizationStringChunkKind.None
+		];
+
+		// Begin parsing
 		while (!reader.eof())
 		{
-			switch (Parser._peekChunkKind(reader))
+			const chunkKind: LocalizationStringChunkKind = Parser._peekChunkKind(reader);
+
+			// Header comments can be safely discarded
+			if (headerCommentKinds.includes(chunkKind))
+				Parser._discardCommentLine(reader);
+
+			// If the chunk kind is None, we're looking at EOF and can safely break
+			else if (chunkKind === LocalizationStringChunkKind.None)
+				break;
+
+			// If we see a parent key, begin parsing as a parent node
+			else if (chunkKind === LocalizationStringChunkKind.ParentKey)
 			{
-				// Allow anything before the first key to be counted as comments
-				case LocalizationStringChunkKind.Comment:
-				case LocalizationStringChunkKind.StringChunk:
-				case LocalizationStringChunkKind.TypesDeclaration:
-				case LocalizationStringChunkKind.Template:
-					Parser._consumeCommentLine(reader);
-					break;
+				// Enforce escaped square-braced text if text is a valid parent key
+				if (reader.peekBehind() !== '\n' && typeof reader.peekBehind() !== 'undefined')
+					throw new ParseError(
+						[
+							'Localization string key must begin at the start of its own line.',
+							'Escape the opening brace if using text in square braces'
+						].join(' '),
+						container,
+						reader.line,
+						reader.column
+					);
 
-				// If the chunk kind is none, we're looking at EOF
-				case LocalizationStringChunkKind.None:
-					break;
+				const { line, column } = reader;
+				const parentKeyData: LocalizationStringParentKeyData =
+					Parser._consumeParentNodeKey(container, reader);
 
-				// Begin building the current node
-				case LocalizationStringChunkKind.ParentKey:
-					// Enforce escaped square-braced text if text is a valid parent key
-					if (reader.peekBehind() !== '\n' && typeof reader.peekBehind() !== 'undefined')
-						throw new ParseError(
-							[
-								'Localization string key must begin at the start of its own line.',
-								'Escape the opening brace if using text in square braces'
-							].join(' '),
-							container,
-							reader.line,
-							reader.column
-						);
+				// Error if we hit a valid string key without encountering a string body
+				if (Parser._peekChunkKind(reader) === LocalizationStringChunkKind.ParentKey)
+					throw new ParseError(
+						'Unexpected string key, expected string body',
+						container,
+						reader.line,
+						reader.column
+					);
 
-					const { line, column } = reader;
-					const parentKeyData: LocalizationStringParentKeyData =
-						Parser._consumeParentNodeKey(container, reader);
+				const currentNode: NodeKindImplParentNode =
+					new NodeKindImplParentNode(container, parentKeyData, line, column);
 
-					const currentNode: NodeKindImplParentNode =
-						new NodeKindImplParentNode(container, parentKeyData, line, column);
+				// Parse children of this parent node
+				while (true)
+				{
+					const nextChunkKind: LocalizationStringChunkKind = Parser._peekChunkKind(reader);
 
-					// Error if we hit a valid string key without encountering a string body
-					if (Parser._peekChunkKind(reader) === LocalizationStringChunkKind.ParentKey)
-						throw new ParseError(
-							'Unexpected string key, expected string body',
-							container,
-							reader.line,
-							reader.column
-						);
+					if (nextChunkKind === LocalizationStringChunkKind.Comment)
+						Parser._discardCommentLine(reader);
 
-					while (true)
-					{
-						const kind: LocalizationStringChunkKind = Parser._peekChunkKind(reader);
+					else if (nextChunkKind === LocalizationStringChunkKind.TypesDeclaration)
+						currentNode.addParams(Parser._consumeTypeDeclarationComment(currentNode, reader));
 
-						if (kind === LocalizationStringChunkKind.Comment)
-							Parser._consumeCommentLine(reader);
+					else if (nextChunkKind === LocalizationStringChunkKind.StringChunk)
+						currentNode.addChild(Parser._consumeStringChunk(currentNode, reader));
 
-						else if (kind === LocalizationStringChunkKind.TypesDeclaration)
-							currentNode.addParams(Parser._consumeTypeDeclarationComment(currentNode, reader));
+					else if (nextChunkKind === LocalizationStringChunkKind.Template)
+						currentNode.addChild(Parser._consumeTemplate(currentNode, reader));
 
-						else if (kind === LocalizationStringChunkKind.StringChunk)
-							currentNode.addChild(Parser._consumeStringChunk(currentNode, reader));
+					// Finalize this parent node when we hit the next parent key or EOF
+					else if (finalizerKinds.includes(nextChunkKind))
+						break;
+				}
 
-						else if (kind === LocalizationStringChunkKind.Template)
-							currentNode.addChild(Parser._consumeTemplate(currentNode, reader));
-
-						// Finalize this node when we hit the next parent key or EOF
-						else if (kind === LocalizationStringChunkKind.ParentKey
-							|| kind === LocalizationStringChunkKind.None)
-							break;
-					}
-
-					nodeList.push(currentNode);
+				nodeList.push(currentNode);
 			}
 		}
 
@@ -314,13 +326,12 @@ export class Parser
 	}
 
 	/**
-	 * Consumes and discards the remainder of the line, including
-	 * the ending newline
+	 * Discards the remainder of the line, including the ending newline
 	 */
-	private static _consumeCommentLine(reader: StringReader): void
+	private static _discardCommentLine(reader: StringReader): void
 	{
 		while (reader.peek() !== '\n' && !reader.eof())
-			reader.consume();
+			reader.discard();
 
 		// Discard newline after comment
 		reader.discard();
