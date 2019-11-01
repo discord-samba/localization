@@ -30,8 +30,10 @@ jobs:
       - name: Prepare indev build
         run: npx gulp gh-prebuild-prepare
 
-      - name: Commit
+      - name: Make commit
         run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "Github Action"
           git add --all
           git commit -m "Build indev: ${{ github.sha }}"
 
