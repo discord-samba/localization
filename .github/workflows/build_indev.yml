@@ -37,7 +37,7 @@ jobs:
           echo "##[set-output name=status;]$(git status)"
 
       - name: Make commit and push
-        if: !contains(steps.git_status.outputs.status, 'nothing to commit')
+        if: contains(steps.git_status.outputs.status, 'nothing to commit') != true
         run: |
           cd ../indev-build
           git config --global user.name "${{ github.actor }}"
