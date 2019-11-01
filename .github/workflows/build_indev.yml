@@ -1,0 +1,43 @@
+name: Build Indev
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v1
+      
+      - name: Install Node v12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build package
+        run: npx gulp build
+      
+      - name: Clone indev
+        run: git clone https://github.com/discord-sambo/localization.git -b indev ../localization-indev
+      
+      - name: Prepare indev build
+        run: npx gulp gh-prebuild-prepare
+
+      - name: Commit
+        run: |
+          git add --all
+          git commit -m "Build indev: ${{ github.sha }}"
+
+      - name: Push indev build
+        uses: ad-m/github-push-action@v0.5.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          directory: ../localization-indev
+          branch: indev
