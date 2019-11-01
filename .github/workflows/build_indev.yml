@@ -30,7 +30,14 @@ jobs:
       - name: Prepare indev build
         run: npx gulp gh-prebuild-prepare
 
+      - name: Check if commit is needed
+        id: git_status
+        run: |
+          cd ../indev-build
+          echo "##[set-output name=status;]$(git status)"
+
       - name: Make commit and push
+        if: !contains(steps.git_status.outputs.status, 'nothing to commit')
         run: |
           cd ../indev-build
           git config --global user.name "${{ github.actor }}"
