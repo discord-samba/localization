@@ -39,6 +39,7 @@ jobs:
       - name: Make commit and push
         if: contains(steps.git_status.outputs.status, 'nothing to commit') != true
         run: |
+          echo test ${{ steps.git_status.outputs.status }}
           cd ../indev-build
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor}}@users.noreply.github.com"
