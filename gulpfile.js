@@ -63,7 +63,7 @@ gulp.task('gh-docs-prepare', cb => {
 		'../gh-pages/.*',
 		'!../gh-pages',
 		'!../gh-pages/.git',
-		'!../gh-pages/.git/**/*'
+		'!../gh-pages/.git/**'
 	], { force: true });
 
 	gulp
