@@ -43,5 +43,5 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor}}@users.noreply.github.com"
           git add --all
-          git commit -m "Build indev from master#${{ github.sha }}"
+          git commit -m "Build indev from master: ${{ github.sha }}"
           git push origin indev
