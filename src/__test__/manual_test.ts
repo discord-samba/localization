@@ -8,5 +8,5 @@ Localization.loadLangFile('test', Path.join(__dirname, 'locale/manual/manual.lan
 try { Localization.resource('test', 'test3'); }
 catch (err) { console.log(err.stack); }
 
-try { Localization.resource('test', 'test7'); }
+try { Localization.resource('test', 'test6'); }
 catch (err) { console.log(err.stack); }
