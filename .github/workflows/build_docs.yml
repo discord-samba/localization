@@ -45,6 +45,7 @@ jobs:
           cd ../gh-pages
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor}}@users.noreply.github.com"
+          touch .nojekyll
           git add --all
           git commit -m "Build docs from master: ${{ github.sha }}"
           git push origin gh-pages
