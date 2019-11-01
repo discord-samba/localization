@@ -19,7 +19,10 @@ jobs:
           node-version: 12
       
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          rm -rf ./node_modules/typedoc/node_modules/typescript
+          cp -r ./node_modules/typescript ./node_modules/typedoc/node_modules/typescript
 
       - name: Build docs
         run: npm run docs
