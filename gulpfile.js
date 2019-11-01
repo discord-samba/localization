@@ -58,7 +58,7 @@ gulp.task('gh-prebuild-prepare', cb => {
 
 // Should only be run in a GH workflow
 gulp.task('gh-docs-prepare', cb => {
-	del.sync('../gh-pages/**/*.*');
+	del.sync('../gh-pages/**/*.*', { force: true });
 	gulp.src('../docs/**/*.*').pipe(gulp.dest('../gh-pages'));
 	return cb();
 });
