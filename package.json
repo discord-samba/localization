@@ -5,7 +5,7 @@
   "main": "bin/index.js",
   "scripts": {
     "test": "jest",
-    "docs": "typedoc --mode file --module commonjs --theme minimal --exclude \"./**/+(node_modules|__test__|)/**/*.ts\" --out docs/ src"
+    "docs": "typedoc --mode file --module commonjs --theme minimal --exclude \"./**/+(node_modules|__test__|)/**/*.ts\" --out ../docs/ src"
   },
   "repository": {
     "type": "git",
