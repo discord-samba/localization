@@ -31,4 +31,16 @@ gulp.task('build', () =>
 		.pipe(gulp.dest('bin/'));
 });
 
+gulp.task('gh-prebuild-prepare', () => {
+	del.sync([
+		'../localization-indev/**',
+		'../localization-indev/.*',
+		'!../localization-indev',
+		'!../localization-indev/.git',
+		'!../localization-indev/.git/**'
+	], { force: true });
+	gulp.src('bin/**/*.*').pipe(gulp.dest('../localization-indev/bin'));
+	gulp.src('package.json').pipe(gulp.dest('../localization-indev'));
+});
+
 gulp.task('default', gulp.series('lint', 'build'));
