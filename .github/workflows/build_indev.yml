@@ -38,10 +38,3 @@ jobs:
           git add --all
           git commit -m "Build indev: ${{ github.sha }}"
           git push origin indev
-
-      # - name: Push indev build
-      #   uses: ad-m/github-push-action@v0.5.0
-      #   with:
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     directory: ../localization-indev
-      #     branch: indev
