@@ -43,7 +43,8 @@ gulp.task('gh-prebuild-prepare', cb => {
 	gulp
 		.src([
 			'bin/**/*.*',
-			'!bin/**/__test__'
+			'!bin/**/__test__',
+			'!bin/**/__test__/**/*'
 		])
 		.pipe(gulp.dest('../out/bin'));
 
