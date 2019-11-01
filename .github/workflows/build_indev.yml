@@ -32,6 +32,7 @@ jobs:
 
       - name: Make commit
         run: |
+          cd ../localization-indev
           git config --global user.email "action@github.com"
           git config --global user.name "Github Action"
           git add --all
