@@ -28,7 +28,7 @@ jobs:
         run: npm run docs
       
       - name: Clone gh-pages branch
-        run: git clone https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git -b gh-pages ../gh-pages
+        run: git clone https://${{ github.actor }}:${{ secrets.DOCS_TOKEN }}@github.com/${{ github.repository }}.git -b gh-pages ../gh-pages
       
       - name: Prepare docs build
         run: npx gulp gh-docs-prepare
