@@ -33,14 +33,14 @@ gulp.task('build', () =>
 
 gulp.task('gh-prebuild-prepare', cb => {
 	del.sync([
-		'../localization-indev/**',
-		'../localization-indev/.*',
-		'!../localization-indev',
-		'!../localization-indev/.git',
-		'!../localization-indev/.git/**'
+		'../indev-build/**',
+		'../indev-build/.*',
+		'!../indev-build',
+		'!../indev-build/.git',
+		'!../indev-build/.git/**'
 	], { force: true });
-	gulp.src('bin/**/*.*').pipe(gulp.dest('../localization-indev/bin'));
-	gulp.src('package.json').pipe(gulp.dest('../localization-indev'));
+	gulp.src('bin/**/*.*').pipe(gulp.dest('../indev-build/bin'));
+	gulp.src('package.json').pipe(gulp.dest('../indev-build'));
 
 	return cb();
 });
