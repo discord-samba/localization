@@ -34,7 +34,7 @@ jobs:
         id: git_status
         run: |
           cd ../indev-build
-          echo "##[set-output name=status;]$(git status)"
+          echo "##[set-output name=status;]$(git status | grep 'nothing to commit')"
 
       - name: Make commit and push
         if: contains(steps.git_status.outputs.status, 'nothing to commit') != true
