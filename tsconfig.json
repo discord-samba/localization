@@ -12,12 +12,13 @@
         "noUnusedParameters": true,
         "skipLibCheck": true
     },
-    "exclude": [
-        "node_modules",
-        "bin"
+    "include": [
+		"src/**/*.ts",
+		"src/**/*.test.ts",
+		"./gulpfile.js"
 	],
-	"include": [
-		"src",
-		"jest.config.js"
+    "exclude": [
+        "**/node_modules",
+        "**/bin"
 	]
 }

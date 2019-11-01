@@ -32,7 +32,8 @@ gulp.task('build', () =>
 });
 
 // Should only be run in a GH workflow
-gulp.task('gh-prebuild-prepare', cb => {
+gulp.task('gh-prebuild-prepare', cb =>
+{
 	del.sync([
 		'../out/**',
 		'../out/.*',
@@ -40,7 +41,7 @@ gulp.task('gh-prebuild-prepare', cb => {
 		'!../out/.git',
 		'!../out/.git/**'
 	], { force: true });
-	
+
 	gulp
 		.src([
 			'bin/**/*.*',
@@ -57,7 +58,8 @@ gulp.task('gh-prebuild-prepare', cb => {
 });
 
 // Should only be run in a GH workflow
-gulp.task('gh-docs-prepare', cb => {
+gulp.task('gh-docs-prepare', cb =>
+{
 	del.sync([
 		'../gh-pages/**/*.*',
 		'../gh-pages/.*',
