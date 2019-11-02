@@ -20,5 +20,16 @@
     "exclude": [
         "**/node_modules",
         "**/bin"
-	]
+	],
+	"typedocOptions": {
+		"mode": "file",
+		"module": "commonjs",
+		"theme": "@discord-sambo/typedoc-default-theme/src/minimal",
+		"exclude": "./**/+(node_modules|__test__|)/**/*.ts",
+		"out": "../docs",
+		"links": [{
+			"label": "Logger",
+			"url": "https://discord-sambo.github.io/logger"
+		}]
+	}
 }

@@ -5,7 +5,7 @@
   "main": "bin/index.js",
   "scripts": {
     "test": "jest",
-    "docs": "typedoc --mode file --module commonjs --theme minimal --exclude \"./**/+(node_modules|__test__|)/**/*.ts\" --out ../docs/ src"
+    "docs": "typedoc src"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/discord-sambo/localization#readme",
   "devDependencies": {
     "@discord-sambo/eslint-config": "discord-sambo/eslint-config",
+    "@discord-sambo/typedoc-default-themes": "discord-sambo/typedoc-default-themes",
     "@types/glob": "^7.1.1",
     "@types/jest": "^24.0.18",
     "@types/node": "^12.7.8",
@@ -34,6 +35,7 @@
     "run-sequence": "^2.2.1",
     "ts-jest": "^24.1.0",
     "typedoc": "^0.15.0",
+    "typedoc-default-themes": "discord-sambo/typedoc-default-themes",
     "typescript": "^3.7.1-rc"
   },
   "dependencies": {

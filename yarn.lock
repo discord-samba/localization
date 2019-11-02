@@ -145,6 +145,15 @@
     "@typescript-eslint/eslint-plugin" "^2.4.0"
     "@typescript-eslint/parser" "^2.4.0"
 
+"@discord-sambo/typedoc-default-themes@discord-sambo/typedoc-default-themes":
+  version "0.6.0"
+  resolved "https://codeload.github.com/discord-sambo/typedoc-default-themes/tar.gz/e43677a291dd8dab70c52ea12b9d750c7e1dbe08"
+  dependencies:
+    backbone "^1.4.0"
+    jquery "^3.4.1"
+    lunr "^2.3.6"
+    underscore "^1.9.1"
+
 "@gulp-sourcemaps/identity-map@1.X":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@gulp-sourcemaps/identity-map/-/identity-map-1.0.2.tgz#1e6fe5d8027b1f285dc0d31762f566bccd73d5a9"
