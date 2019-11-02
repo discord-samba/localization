@@ -23,9 +23,14 @@ jobs:
           npm install
           rm -rf ./node_modules/typedoc/node_modules/typescript
           cp -r ./node_modules/typescript ./node_modules/typedoc/node_modules/typescript
-          cd ./node_modules/@discord-sambo/typedoc-themes
+          cd ../
+          git clone https://github.com/discord-sambo/typedoc-themes.git
+          cd typedoc-themes
           npm install
           npm run build
+          npm link
+          cd ../localization
+          npm link @discord-sambo/typedoc-themes
 
       - name: Build docs
         run: npm run docs
