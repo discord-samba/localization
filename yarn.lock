@@ -145,9 +145,9 @@
     "@typescript-eslint/eslint-plugin" "^2.4.0"
     "@typescript-eslint/parser" "^2.4.0"
 
-"@discord-sambo/typedoc-default-themes@discord-sambo/typedoc-default-themes":
+"@discord-sambo/typedoc-themes@discord-sambo/typedoc-themes":
   version "0.6.0"
-  resolved "https://codeload.github.com/discord-sambo/typedoc-default-themes/tar.gz/e43677a291dd8dab70c52ea12b9d750c7e1dbe08"
+  resolved "https://codeload.github.com/discord-sambo/typedoc-themes/tar.gz/821c7199db2796b53d216019f0dedd1dc7a88a02"
   dependencies:
     backbone "^1.4.0"
     jquery "^3.4.1"

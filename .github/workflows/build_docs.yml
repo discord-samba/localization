@@ -23,6 +23,8 @@ jobs:
           npm install
           rm -rf ./node_modules/typedoc/node_modules/typescript
           cp -r ./node_modules/typescript ./node_modules/typedoc/node_modules/typescript
+          cd ./node_modules/@discord-sambo/typedoc-default-themes
+          npm run build
 
       - name: Build docs
         run: npm run docs
