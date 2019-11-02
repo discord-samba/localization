@@ -6,7 +6,7 @@ const app = new Application({
 	target: 'es2017',
 	mode: 'file',
 	module: 'commonjs',
-	theme: 'node_modules/@discord-sambo/typedoc-default-themes/bin/minimal',
+	theme: 'node_modules/@discord-sambo/typedoc-themes/bin/minimal',
 	exclude: './**/+(node_modules|__test__|)/**/*.ts',
 	out: '../docs'
 });
