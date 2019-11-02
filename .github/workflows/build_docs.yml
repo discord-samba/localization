@@ -35,11 +35,13 @@ jobs:
           npm install
           npm run build
           npm link
+
+          # CD back to main repo and link theme to dependencies
           cd ../$(echo '${{ github.repository }}' | grep -oP '/\K.+')
           npm link @discord-sambo/typedoc-themes
 
       - name: Build docs
-        run: npm run docs
+        run: node scripts/typedoc-runner
 
       - name: Clone gh-pages branch
         run: git clone https://${{ github.actor }}:${{ secrets.DOCS_TOKEN }}@github.com/${{ github.repository }}.git -b gh-pages ../gh-pages

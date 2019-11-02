@@ -4,8 +4,7 @@
   "description": "Localization module for Discord-Sambo",
   "main": "bin/index.js",
   "scripts": {
-    "test": "jest",
-    "docs": "node ./scripts/typedoc-runner.js"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
