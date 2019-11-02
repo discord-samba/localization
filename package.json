@@ -34,7 +34,7 @@
     "run-sequence": "^2.2.1",
     "ts-jest": "^24.1.0",
     "typedoc": "^0.15.0",
-    "typescript": "^3.7.0-beta"
+    "typescript": "^3.7.1-rc"
   },
   "dependencies": {
     "glob": "^7.1.4"
