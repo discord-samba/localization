@@ -21,8 +21,14 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
+          
+          # Replace typedoc's typescript dep with currently installed
+          # because it comes with an incompatible version
           rm -rf ./node_modules/typedoc/node_modules/typescript
           cp -r ./node_modules/typescript ./node_modules/typedoc/node_modules/typescript
+          
+          # Clone typedoc theme, build, and link because for whatever reason
+          # installing the deps and building in node_modules fails
           cd ../
           git clone https://github.com/discord-sambo/typedoc-themes.git
           cd typedoc-themes
