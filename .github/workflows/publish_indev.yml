@@ -1,4 +1,4 @@
-name: Publish Indev
+name: Publish Dev Build
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Build
+    name: Publish
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -25,7 +25,10 @@ jobs:
         run: npx gulp build
 
       - name: Generate dev version
-        run: npm version 0.1.0-dev.$(git rev-parse --verify HEAD)
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor}}@users.noreply.github.com"
+          npm version 0.1.0-dev.$(git rev-parse --verify HEAD)
 
       - name: Publish to NPM
         run: npm publish --tag dev --access public
