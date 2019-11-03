@@ -1,16 +1,17 @@
+.github/*
 .vscode/*
-src/*
-test/*
 examples/*
 scripts/*
+src/*
+
+bin/__test__/*
 
 .gitignore
-.jsdoc.json
-.travis.yml
 
-config.json
+README.md
 
 gulpfile.js
-yarn.lock
 tsconfig.json
-tslint.json
+yarn.lock
+
+config.json
