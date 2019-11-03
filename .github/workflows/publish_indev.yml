@@ -35,3 +35,14 @@ jobs:
         run: npm publish --tag dev --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Setup GPR registry
+        uses: actions/setup-node@v1
+        with:
+          registry-url: https://npm.pkg.github.com/
+          scope: @discord-sambo
+      
+      - name: Publish to GPR
+        run: npm publish --tag dev --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
