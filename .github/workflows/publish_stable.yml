@@ -3,7 +3,7 @@ name: Publish Release Build
 on:
   release:
     types:
-      - created
+      - published
 
 jobs:
   build:
