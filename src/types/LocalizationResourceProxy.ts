@@ -2,7 +2,7 @@ import { TemplateArguments } from './TemplateArguments';
 
 /**
  * Represents a Proxy object for a specific language where function calls
- * will call [Localization.resource()]{@link Localization#resource} for that
+ * will call [Localization.resource()]{@link Localization.resource} for that
  * language and forward the given `TemplateArguments` to the resource lookup.
  *
  * >**TypeScript note**: Can be given a type parameter object where the keys
