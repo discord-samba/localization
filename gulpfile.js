@@ -32,32 +32,6 @@ gulp.task('build', () =>
 });
 
 // Should only be run in a GH workflow
-gulp.task('gh-prebuild-prepare', cb =>
-{
-	del.sync([
-		'../out/**',
-		'../out/.*',
-		'!../out',
-		'!../out/.git',
-		'!../out/.git/**'
-	], { force: true });
-
-	gulp
-		.src([
-			'bin/**/*.*',
-			'!bin/**/__test__',
-			'!bin/**/__test__/**/*'
-		])
-		.pipe(gulp.dest('../out/bin'));
-
-	gulp
-		.src('package.json')
-		.pipe(gulp.dest('../out'));
-
-	return cb();
-});
-
-// Should only be run in a GH workflow
 gulp.task('gh-docs-prepare', cb =>
 {
 	del.sync([
