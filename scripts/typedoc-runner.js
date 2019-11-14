@@ -22,6 +22,10 @@ if (typeof project !== 'undefined')
 		'links',
 		[
 			{
+				label: 'Command',
+				url: 'https://discord-sambo.github.io/command'
+			},
+			{
 				label: 'Logger',
 				url: 'https://discord-sambo.github.io/logger'
 			}
