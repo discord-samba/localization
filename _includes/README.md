@@ -1,5 +1,6 @@
 <p class="lead">
-This is the command module for Discord-Sambo. It provides a command system for interacting with your Discord client.
+This is the localization module for Discord-Sambo. It provides a system for defining
+and loading string resources for desired languages.
 </p>
 
 ## NOT READY FOR USE
