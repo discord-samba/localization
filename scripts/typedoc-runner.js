@@ -23,11 +23,11 @@ if (typeof project !== 'undefined')
 		[
 			{
 				label: 'Command',
-				url: 'https://discord-sambo.github.io/command'
+				url: 'https://discord-sambo.github.io/command/docs'
 			},
 			{
 				label: 'Logger',
-				url: 'https://discord-sambo.github.io/logger'
+				url: 'https://discord-sambo.github.io/logger/docs'
 			}
 		]
 	);
