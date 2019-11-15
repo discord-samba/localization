@@ -23,11 +23,18 @@ if (typeof project !== 'undefined')
 		[
 			{
 				label: 'Command',
-				url: 'https://discord-sambo.github.io/command/docs'
+				url: 'https://discord-sambo.github.io/command/docs',
+				current: false
+			},
+			{
+				label: 'Localization',
+				url: 'https://discord-sambo.github.io/localization/docs',
+				current: true
 			},
 			{
 				label: 'Logger',
-				url: 'https://discord-sambo.github.io/logger/docs'
+				url: 'https://discord-sambo.github.io/logger/docs',
+				current: false
 			}
 		]
 	);
