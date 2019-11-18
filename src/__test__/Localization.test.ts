@@ -94,6 +94,11 @@ describe('Loading string resources', () =>
 		expect(fn).toThrow('Localization string key \'bar\' does not exist for language \'test\'');
 	});
 
+	it('Should overload previously loaded strings', () =>
+	{
+		expect(Localization.resource('test', 'test11')).toBe('boofarfaz');
+	});
+
 	it('Should pull from fallback language if no resource is found', () =>
 	{
 		expect(Localization.resource('test', 'foo')).toBe('test::default::default::foo');

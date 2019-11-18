@@ -30,6 +30,12 @@ baz
 ## Should error
 foo{{> bar }}baz
 
+[test11]
+foobarbaz
+
+[test11]
+boofarfaz
+
 [testCat:test1]
 ## Test categories
 fooBARbaz
