@@ -2,8 +2,6 @@
 layout: 'guide'
 title: 'Writing Localization Files'
 menuOrder: 1
-redirect_from:
-  - /guides/default
 ---
 
 
