@@ -54,7 +54,7 @@ foo{{! bar.join('') !}}baz
 
 [args:test3]
 ##! bar?: string
-foo{{ bar ?}}baz
+foo{{? bar }}baz
 
 [args:test4]
 ##! bar: any

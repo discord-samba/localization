@@ -25,21 +25,21 @@ describe('Building strings from abstract localization nodes', () =>
 
 	it('Should build a string with optional templates', () =>
 	{
-		LocalizationCache.set(p, 'test', Parser.parse(c, '[test]\nfoo{{ bar ?}}baz')[0]);
+		LocalizationCache.set(p, 'test', Parser.parse(c, '[test]\nfoo{{? bar }}baz')[0]);
 		expect(LocalizationCache.get(p, 'test')!.build({ bar: 'bar' }, {})).toBe('foobarbaz');
 		LocalizationCache.clear();
 	});
 
 	it('Should build a string with optional templates with missing args', () =>
 	{
-		LocalizationCache.set(p, 'test', Parser.parse(c, '[test]\nfoo{{ bar ?}}baz')[0]);
+		LocalizationCache.set(p, 'test', Parser.parse(c, '[test]\nfoo{{? bar }}baz')[0]);
 		expect(LocalizationCache.get(p, 'test')!.build({}, {})).toBe('foobaz');
 		LocalizationCache.clear();
 	});
 
 	it('Should properly handle isolated optional templates', () =>
 	{
-		LocalizationCache.set(p, 'test', Parser.parse(c, '[test]\nfoo\n{{ bar ?}}\nbaz')[0]);
+		LocalizationCache.set(p, 'test', Parser.parse(c, '[test]\nfoo\n{{? bar }}\nbaz')[0]);
 		expect(LocalizationCache.get(p, 'test')!.build({}, {})).toBe('foo\nbaz');
 		LocalizationCache.clear();
 	});

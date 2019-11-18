@@ -19,7 +19,7 @@ foo{{ bar }}baz
 ## When bar === 'bar'
 ## Should equal: foobaz
 ## When bar === undefined
-foo{{ bar ?}}baz
+foo{{? bar }}baz
 
 [test4]
 ## Test isolated optional template
@@ -28,7 +28,7 @@ foo{{ bar ?}}baz
 ## Should equal: foo\n\nbaz
 ## When bar === ''
 foo
-{{ bar ?}}
+{{? bar }}
 baz
 
 [test5]

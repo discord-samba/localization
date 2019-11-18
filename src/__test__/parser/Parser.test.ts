@@ -22,7 +22,7 @@ describe('Parsing valid localization text', () =>
 
 	it('Should parse optional templates', () =>
 	{
-		expect(() => Parser.parse(c, '[test]\nfoo{{ bar ?}}baz')).not.toThrow(ParseError);
+		expect(() => Parser.parse(c, '[test]\nfoo{{? bar }}baz')).not.toThrow(ParseError);
 	});
 
 	it('Should parse forward templates', () =>
@@ -80,12 +80,14 @@ describe('Throwing parser errors', () =>
 	it('Should error on invalid templates', () =>
 	{
 		const e: string = 'Invalid template';
-		expect(() => Parser.parse(c, '[test]\nfoo{{? bar }}baz')).toThrow(e);
+		expect(() => Parser.parse(c, '[test]\nfoo{{ bar ?}}baz')).toThrow(e);
 		expect(() => Parser.parse(c, '[test]\nfoo{{! bar }}baz')).toThrow(e);
 		expect(() => Parser.parse(c, '[test]\nfoo{{ bar !}}baz')).toThrow(e);
 		expect(() => Parser.parse(c, '[test]\nfoo{{! bar ?}}baz')).toThrow(e);
+		expect(() => Parser.parse(c, '[test]\nfoo{{? bar !}}baz')).toThrow(e);
 		expect(() => Parser.parse(c, '[test]\nfoo{{> bar ?}}baz')).toThrow(e);
 		expect(() => Parser.parse(c, '[test]\nfoo{{> bar !}}baz')).toThrow(e);
+		expect(() => Parser.parse(c, '[test]\nfoo{{$ bar }}baz')).toThrow(e);
 	});
 
 	it('Should error when encountering a key without encountering a body', () =>

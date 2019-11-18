@@ -619,14 +619,22 @@ export class Parser
 	{
 		let index: number = 0;
 		let kind: LocalizationStringTemplateKind = LocalizationStringTemplateKind.Invalid;
-		if (!/[\w!>\s]/.test(reader.peek(2)))
+
+		// Check for allowed template opening characters
+		if (!/[\w?>!\s]/.test(reader.peek(2)))
 			return LocalizationStringTemplateKind.Invalid;
 
 		if (reader.peek(2) === '!')
 			kind = LocalizationStringTemplateKind.Script;
 
-		if (reader.peek(2) === '>')
+		else if (reader.peek(2) === '>')
 			kind = LocalizationStringTemplateKind.Forward;
+
+		else if (reader.peek(2) === '?')
+			kind = LocalizationStringTemplateKind.Optional;
+
+		else
+			kind = LocalizationStringTemplateKind.Regular;
 
 		while (true)
 		{
@@ -648,17 +656,8 @@ export class Parser
 					break;
 				}
 
-				if (reader.peek(index - 1) === '?')
-				{
-					if (kind === LocalizationStringTemplateKind.Forward)
-						kind = LocalizationStringTemplateKind.Invalid;
-					else
-						kind = LocalizationStringTemplateKind.Optional;
-				}
-				else if (kind !== LocalizationStringTemplateKind.Forward)
-				{
-					kind = LocalizationStringTemplateKind.Regular;
-				}
+				if (!/[\w\s]/.test(reader.peek(index - 1)))
+					kind = LocalizationStringTemplateKind.Invalid;
 
 				break;
 			}
@@ -786,14 +785,14 @@ export class Parser
 		let key: string = '';
 		const { line, column } = reader;
 
-		// Discard the opening braces
-		reader.discard(2);
+		// Discard the opening `{{?`
+		reader.discard(3);
 
-		while (reader.peekSegment(3) !== '?}}')
+		while (reader.peekSegment(2) !== '}}')
 			key += Parser._consumeTemplateKeyChar(parent, reader);
 
 		// Discard the closing braces
-		reader.discard(3);
+		reader.discard(2);
 
 		const node: NodeKindImplOptionalTemplate =
 			new NodeKindImplOptionalTemplate(key.trim(), parent, line, column);
