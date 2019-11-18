@@ -9,8 +9,8 @@ redirect_from:
 
 # Writing Localization Files
 If you've used YAMDBF, the predecessor to Sambo in the past, or more specifically its localization system,
-this process will be familiar to you. That being said, there's a lot to go over for the sake of being
-thorough and presenting a well-documented process.
+this process will be familiar to you. That being said, there are some slight differences, and there's
+a lot to go over for the sake of being thorough and presenting a well-documented process.
 
 The Localization module operates on top of files with the `.lang` format. These files consist of string
 resource declarations for any one arbitrary language (You will specify which language the file represents
