@@ -28,6 +28,7 @@ unclear by the end don't be afraid to ask for help on the [Discord server](#) if
 	- [Optional Templates](#optional-templates)
 	- [Forward Templates](#forward-templates)
 	- [Script Templates](#script-templates)
+- [Escape Sequences](#escape-sequences)
 - [Afterword](#afterword)
 
 ## File Organization Basics
@@ -40,15 +41,15 @@ will all be cached under the specified language.
 
 The localization loader method [`loadFromDirectory()`](/docs/classes/localization.html#loadfromdirectory)
 will load from subdirectories in the given directory as well, so this allows for even more detailed
-organization of localization resources.
+organization of localization resources without extra effort in loading them.
 
 ## Defining String Resources
 
 Localization string resources are defined as key-value pairs within `.lang` files. The key itself must be
-alpha-numeric, with underscores allowed. Whitespace is not allowed anywhere within the key declaration
-syntax. Anything resembling a localization string resource key that is syntactically invalid will be
-parsed as part of the previous string resource, or discarded as header comments if appearing as the first
-item in a `.lang` file.
+alpha-numeric with underscores allowed, and must be the first thing on a line. Whitespace is not allowed
+anywhere within the key declaration syntax. Anything resembling a localization string resource key that
+is syntactically invalid will be parsed as part of the previous string resource, or discarded as header
+comments if appearing as the first item in a `.lang` file.
 
 Localization string resource definition syntax is as follows:
 
@@ -66,16 +67,49 @@ boo far faz
 
 This creates two keys, `KEY_1`, and `KEY_2`, when this file is loaded. Their content will consist of
 `foo bar baz` and `boo far faz`, respectively. Localization resource content is trimmed when the resource
-is recalled at runtime.
+is called at runtime.
 
 ### Categories and subcategories
-*TODO: Categories/subcategories writeup*
+Additional distinction can be optionally applied to localization resources via categories and subcategories.
+These are an addition to the syntax of resource keys. Categories and subcategories, like resource keys,
+must be alpha-numeric with underscores allowed, and use the syntax `[category(subcategory):RESOURCE_KEY]`,
+where the subcategory is optional (`[category:RESOURCE_KEY]`).
+
+This affords basically limitless arbitrary distinction between resource keys. For example, the Localization
+module provides a `CommandInfoProvider` function that operates on top of category/subcategory functionality
+that can be given to the Command module to allow it to pull localized command information from the
+Localization module for use within the base `help` command.
+
+```
+[command(ping):desc]
+Pong!
+
+[command(ping):help]
+Pings the bot, which will respond with how long the ping took.
+
+[command(shortcuts):desc]
+Configure or list command shortcuts
+
+[command(shortcuts):help]
+Shortcuts allow creating and calling preconfigured command+argument sets, or simple aliases
+
+Example:
+	<prefix>shortcuts set h help
+
+Which would set the shortcut "h" to call the command "help"
+...
+```
+
+At the time of writing this, Sambo has no base commands written, so we are using examples from YAMDBF
+for how command information can be provided via Sambo's Localization module. As you can see, we're
+providing information for two commands via the `desc` and `help` keys. Because there is a distinction
+between the subcategories for the two sets of keys, there is no overlap.
 
 ## Templating
 `.lang` files allow for more than just simple strings. String building would be a nightmare if interpolation
 weren't possible. The Sambo Localization module provides variable interpolation functionality through
 its templating syntax, which somewhat resembles Handlebars. There are a few different kinds of templates
-to use within the localization resources:
+to use within your localization resources:
 
  - Regular
  - Optional
@@ -95,10 +129,10 @@ Arguments can be preemptively declared within a resource definition via `##!` sy
 comment. This allows (or rather necessitates) specifying a type for the argument, which will be type-checked
 at runtime. The allowed types are:
 
- - String
- - Number
- - Boolean
- - Any (Allows any type)
+ - `String`
+ - `Number`
+ - `Boolean`
+ - `Any` (Allows any type)
  - An array of any of the above
    - Denoted with `[]`, for example: `String[]`
 
@@ -122,9 +156,9 @@ foo{{ bar }}{{? baz }}
 ```
 {% endraw %}
 
-Argument type-declarations can be split accross multiple type-declarations if desired. This helps keep
-line-length from getting out of hand if you have a particularly large set of arguments being passed to
-a resource
+Argument type-declarations can be split accross multiple type-declaration comments if desired. This
+helps keep line-length from getting out of hand if you have a particularly large set of arguments
+being passed to a resource.
 
 {% raw %}
 ```
@@ -172,7 +206,7 @@ the output will be `'foobarbaz'`.
 
 Regular templates expect to always receive a value, and will interpolate `undefined` if given none,
 so the above example would return `'fooundefinedbaz'` if given no `bar` argument. You should consider
-this result an bug in your code and should diagnose why it is occurring.
+this result a bug in your code and should diagnose why it is occurring.
 
 If instead you intended to have a template that evaluates to nothing when no value is given, use an
 Optional Template.
@@ -254,7 +288,7 @@ Resources can also embed other resources via Script Templates, detailed later.
 Script templates allow you to embed arbitrary Javascript code in your templates. This code will be
 pre-compiled to check for syntax errors when the `.lang` file containing it is loaded. You will also
 be presented with errors detailing where in the `.lang` file the script template is located if a script
-template throws an error at runtime. This will aide debugging on the part of you, the developer.
+template throws an error at runtime. This will aid debugging on the part of you, the developer.
 
 Script templates are the ultimate solution to any disparity between the structure of different languages.
 The primary example that comes to mind is pluralization. Pluralization in English is not the end-all
@@ -296,10 +330,12 @@ Guess what? {{> EXAMPLE_11 }}
 {% endraw %}
 
 **Note:** Just like with forward templates, there is recursion protection in place for loading other
-localization resources via `res`.
+localization resources via `res`. Also note that when calling other resources via `res`, you do not
+need to explicitly pass the arguments to the resource function. They are forwarded automatically.
+You can, however, pass an arguments object specific to that script template if desired.
 
 As you may have noticed, simple script templates have their values returned implicitly. More complex,
-multi-line script templates can be written as well, but you will need to explicitly return a value manually.
+multi-line script templates can be written as well, but you will need to explicitly return a value.
 
 {% raw %}
 ```
@@ -331,7 +367,32 @@ baz
 {% endraw %}
 
 Given the example above and no arguments, you can expect the resource to return `'foo\nbaz'`. Just like
-with optional templates, this mechanic can be circumvented by returning an empty string (`''`).
+with optional templates, this behavior can be circumvented by returning an empty string (`''`).
+
+## Escape Sequences
+All of the `.lang` format-specific syntax can be escaped with `\` if you need to use something that would otherwise
+be parsed as a resource key or template syntax. For example:
+
+{% raw %}
+```
+[EXAMPLE_16]
+\[NOT_A_KEY]
+\{{ Not a template }}
+```
+{% endraw %}
+
+Without escaping, the square braces would be interpreted as a key and throw a parse error, as the parser
+expects to see a string body and not another key immediately after the `EXAMPLE_16` key. The template
+would be otherwise parsed as a Regular Template with the key `Not a template`.
+
+`.lang` files also support a few other escape sequences as well:
+- `\t`
+- `\n`
+- `\u####` for unicode character insertion
+  - Where each `#` is a hex digit
+
+Any `\` found that does not match any of the escape sequences described here will be interpreted and
+output as a literal `\` in the resource text.
 
 ## Afterword
 Hopefully this guide serves to adequately describe the process of writing localization files. Again,
