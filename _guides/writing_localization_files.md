@@ -176,7 +176,7 @@ this result an bug in your code and should diagnose why it is occurring.
 
 If instead you intended to have a template that evaluates to nothing when no value is given, use an
 Optional Template.
-	
+
 ### Optional Templates
 Optional Templates function like regular templates, except they evaluate to nothing when no matching
 argument is given. Optional templates use the syntax {% raw %}`{{? argument_name }}`{% endraw %}.
@@ -296,7 +296,7 @@ Guess what? {{> EXAMPLE_11 }}
 {% endraw %}
 
 **Note:** Just like with forward templates, there is recursion protection in place for loading other
-localization resources via `res`. 
+localization resources via `res`.
 
 As you may have noticed, simple script templates have their values returned implicitly. More complex,
 multi-line script templates can be written as well, but you will need to explicitly return a value manually.
