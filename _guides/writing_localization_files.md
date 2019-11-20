@@ -359,9 +359,9 @@ Script templates present this same behavior when they return `undefined`.
 {% raw %}
 ```
 [EXAMPLE_15]
-##! foo?: String
+##! bar?: String
 foo
-{{! undefined !}}
+{{! args.bar !}}
 baz
 ```
 {% endraw %}
