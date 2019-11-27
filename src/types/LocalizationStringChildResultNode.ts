@@ -3,8 +3,7 @@ import { LocalizationStringNodeKind } from './LocalizationStringNodeKind';
 /**
  * Represents the result of evaluating an abstract Localization string child
  * node at runtime
- *
- * @private
+ * @internal
  */
 export interface LocalizationStringChildResultNode
 {

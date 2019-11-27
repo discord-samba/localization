@@ -3,8 +3,7 @@ import { LocalizationStringParentNode } from './LocalizationStringParentNode';
 
 /**
  * Interface for an abstract Localization resource child node
- *
- * @private
+ * @internal
  */
 export interface LocalizationStringChildNode
 {

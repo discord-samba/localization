@@ -5,9 +5,7 @@ import { LocalizationCache } from '../LocalizationCache';
 import { NodeKindImplParentNode } from '../nodeKindImpl/NodeKindImplParentNode';
 import { Parser } from '../parser/Parser';
 
-/**
- * @private
- */
+/** @internal */
 export class LocalizationFileLoader
 {
 	/**

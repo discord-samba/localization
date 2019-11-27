@@ -1,7 +1,6 @@
 /**
  * Represents a Localization resource argument type declaration
- *
- * @private
+ * @internal
  */
 export interface LocalizationStringTypeDeclaration
 {

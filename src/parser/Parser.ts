@@ -13,9 +13,7 @@ import { NodeKindImplStringChunk } from '../nodeKindImpl/NodeKindImplStringChunk
 import { ParseError } from './ParseError';
 import { StringReader } from './StringReader';
 
-/**
- * @private
- */
+/** @internal */
 export class Parser
 {
 	/**

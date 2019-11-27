@@ -4,8 +4,7 @@ import { LocalizationStringTypeDeclarationMapping } from '../types/LocalizationS
 
 /**
  * Interface for an abstract Localization resource parent node
- *
- * @private
+ * @internal
  */
 export interface LocalizationStringParentNode
 {

@@ -5,8 +5,7 @@ import { LocalizationStringParentNode } from '../interfaces/LocalizationStringPa
 /**
  * Represents an abstract Localization resource node for an optional template
  * that may or may not have a value provided at runtime
- *
- * @private
+ * @internal
  */
 export class NodeKindImplOptionalTemplate implements LocalizationStringChildNode
 {

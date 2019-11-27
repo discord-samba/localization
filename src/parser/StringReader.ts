@@ -1,10 +1,9 @@
-/**
- * @private
- */
+/** @internal */
 export class StringReader
 {
 	private _input: string;
 	private _index: number;
+
 	public line: number;
 	public column: number;
 

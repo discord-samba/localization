@@ -3,8 +3,7 @@ import { LocalizationStringTypeDeclaration } from './LocalizationStringTypeDecla
 /**
  * Represents a mapping of type identifiers to types that a
  * Localization resource expects at runtime
- *
- * @private
+ * @internal
  */
 export interface LocalizationStringTypeDeclarationMapping
 {

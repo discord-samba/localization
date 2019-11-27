@@ -1,8 +1,6 @@
 import { LocalizationResourceProxy } from './LocalizationResourceProxy';
 
-/**
- * @private
- */
+/** @internal */
 export interface LocalizationResrouceMetaData
 {
 	// Call location

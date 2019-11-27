@@ -9,8 +9,7 @@ import { TemplateArguments } from '../types/TemplateArguments';
  * Represents an abstract Localization resource node that holds a script
  * embedded in a Localization resource which will be executed when the
  * resource is loaded at runtime
- *
- * @private
+ * @internal
  */
 export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 {

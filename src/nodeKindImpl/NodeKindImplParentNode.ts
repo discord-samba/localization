@@ -7,8 +7,7 @@ import { LocalizationStringTypeDeclarationMapping } from '../types/LocalizationS
 /**
  * Represents an abstract Localization resource parent node, of which all other
  * nodes comprising that Localization resource are children
- *
- * @private
+ * @internal
  */
 export class NodeKindImplParentNode implements LocalizationStringParentNode
 {

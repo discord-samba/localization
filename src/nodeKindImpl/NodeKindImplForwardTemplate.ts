@@ -6,8 +6,7 @@ import { LocalizationStringParentNode } from '../interfaces/LocalizationStringPa
  * Represents an abstract Localization resource node for a template that will
  * load another Localization resource when the resource containing the template
  * is loaded at runtime
- *
- * @private
+ * @internal
  */
 export class NodeKindImplForwardTemplate implements LocalizationStringChildNode
 {

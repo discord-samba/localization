@@ -5,8 +5,7 @@ import { LocalizationStringParentNode } from '../interfaces/LocalizationStringPa
 /**
  * Represents an abstract Localization resource node containing raw text without
  * any special localization syntax
- *
- * @private
+ * @internal
  */
 export class NodeKindImplStringChunk implements LocalizationStringChildNode
 {

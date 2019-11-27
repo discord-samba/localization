@@ -16,8 +16,7 @@ import { TemplateArguments } from './types/TemplateArguments';
 /**
  * Stores a localization string parent node and builds a string
  * from it on demand
- *
- * @private
+ * @internal
  */
 export class LocalizationStringBuilder
 {
