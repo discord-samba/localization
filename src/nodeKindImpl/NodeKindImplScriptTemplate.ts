@@ -13,7 +13,7 @@ import { TemplateArguments } from '../types/TemplateArguments';
  */
 export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 {
-	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.ScriptTemplate;
+	public readonly kind: LocalizationStringNodeKind = LocalizationStringNodeKind.ScriptTemplate;
 
 	private _fn!: Function;
 	private _impFn?: Function;

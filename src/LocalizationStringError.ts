@@ -6,9 +6,9 @@ import { LocalizationResrouceMetaData } from './types/LocalizationResourceMetaDa
  */
 export class LocalizationStringError
 {
-	public name: string;
-	public message: string;
-	public stack!: string;
+	public readonly name: string;
+	public readonly message: string;
+	public readonly stack!: string;
 
 	public constructor(
 		message: string,

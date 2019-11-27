@@ -9,12 +9,12 @@ import { LocalizationStringParentNode } from '../interfaces/LocalizationStringPa
  */
 export class NodeKindImplOptionalTemplate implements LocalizationStringChildNode
 {
-	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.OptionalTemplate;
+	public readonly kind: LocalizationStringNodeKind = LocalizationStringNodeKind.OptionalTemplate;
 
-	public key: string;
-	public parent: LocalizationStringParentNode;
-	public line: number;
-	public column: number;
+	public readonly key: string;
+	public readonly parent: LocalizationStringParentNode;
+	public readonly line: number;
+	public readonly column: number;
 
 	public constructor(key: string, parent: LocalizationStringParentNode, line: number, column: number)
 	{

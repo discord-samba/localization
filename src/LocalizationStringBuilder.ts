@@ -20,9 +20,9 @@ import { TemplateArguments } from './types/TemplateArguments';
  */
 export class LocalizationStringBuilder
 {
-	private _language: string;
+	private readonly _language: string;
 
-	public node: LocalizationStringParentNode;
+	public readonly node: LocalizationStringParentNode;
 
 	public constructor(language: string, input: LocalizationStringParentNode)
 	{

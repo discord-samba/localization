@@ -5,9 +5,9 @@ import * as FS from 'fs';
  */
 export class ParseError
 {
-	public name: string;
-	public message: string;
-	public stack!: string;
+	public readonly name: string;
+	public readonly message: string;
+	public readonly stack!: string;
 
 	public constructor(message: string, container: string, line: number, column: number)
 	{

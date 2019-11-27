@@ -11,15 +11,16 @@ import { LocalizationStringTypeDeclarationMapping } from '../types/LocalizationS
  */
 export class NodeKindImplParentNode implements LocalizationStringParentNode
 {
-	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.Parent;
+	public readonly kind: LocalizationStringNodeKind = LocalizationStringNodeKind.Parent;
 
-	public container: string;
-	public key: string;
-	public category: string;
-	public subcategory: string;
-	public line: number;
-	public column: number;
-	public children: LocalizationStringChildNode[];
+	public readonly container: string;
+	public readonly key: string;
+	public readonly category: string;
+	public readonly subcategory: string;
+	public readonly line: number;
+	public readonly column: number;
+	public readonly children: LocalizationStringChildNode[];
+
 	public params: LocalizationStringTypeDeclarationMapping;
 
 	public constructor(

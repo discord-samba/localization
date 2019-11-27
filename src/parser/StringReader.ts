@@ -1,7 +1,8 @@
 /** @internal */
 export class StringReader
 {
-	private _input: string;
+	private readonly _input: string;
+
 	private _index: number;
 
 	public line: number;

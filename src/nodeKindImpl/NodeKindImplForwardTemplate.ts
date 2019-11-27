@@ -10,12 +10,12 @@ import { LocalizationStringParentNode } from '../interfaces/LocalizationStringPa
  */
 export class NodeKindImplForwardTemplate implements LocalizationStringChildNode
 {
-	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.ForwardTemplate;
+	public readonly kind: LocalizationStringNodeKind = LocalizationStringNodeKind.ForwardTemplate;
 
-	public forwardKey: string;
-	public parent: LocalizationStringParentNode;
-	public line: number;
-	public column: number;
+	public readonly forwardKey: string;
+	public readonly parent: LocalizationStringParentNode;
+	public readonly line: number;
+	public readonly column: number;
 
 	public constructor(forwardKey: string, parent: LocalizationStringParentNode, line: number, column: number)
 	{

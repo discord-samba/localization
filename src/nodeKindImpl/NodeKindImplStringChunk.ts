@@ -9,12 +9,12 @@ import { LocalizationStringParentNode } from '../interfaces/LocalizationStringPa
  */
 export class NodeKindImplStringChunk implements LocalizationStringChildNode
 {
-	public kind: LocalizationStringNodeKind = LocalizationStringNodeKind.StringChunk;
+	public readonly kind: LocalizationStringNodeKind = LocalizationStringNodeKind.StringChunk;
 
-	public content: string;
-	public parent: LocalizationStringParentNode;
-	public line: number;
-	public column: number;
+	public readonly content: string;
+	public readonly parent: LocalizationStringParentNode;
+	public readonly line: number;
+	public readonly column: number;
 
 	public constructor(value: string, parent: LocalizationStringParentNode, line: number, column: number)
 	{
