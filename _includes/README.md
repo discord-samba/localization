@@ -1,6 +1,6 @@
 <p class="lead">
-This is the localization module for Discord-Sambo. It provides a system for defining and loading string
-resources for desired languages. See the <a href="https://discord.sambo/localization/guides/default">Guides</a>
+This is the localization module for Discord-Samba. It provides a system for defining and loading string
+resources for desired languages. See the <a href="https://discord.samba/localization/guides/default">Guides</a>
 section for more information.
 </p>
 
@@ -8,12 +8,12 @@ section for more information.
 The latest stable release of the module will always be available via the `@latest` tag on NPM:
 
 ```
-npm install @discord-sambo/localization@latest
+npm install @discord-samba/localization@latest
 ```
 
 Dev builds are published automatically after every commit to the `master` branch and are available
 via the `@dev` tag on NPM.
 
 ```
-npm install @discord-sambo/localization@dev
+npm install @discord-samba/localization@dev
 ```

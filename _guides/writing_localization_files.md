@@ -9,7 +9,7 @@ redirect_from:
 # Writing Localization Files <!-- omit in toc -->
 
 ### Foreword <!-- omit in toc -->
-If you've used YAMDBF, the predecessor to Sambo in the past, or more specifically its localization system,
+If you've used YAMDBF, the predecessor to Samba in the past, or more specifically its localization system,
 this process will be familiar to you. That being said, there are some slight differences, and there's
 a lot to go over for the sake of being thorough and presenting a well-documented process.
 
@@ -100,14 +100,14 @@ Which would set the shortcut "h" to call the command "help"
 ...
 ```
 
-At the time of writing this, Sambo has no base commands written, so we are using examples from YAMDBF
-for how command information can be provided via Sambo's Localization module. As you can see, we're
+At the time of writing this, Samba has no base commands written, so we are using examples from YAMDBF
+for how command information can be provided via Samba's Localization module. As you can see, we're
 providing information for two commands via the `desc` and `help` keys. Because there is a distinction
 between the subcategories for the two sets of keys, there is no overlap.
 
 ## Templating
 `.lang` files allow for more than just simple strings. String building would be a nightmare if interpolation
-weren't possible. The Sambo Localization module provides variable interpolation functionality through
+weren't possible. The Samba Localization module provides variable interpolation functionality through
 its templating syntax, which somewhat resembles Handlebars. There are a few different kinds of templates
 to use within your localization resources:
 
