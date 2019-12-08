@@ -1,23 +1,23 @@
 {
-	"name": "@discord-sambo/localization",
+	"name": "@discord-samba/localization",
 	"version": "0.1.0",
-	"description": "Localization module for Discord-Sambo",
+	"description": "Localization module for Discord-Samba",
 	"main": "bin/index.js",
 	"scripts": {
 		"test": "jest"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/discord-sambo/localization.git"
+		"url": "git+https://github.com/discord-samba/localization.git"
 	},
 	"author": "Zack Campbell",
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/discord-sambo/localization/issues"
+		"url": "https://github.com/discord-samba/localization/issues"
 	},
-	"homepage": "https://github.com/discord-sambo/localization#readme",
+	"homepage": "https://github.com/discord-samba/localization#readme",
 	"devDependencies": {
-		"@discord-sambo/eslint-config": "discord-sambo/eslint-config",
+		"@discord-samba/eslint-config": "discord-samba/eslint-config",
 		"@types/glob": "^7.1.1",
 		"@types/jest": "^24.0.18",
 		"@types/node": "^12.7.8",
@@ -39,7 +39,7 @@
 		"glob": "^7.1.4"
 	},
 	"eslintConfig": {
-		"extends": "@discord-sambo"
+		"extends": "@discord-samba"
 	},
 	"jest": {
 		"roots": [
