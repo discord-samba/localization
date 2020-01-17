@@ -1,9 +1,7 @@
 ---
 layout: 'guide'
 title: 'Writing Localization Files'
-menuOrder: 1
-redirect_from:
-  - /guides/default
+menuOrder: 2
 ---
 
 # Writing Localization Files <!-- omit in toc -->
