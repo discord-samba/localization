@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/typedef */
 
-const { Application } = require('typedoc');
+const { Application, ParameterType } = require('typedoc');
+const app = new Application();
 
-const app = new Application({
+app.bootstrap({
 	tsconfig: 'tsconfig.json',
 	target: 'es2017',
 	mode: 'file',
@@ -13,7 +14,11 @@ const app = new Application({
 	out: '../docs'
 });
 
-app.options.addDeclaration({ name: 'links', type: 'Array' });
+app.options.addDeclaration({
+	name: 'links',
+	type: ParameterType.Mixed,
+});
+
 app.options.setValue(
 	'links',
 	[
