@@ -4,6 +4,17 @@ const { Application, ParameterType, TSConfigReader } = require('typedoc');
 const app = new Application();
 
 app.options.addReader(new TSConfigReader());
+
+app.bootstrap({
+	target: 'es2017',
+	mode: 'file',
+	module: 'commonjs',
+	theme: 'node_modules/@discord-samba/typedoc-themes/bin/minimal',
+	exclude: './**/+(node_modules|__test__|)/**/*.ts',
+	excludePrivate: true,
+	out: '../docs'
+});
+
 app.options.addDeclaration({ name: 'links', type: ParameterType.Mixed });
 app.options.setValue(
 	'links',
@@ -23,16 +34,6 @@ app.options.setValue(
 		}
 	]
 );
-
-app.bootstrap({
-	target: 'es2017',
-	mode: 'file',
-	module: 'commonjs',
-	theme: 'node_modules/@discord-samba/typedoc-themes/bin/minimal',
-	exclude: './**/+(node_modules|__test__|)/**/*.ts',
-	excludePrivate: true,
-	out: '../docs'
-});
 
 const project = app.convert(app.expandInputFiles(['src']));
 
