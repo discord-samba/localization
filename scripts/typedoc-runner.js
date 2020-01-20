@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/typedef */
 
-const { Application, ParameterType, TSConfigReader } = require('typedoc');
+const { Application, TSConfigReader, ParameterType } = require('typedoc');
 const app = new Application();
 
 app.options.addReader(new TSConfigReader());
