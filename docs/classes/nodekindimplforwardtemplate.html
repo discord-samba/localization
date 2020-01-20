@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>ParseError | @discord-samba/localization</title>
+	<title>NodeKindImplForwardTemplate | @discord-samba/localization</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style type="text/css">/*! normalize.css v1.1.3 | MIT License | git.io/normalize */
@@ -2410,8 +2410,28 @@ img {
 		<li class=" tsd-kind-class">
 			<a href="localizationstringerror.html" class="tsd-kind-icon">Localization<wbr>String<wbr>Error</a>
 		</li>
-		<li class=" tsd-kind-class">
+		<li class="current tsd-kind-class">
 			<a href="nodekindimplforwardtemplate.html" class="tsd-kind-icon">Node<wbr>Kind<wbr>Impl<wbr>Forward<wbr>Template</a>
+			<ul>
+				<li class=" tsd-kind-constructor tsd-parent-kind-class">
+					<a href="nodekindimplforwardtemplate.html#constructor" class="tsd-kind-icon">constructor</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class">
+					<a href="nodekindimplforwardtemplate.html#column" class="tsd-kind-icon">column</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class">
+					<a href="nodekindimplforwardtemplate.html#forwardkey" class="tsd-kind-icon">forward<wbr>Key</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class">
+					<a href="nodekindimplforwardtemplate.html#kind" class="tsd-kind-icon">kind</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class">
+					<a href="nodekindimplforwardtemplate.html#line" class="tsd-kind-icon">line</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class">
+					<a href="nodekindimplforwardtemplate.html#parent" class="tsd-kind-icon">parent</a>
+				</li>
+			</ul>
 		</li>
 		<li class=" tsd-kind-class">
 			<a href="nodekindimploptionaltemplate.html" class="tsd-kind-icon">Node<wbr>Kind<wbr>Impl<wbr>Optional<wbr>Template</a>
@@ -2428,22 +2448,8 @@ img {
 		<li class=" tsd-kind-class">
 			<a href="nodekindimplstringchunk.html" class="tsd-kind-icon">Node<wbr>Kind<wbr>Impl<wbr>String<wbr>Chunk</a>
 		</li>
-		<li class="current tsd-kind-class">
+		<li class=" tsd-kind-class">
 			<a href="parseerror.html" class="tsd-kind-icon">Parse<wbr>Error</a>
-			<ul>
-				<li class=" tsd-kind-constructor tsd-parent-kind-class">
-					<a href="parseerror.html#constructor" class="tsd-kind-icon">constructor</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class">
-					<a href="parseerror.html#message" class="tsd-kind-icon">message</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class">
-					<a href="parseerror.html#name" class="tsd-kind-icon">name</a>
-				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class">
-					<a href="parseerror.html#stack" class="tsd-kind-icon">stack</a>
-				</li>
-			</ul>
 		</li>
 		<li class=" tsd-kind-class">
 			<a href="parser.html" class="tsd-kind-icon">Parser</a>
@@ -2491,16 +2497,28 @@ img {
 		<section class="tsd-panel tsd-comment">
 			<div class="tsd-comment tsd-typography">
 				<div class="lead">
-					<p>Represents a parse-time error in the Localization engine</p>
+					<p>Represents an abstract Localization resource node for a template that will
+						load another Localization resource when the resource containing the template
+					is loaded at runtime</p>
 				</div>
+				<dl class="tsd-comment-tags">
+					<dt>internal</dt>
+					<dd></dd>
+				</dl>
 			</div>
 		</section>
 		<section class="tsd-panel tsd-hierarchy">
 			<h3>Hierarchy</h3>
 			<ul class="tsd-hierarchy">
 				<li>
-					<span class="target">ParseError</span>
+					<span class="target">NodeKindImplForwardTemplate</span>
 				</li>
+			</ul>
+		</section>
+		<section class="tsd-panel">
+			<h3>Implements</h3>
+			<ul class="tsd-hierarchy">
+				<li><a href="../interfaces/localizationstringchildnode.html" class="tsd-signature-type">LocalizationStringChildNode</a></li>
 			</ul>
 		</section>
 		<section class="tsd-panel-group tsd-index-group">
@@ -2510,15 +2528,17 @@ img {
 					<section class="tsd-index-section ">
 						<h3>Constructors</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="parseerror.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="nodekindimplforwardtemplate.html#constructor" class="tsd-kind-icon">constructor</a></li>
 						</ul>
 					</section>
 					<section class="tsd-index-section ">
 						<h3>Properties</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-property tsd-parent-kind-class"><a href="parseerror.html#message" class="tsd-kind-icon">message</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class"><a href="parseerror.html#name" class="tsd-kind-icon">name</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class"><a href="parseerror.html#stack" class="tsd-kind-icon">stack</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class"><a href="nodekindimplforwardtemplate.html#column" class="tsd-kind-icon">column</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class"><a href="nodekindimplforwardtemplate.html#forwardkey" class="tsd-kind-icon">forward<wbr>Key</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class"><a href="nodekindimplforwardtemplate.html#kind" class="tsd-kind-icon">kind</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class"><a href="nodekindimplforwardtemplate.html#line" class="tsd-kind-icon">line</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class"><a href="nodekindimplforwardtemplate.html#parent" class="tsd-kind-icon">parent</a></li>
 						</ul>
 					</section>
 				</div>
@@ -2530,22 +2550,22 @@ img {
 				<a name="constructor" class="tsd-anchor"></a>
 				<h3>constructor</h3>
 				<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-					<li class="tsd-signature tsd-kind-icon">new <wbr>Parse<wbr>Error<span class="tsd-signature-symbol">(</span>message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, container<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, line<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, column<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="parseerror.html" class="tsd-signature-type">ParseError</a></li>
+					<li class="tsd-signature tsd-kind-icon">new <wbr>Node<wbr>Kind<wbr>Impl<wbr>Forward<wbr>Template<span class="tsd-signature-symbol">(</span>forwardKey<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, parent<span class="tsd-signature-symbol">: </span><a href="../interfaces/localizationstringparentnode.html" class="tsd-signature-type">LocalizationStringParentNode</a>, line<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, column<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="nodekindimplforwardtemplate.html" class="tsd-signature-type">NodeKindImplForwardTemplate</a></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/bce2bcf/src/parser/ParseError.ts#L10">parser/ParseError.ts:10</a></li>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/bce2bcf/src/nodeKindImpl/NodeKindImplForwardTemplate.ts#L18">nodeKindImpl/NodeKindImplForwardTemplate.ts:18</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
-								<h5>message: <span class="tsd-signature-type">string</span></h5>
+								<h5>forwardKey: <span class="tsd-signature-type">string</span></h5>
 							</li>
 							<li>
-								<h5>container: <span class="tsd-signature-type">string</span></h5>
+								<h5>parent: <a href="../interfaces/localizationstringparentnode.html" class="tsd-signature-type">LocalizationStringParentNode</a></h5>
 							</li>
 							<li>
 								<h5>line: <span class="tsd-signature-type">number</span></h5>
@@ -2554,7 +2574,7 @@ img {
 								<h5>column: <span class="tsd-signature-type">number</span></h5>
 							</li>
 						</ul>
-						<h4 class="tsd-returns-title">Returns <a href="parseerror.html" class="tsd-signature-type">ParseError</a></h4>
+						<h4 class="tsd-returns-title">Returns <a href="nodekindimplforwardtemplate.html" class="tsd-signature-type">NodeKindImplForwardTemplate</a></h4>
 					</li>
 				</ul>
 			</section>
@@ -2562,32 +2582,56 @@ img {
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Properties</h2>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-				<a name="message" class="tsd-anchor"></a>
-				<h3>message</h3>
-				<div class="tsd-signature tsd-kind-icon">message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<a name="column" class="tsd-anchor"></a>
+				<h3>column</h3>
+				<div class="tsd-signature tsd-kind-icon">column<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 				<aside class="tsd-sources">
+					<p>Implementation of <a href="../interfaces/localizationstringchildnode.html">LocalizationStringChildNode</a>.<a href="../interfaces/localizationstringchildnode.html#column">column</a></p>
 					<ul>
-						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/bce2bcf/src/parser/ParseError.ts#L9">parser/ParseError.ts:9</a></li>
+						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/bce2bcf/src/nodeKindImpl/NodeKindImplForwardTemplate.ts#L18">nodeKindImpl/NodeKindImplForwardTemplate.ts:18</a></li>
 					</ul>
 				</aside>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-				<a name="name" class="tsd-anchor"></a>
-				<h3>name</h3>
-				<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<a name="forwardkey" class="tsd-anchor"></a>
+				<h3>forward<wbr>Key</h3>
+				<div class="tsd-signature tsd-kind-icon">forward<wbr>Key<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/bce2bcf/src/parser/ParseError.ts#L8">parser/ParseError.ts:8</a></li>
+						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/bce2bcf/src/nodeKindImpl/NodeKindImplForwardTemplate.ts#L15">nodeKindImpl/NodeKindImplForwardTemplate.ts:15</a></li>
 					</ul>
 				</aside>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-				<a name="stack" class="tsd-anchor"></a>
-				<h3>stack</h3>
-				<div class="tsd-signature tsd-kind-icon">stack<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+				<a name="kind" class="tsd-anchor"></a>
+				<h3>kind</h3>
+				<div class="tsd-signature tsd-kind-icon">kind<span class="tsd-signature-symbol">:</span> <a href="../enums/localizationstringnodekind.html" class="tsd-signature-type">LocalizationStringNodeKind</a><span class="tsd-signature-symbol"> = LocalizationStringNodeKind.ForwardTemplate</span></div>
 				<aside class="tsd-sources">
+					<p>Implementation of <a href="../interfaces/localizationstringchildnode.html">LocalizationStringChildNode</a>.<a href="../interfaces/localizationstringchildnode.html#kind">kind</a></p>
 					<ul>
-						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/bce2bcf/src/parser/ParseError.ts#L10">parser/ParseError.ts:10</a></li>
+						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/bce2bcf/src/nodeKindImpl/NodeKindImplForwardTemplate.ts#L13">nodeKindImpl/NodeKindImplForwardTemplate.ts:13</a></li>
+					</ul>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<a name="line" class="tsd-anchor"></a>
+				<h3>line</h3>
+				<div class="tsd-signature tsd-kind-icon">line<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+				<aside class="tsd-sources">
+					<p>Implementation of <a href="../interfaces/localizationstringchildnode.html">LocalizationStringChildNode</a>.<a href="../interfaces/localizationstringchildnode.html#line">line</a></p>
+					<ul>
+						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/bce2bcf/src/nodeKindImpl/NodeKindImplForwardTemplate.ts#L17">nodeKindImpl/NodeKindImplForwardTemplate.ts:17</a></li>
+					</ul>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+				<a name="parent" class="tsd-anchor"></a>
+				<h3>parent</h3>
+				<div class="tsd-signature tsd-kind-icon">parent<span class="tsd-signature-symbol">:</span> <a href="../interfaces/localizationstringparentnode.html" class="tsd-signature-type">LocalizationStringParentNode</a></div>
+				<aside class="tsd-sources">
+					<p>Implementation of <a href="../interfaces/localizationstringchildnode.html">LocalizationStringChildNode</a>.<a href="../interfaces/localizationstringchildnode.html#parent">parent</a></p>
+					<ul>
+						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/bce2bcf/src/nodeKindImpl/NodeKindImplForwardTemplate.ts#L16">nodeKindImpl/NodeKindImplForwardTemplate.ts:16</a></li>
 					</ul>
 				</aside>
 			</section>

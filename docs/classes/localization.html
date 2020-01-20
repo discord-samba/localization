@@ -2386,6 +2386,15 @@ img {
 </header>
 <nav class="tsd-navigation secondary">
 	<ul>
+		<li class=" tsd-kind-enum">
+			<a href="../enums/localizationstringchunkkind.html" class="tsd-kind-icon">Localization<wbr>String<wbr>Chunk<wbr>Kind</a>
+		</li>
+		<li class=" tsd-kind-enum">
+			<a href="../enums/localizationstringnodekind.html" class="tsd-kind-icon">Localization<wbr>String<wbr>Node<wbr>Kind</a>
+		</li>
+		<li class=" tsd-kind-enum">
+			<a href="../enums/localizationstringtemplatekind.html" class="tsd-kind-icon">Localization<wbr>String<wbr>Template<wbr>Kind</a>
+		</li>
 		<li class="current tsd-kind-class">
 			<a href="localization.html" class="tsd-kind-icon">Localization</a>
 			<ul>
@@ -2410,10 +2419,64 @@ img {
 			</ul>
 		</li>
 		<li class=" tsd-kind-class">
+			<a href="localizationcache.html" class="tsd-kind-icon">Localization<wbr>Cache</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="localizationfileloader.html" class="tsd-kind-icon">Localization<wbr>File<wbr>Loader</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="localizationstringbuilder.html" class="tsd-kind-icon">Localization<wbr>String<wbr>Builder</a>
+		</li>
+		<li class=" tsd-kind-class">
 			<a href="localizationstringerror.html" class="tsd-kind-icon">Localization<wbr>String<wbr>Error</a>
 		</li>
 		<li class=" tsd-kind-class">
+			<a href="nodekindimplforwardtemplate.html" class="tsd-kind-icon">Node<wbr>Kind<wbr>Impl<wbr>Forward<wbr>Template</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="nodekindimploptionaltemplate.html" class="tsd-kind-icon">Node<wbr>Kind<wbr>Impl<wbr>Optional<wbr>Template</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="nodekindimplparentnode.html" class="tsd-kind-icon">Node<wbr>Kind<wbr>Impl<wbr>Parent<wbr>Node</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="nodekindimplregulartemplate.html" class="tsd-kind-icon">Node<wbr>Kind<wbr>Impl<wbr>Regular<wbr>Template</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="nodekindimplscripttemplate.html" class="tsd-kind-icon">Node<wbr>Kind<wbr>Impl<wbr>Script<wbr>Template</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="nodekindimplstringchunk.html" class="tsd-kind-icon">Node<wbr>Kind<wbr>Impl<wbr>String<wbr>Chunk</a>
+		</li>
+		<li class=" tsd-kind-class">
 			<a href="parseerror.html" class="tsd-kind-icon">Parse<wbr>Error</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="parser.html" class="tsd-kind-icon">Parser</a>
+		</li>
+		<li class=" tsd-kind-class">
+			<a href="stringreader.html" class="tsd-kind-icon">String<wbr>Reader</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/localizationresroucemetadata.html" class="tsd-kind-icon">Localization<wbr>Resrouce<wbr>Meta<wbr>Data</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/localizationstringchildnode.html" class="tsd-kind-icon">Localization<wbr>String<wbr>Child<wbr>Node</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/localizationstringchildresultnode.html" class="tsd-kind-icon">Localization<wbr>String<wbr>Child<wbr>Result<wbr>Node</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/localizationstringparentkeydata.html" class="tsd-kind-icon">Localization<wbr>String<wbr>Parent<wbr>Key<wbr>Data</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/localizationstringparentnode.html" class="tsd-kind-icon">Localization<wbr>String<wbr>Parent<wbr>Node</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/localizationstringtypedeclaration.html" class="tsd-kind-icon">Localization<wbr>String<wbr>Type<wbr>Declaration</a>
+		</li>
+		<li class=" tsd-kind-interface">
+			<a href="../interfaces/localizationstringtypedeclarationmapping.html" class="tsd-kind-icon">Localization<wbr>String<wbr>Type<wbr>Declaration<wbr>Mapping</a>
 		</li>
 		<li class=" tsd-kind-interface">
 			<a href="../interfaces/templatearguments.html" class="tsd-kind-icon">Template<wbr>Arguments</a>
@@ -2431,6 +2494,15 @@ img {
 </nav>
 <div class="container container-main">
 	<div class="content-wrap">
+		<section class="tsd-panel tsd-comment">
+			<div class="tsd-comment tsd-typography">
+				<div class="lead">
+					<p>This is the main class of the Localization module. This class contains all
+						the static methods that will be used for leveraging localization within
+					your project</p>
+				</div>
+			</div>
+		</section>
 		<section class="tsd-panel tsd-hierarchy">
 			<h3>Hierarchy</h3>
 			<ul class="tsd-hierarchy">
@@ -2469,9 +2541,20 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/46a0680/src/Localization.ts#L188">Localization.ts:188</a></li>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/bce2bcf/src/Localization.ts#L188">Localization.ts:188</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Gets a <code>LocalizationResourceProxy</code> for the given path. See <a href="../globals.html#localizationresourceproxy">LocalizationResourceProxy</a>
+								Uses a cached resource proxy if one already exists for the given path</p>
+							</div>
+							<p>Accepts a language string, or accepts a string tuple matching
+							any of the following patterns:</p>
+							<pre><code>[language, category, subcategory] <span class="hljs-comment">// Self-explanatory</span>
+[language, category]              <span class="hljs-comment">// Defaults to 'default'' subcategory</span>
+[language]                        <span class="hljs-comment">// Defaults to 'default' category, 'default' subcategory</span></code></pre>
+						</div>
 						<h4 class="tsd-type-parameters-title">Type parameters</h4>
 						<ul class="tsd-type-parameters">
 							<li>
@@ -2498,9 +2581,15 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/46a0680/src/Localization.ts#L21">Localization.ts:21</a></li>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/bce2bcf/src/Localization.ts#L21">Localization.ts:21</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Loads and parses all .lang files in the given directory (and subdirectories
+								therein) and caches them under the given language</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
@@ -2524,9 +2613,14 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/46a0680/src/Localization.ts#L29">Localization.ts:29</a></li>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/bce2bcf/src/Localization.ts#L29">Localization.ts:29</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Loads and parses the given .lang file, caching it under the given language</p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
@@ -2544,15 +2638,26 @@ img {
 				<a name="resource" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagStatic">Static</span> resource</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<li class="tsd-signature tsd-kind-icon">resource<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]</span>, key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, args<span class="tsd-signature-symbol">: </span><a href="../interfaces/templatearguments.html" class="tsd-signature-type">TemplateArguments</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					<li class="tsd-signature tsd-kind-icon">resource<span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">]</span>, key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, args<span class="tsd-signature-symbol">?: </span><a href="../interfaces/templatearguments.html" class="tsd-signature-type">TemplateArguments</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 				</ul>
 				<ul class="tsd-descriptions">
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/46a0680/src/Localization.ts#L54">Localization.ts:54</a></li>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/bce2bcf/src/Localization.ts#L54">Localization.ts:54</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Fetches a Localization string resource for the given path. The string
+								will be built using the given arguments.</p>
+							</div>
+							<p>Accepts a language string, or accepts a string tuple matching
+							any of the following patterns:</p>
+							<pre><code>[language, category, subcategory] <span class="hljs-comment">// Self-explanatory</span>
+[language, category]              <span class="hljs-comment">// Defaults to 'default'' subcategory</span>
+[language]                        <span class="hljs-comment">// Defaults to 'default' category, 'default' subcategory</span></code></pre>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
@@ -2579,9 +2684,22 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/46a0680/src/Localization.ts#L160">Localization.ts:160</a></li>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/bce2bcf/src/Localization.ts#L160">Localization.ts:160</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Returns whether or not a Localization resource exists for the
+								given path.</p>
+							</div>
+							<p>Accepts a language string, or accepts a string tuple matching
+							any of the following patterns:</p>
+							<pre><code>[language, category, subcategory] <span class="hljs-comment">// Self-explanatory</span>
+[language, category]              <span class="hljs-comment">// Defaults to 'default'' subcategory</span>
+[language]                        <span class="hljs-comment">// Defaults to 'default' category, 'default' subcategory</span></code></pre><blockquote>
+								<p><strong>NOTE:</strong> Does not check the fallback language</p>
+							</blockquote>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
@@ -2605,9 +2723,15 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/46a0680/src/Localization.ts#L38">Localization.ts:38</a></li>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/bce2bcf/src/Localization.ts#L38">Localization.ts:38</a></li>
 							</ul>
 						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Sets the fallback language to use if a resource doesn&#39;t exist for the
+								language given to <code>Localization.resource()</code></p>
+							</div>
+						</div>
 						<h4 class="tsd-parameters-title">Parameters</h4>
 						<ul class="tsd-parameters">
 							<li>
