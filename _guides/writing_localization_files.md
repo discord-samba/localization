@@ -1,7 +1,9 @@
 ---
 layout: 'guide'
 title: 'Writing Localization Files'
-menuOrder: 2
+menuOrder: 1
+redirect_from:
+  - /guides/default
 ---
 
 # Writing Localization Files <!-- omit in toc -->
@@ -37,7 +39,7 @@ when loading the file).
 A language definition can be split across any arbitrary number of files; The string resource declarations
 will all be cached under the specified language.
 
-The localization loader method [`loadFromDirectory()`](/localization/docs/classes/localization.html#loadfromdirectory)
+The localization loader method [`loadFromDirectory()`](/docs/classes/localization.html#loadfromdirectory)
 will load from subdirectories in the given directory as well, so this allows for even more detailed
 organization of localization resources without extra effort in loading them.
 
@@ -289,7 +291,7 @@ be presented with errors detailing where in the `.lang` file the script template
 template throws an error at runtime. This will aid debugging on the part of you, the developer.
 
 Script templates are the ultimate solution to any disparity between the structure of different languages.
-The primary example that comes to mind is pluralization. English-like pluralization is not the end-all
+The primary example that comes to mind is pluralization. Pluralization in English is not the end-all
 solution to pluralization and can not necessarily be represented similarly in many languages.
 
 Script templates use the syntax {% raw %}`{{! 'foo' + 'bar' + 'baz' !}}`{% endraw%}. Using the example
@@ -312,7 +314,7 @@ In the example above, you can see that resource arguments can be accessed within
 | `{ qty: 2 }` | `'I have 2 apples!'` |
 
 In addition to `args`, script templates also receive `res` which is a
-[`LocalizationResourceProxy`](/localization/docs/globals.html#localizationresourceproxy) that can be used for loading
+[`LocalizationResourceProxy`](docs/globals.html#localizationresourceproxy) that can be used for loading
 other localization resources, similarly to, and as mentioned in [Forward Templates](#forward-templates).
 
 {% raw %}
