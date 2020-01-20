@@ -79,14 +79,16 @@ export class Localization
 		if (!LocalizationCache.hasLanguage(language))
 			throw new Error(`No language '${language}' has been loaded`);
 
-		const proxy: LocalizationResourceProxy = Localization.getResourceProxy(path);
-
 		// If we don't have call location information, capture it
 		if (typeof _meta._cl === 'undefined')
 		{
 			const trace: { stack: string } = { stack: '' };
 			Error.captureStackTrace(trace);
-			_meta._cl = trace.stack.split('\n').slice(_meta._ip! ? 3 : 2)!.join('\n');
+			_meta._cl = trace
+				.stack
+				.split('\n')
+				.slice(_meta._ip! ? 3 : 2)
+				.join('\n');
 		}
 
 		// Define meta call chain if it doesn't exist
@@ -122,6 +124,7 @@ export class Localization
 					}
 					else
 					{
+						const proxy: LocalizationResourceProxy = Localization.getResourceProxy(path);
 						return (_args: TemplateArguments = args): string =>
 							(proxy as any)[_key](_args, _meta);
 					}
@@ -132,7 +135,7 @@ export class Localization
 		let builder: LocalizationStringBuilder =
 			LocalizationCache.get([language, category, subcategory], key)!;
 
-		if (typeof builder === 'undefined')
+		if (typeof builder === 'undefined' && typeof LocalizationCache.fallbackLanguage !== 'undefined')
 			builder = LocalizationCache.get([LocalizationCache.fallbackLanguage, category, subcategory], key)!;
 
 		if (typeof builder === 'undefined')
@@ -173,7 +176,7 @@ export class Localization
 
 	/**
 	 * Gets a `LocalizationResourceProxy` for the given path. See {@link LocalizationResourceProxy}
-	 * Uses a cached resource proxy if one already exists for the given language
+	 * Uses a cached resource proxy if one already exists for the given path
 	 *
 	 * Accepts a language string, or accepts a string tuple matching
 	 * any of the following patterns:
