@@ -1,6 +1,6 @@
 <p class="lead">
 This is the localization module for Discord-Samba. It provides a system for defining and loading string
-resources for desired languages. See the <a href="https://discord-samba.github.io/localization/guides/default">Guides</a>
+resources for desired languages. See the [Guides](https://discord-samba.github.io/localization/guides/default)
 section for more information.
 </p>
 
