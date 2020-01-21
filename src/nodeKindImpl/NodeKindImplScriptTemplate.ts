@@ -75,7 +75,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 		{
 			const errStackLines: string[] = error.stack!
 				.split('\n')
-				.filter((_, i) => i < 5);
+				.slice(0, 5);
 
 			let scriptLine: number = parseInt(errStackLines[0].split(':')[1]) - 3 + this.bodyStartLine;
 
