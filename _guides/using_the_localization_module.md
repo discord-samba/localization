@@ -74,7 +74,7 @@ it to variables to keep things generic, rather than assuming it will be used for
 
 ### Simple strings
 Given a Localization file consisting of:
-```ini
+```
 [EXAMPLE_1]
 Foo bar baz
 
@@ -114,7 +114,7 @@ object via the third argument for the `Localization.resource()` method.
 
 Given a Localization file consisiting of:
 {% raw %}
-```ini
+```
 [EXAMPLE_3]
 ##! bar: Number
 foo{{ bar }}baz
