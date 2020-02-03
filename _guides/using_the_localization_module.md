@@ -6,9 +6,9 @@ redirect_from:
   - /guides/default
 ---
 
-# Using the Localization Module <!-- omit in toc -->
+# Using the Localization Module
 
-### Foreword <!-- omit in toc -->
+## Foreword
 This guide assumes you have already written at least one Localization file (`.lang` format) to load
 and use in your code. If you have not, or are unsure how to go about doing so, please read
 [*Writing Localization Files*](/localization/guides/writing_localization_files/) before continuing.
@@ -17,16 +17,6 @@ If anything is left unclear by the end of this don't be afraid to ask for help o
 [Discord server](#) if you need it.
 
 *TODO: Make a new Discord server and update the above link*
-
-### Table of Contents <!-- omit in toc -->
-- [Getting started](#getting-started)
-	- [`loadLangFile()`](#loadlangfile)
-	- [`loadFromDirectory()`](#loadfromdirectory)
-- [Using Your Localizations](#using-your-localizations)
-	- [Simple strings](#simple-strings)
-	- [Templated strings](#templated-strings)
-- [Setting a Fallback Language](#setting-a-fallback-language)
-- [Using Resource Proxies](#using-resource-proxies)
 
 ## Getting started
 First, you'll want to import the Localization module itself
