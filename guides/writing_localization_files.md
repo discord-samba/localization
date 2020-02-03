@@ -4,9 +4,9 @@ title: 'Writing Localization Files'
 menuOrder: 2
 ---
 
-# Writing Localization Files <!-- omit in toc -->
+# Writing Localization Files
 
-### Foreword <!-- omit in toc -->
+## Foreword
 If you've used YAMDBF, the predecessor to Samba in the past, or more specifically its localization system,
 this process will be familiar to you. That being said, there are some slight differences, and there's
 a lot to go over for the sake of being thorough and presenting a well-documented process.
@@ -15,19 +15,6 @@ This guide is meant to be as in-depth as possible without being too lengthy so i
 unclear by the end don't be afraid to ask for help on the [Discord server](#) if you need it.
 
 *TODO: Make a new Discord server and update the above link*
-
-### Table of Contents <!-- omit in toc -->
-- [File Organization Basics](#file-organization-basics)
-- [Defining String Resources](#defining-string-resources)
-	- [Categories and subcategories](#categories-and-subcategories)
-- [Templating](#templating)
-	- [Template Arguments](#template-arguments)
-	- [Regular Templates](#regular-templates)
-	- [Optional Templates](#optional-templates)
-	- [Forward Templates](#forward-templates)
-	- [Script Templates](#script-templates)
-- [Escape Sequences](#escape-sequences)
-- [Afterword](#afterword)
 
 ## File Organization Basics
 The Localization module operates on top of files with the `.lang` format. These files consist of string
