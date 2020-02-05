@@ -107,7 +107,7 @@ export class Localization
 			_meta._mp = new Proxy({}, {
 				get: (_, _key: string) =>
 				{
-					// Handle recursion protection for template scripts using the
+					// Handle recursion protection for script templates using the
 					// given resource proxy
 					if (_meta._cc?.includes(_key))
 					{

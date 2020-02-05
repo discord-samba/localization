@@ -233,4 +233,9 @@ describe('Using argument type declarations', () =>
 	{
 		expect(argsProxy.test5({ bar: [1, true, 'three'] })).toBe('foo1truethreebaz');
 	});
+
+	it('Should provide `$` variables for declared template arguments ', () =>
+	{
+		expect(argsProxy.test6({ bar: 'bar', far: 'far' })).toBe('fooBARbaz\nboofarfarfaz');
+	});
 });

@@ -63,3 +63,12 @@ foo{{ bar }}baz
 [args:test5]
 ##! bar: any[]
 foo{{! args.bar.join('') !}}baz
+
+[args:test6]
+## Testing usage of `$` vars for template arguments
+##! bar: String, far: String
+foo{{! $bar.toUpperCase() !}}baz
+boo{{!
+	let baz = 'far';
+	return $far + baz;
+!}}faz

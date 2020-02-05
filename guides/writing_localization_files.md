@@ -65,10 +65,10 @@ boo far faz
 ```
 
 > **Note:** Localization resource content will have ending whitespace trimmed by the Localization string
-builder when the resource is called at runtime. Beginning whitespace is preserved in case it is desired
-for formatting purposes. In the case of one-line resources, the whitespace prior to the resource content
-will be ignored as any whitespace up to and including a linebreak after a Localization resource key is
-explicitly discarded by the parser regardless.
+> builder when the resource is called at runtime. Beginning whitespace is preserved in case it is desired
+> for formatting purposes. In the case of one-line resources, the whitespace prior to the resource content
+> will be ignored as any whitespace up to and including a linebreak after a Localization resource key is
+> explicitly discarded by the parser regardless.
 
 ### Categories and subcategories
 Additional distinction can be optionally applied to localization resources via categories and subcategories.
@@ -107,9 +107,9 @@ providing information for two commands via the `desc` and `help` keys. Because t
 between the subcategories for the two sets of keys, there is no overlap.
 
 > **Tip:** If simple distinction via a single category and single subcategory is not adequate for your
-purposes, you can effictively apply infinite arbitrary distinction with just the category by treating
-it like any other language identifier and using multiple words. `camel_case`, `snakeCase`, or even
-`PascalCase` are your friends here. The same can be said for subcategories.
+> purposes, you can effictively apply infinite arbitrary distinction with just the category by treating
+> it like any other language identifier and using multiple words. `camel_case`, `snakeCase`, or even
+> `PascalCase` are your friends here. The same can be said for subcategories.
 
 ## Templating
 `.lang` files allow for more than just simple strings. String building would be a nightmare if interpolation
@@ -197,7 +197,9 @@ LocalizationStringError: Expected type 'string', got number
 ```
 
 > **Note:** Type-checking your arguments is entirely optional. You do not need to write type declarations
-for your template arguments if you do not want type-checking at runtime.
+> for your template arguments if you do not want type-checking at runtime. However, neglecting to declare
+> your template arguments means you will not have access to `$` vars for convenience in Script Templates
+> (detailed later).
 
 ### Regular Templates
 > Syntax: {% raw %}`{{ argument_name }}`{% endraw %}
@@ -295,8 +297,8 @@ In the example above, `EXAMPLE_9` expects an argument called `baz`, so this must
 `EXAMPLE_10` so that the argument may be forwarded to `EXAMPLE_9` when it is loaded as well.
 
 > **Note:** Forward templates cannot call any chain of forward templates that will eventually load its
-own containing parent resource. This prevents infinite loops. You will receive an error when you attempt
-to call a resource that does not adhere to this restriction.
+> own containing parent resource. This prevents infinite loops. You will receive an error when you attempt
+> to call a resource that does not adhere to this restriction.
 
 Resources can also embed other resources via Script Templates, detailed later.
 
@@ -331,9 +333,22 @@ In the example above, you can see that resource arguments can be accessed within
 | `{ qty: 1 }` | `'I have an apple!'` |
 | `{ qty: 2 }` | `'I have 2 apples!'` |
 
+> **Tip:** For convenience, if a template argument has been declared, it will also be available within
+> Script templates via `$` instead of accessing it directly via `args`. This can really save a lot of
+> space in complex resources with many script templates. The above example could be rewritten using `$`:
+> 
+> {% raw %}
+> ```
+> [EXAMPLE_11]
+> ##! qty: Number
+> I have {{! $qty === 1 ? 'an' : $qty !}} apple{{! $qty === 1 ? '' : 's' }}!
+> ```
+> {% endraw %}
+
 In addition to `args`, script templates also receive `res` which is a
-[`LocalizationResourceProxy`](/localization/docs/globals.html#localizationresourceproxy) that can be used for loading
-other localization resources, similarly to, and as mentioned in [Forward Templates](#forward-templates).
+[`LocalizationResourceProxy`](/localization/docs/globals.html#localizationresourceproxy) that can be
+used for loading other localization resources, similarly to, and as mentioned in
+[Forward Templates](#forward-templates).
 
 {% raw %}
 ```
@@ -348,9 +363,9 @@ Guess what? {{> EXAMPLE_11 }}
 {% endraw %}
 
 > **Note:** Just like with forward templates, there is recursion protection in place for loading other
-localization resources via `res`. Also note that when calling other resources via `res`, you do not
-need to explicitly pass the arguments to the resource function. They are forwarded automatically.
-You can, however, pass an arguments object specific to that script template if desired.
+> localization resources via `res`. Also note that when calling other resources via `res`, you do not
+> need to explicitly pass the arguments to the resource function. They are forwarded automatically.
+> You can, however, pass an arguments object specific to that script template if desired.
 
 As you may have noticed, simple script templates have their values returned implicitly. More complex,
 multi-line script templates can be written as well, but you will need to explicitly return a value.
@@ -388,8 +403,8 @@ Given the example above and no arguments, you can expect the resource to return 
 with optional templates, this behavior can be circumvented by returning an empty string (`''`).
 
 ## Escape Sequences
-All of the `.lang` format-specific syntax can be escaped with `\` if you need to use something that would otherwise
-be parsed as a resource key or template syntax. For example:
+All of the `.lang` format-specific syntax can be escaped with `\` if you need to use something that
+would otherwise be parsed as a resource key or template syntax. For example:
 
 {% raw %}
 ```

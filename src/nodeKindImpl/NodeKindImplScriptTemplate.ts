@@ -18,8 +18,10 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 	private _fn!: Function;
 	private _impFn?: Function;
 
-	// Should be the line that the template script body actually begins on.
-	// Can be different than the line the template script braces are opened
+	private _fnBody: string;
+
+	// Should be the line that the script template body actually begins on.
+	// Can be different than the line the script template braces are opened
 	// which would be the `line` property
 	public bodyStartLine: number;
 
@@ -40,7 +42,20 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 		this.line = line;
 		this.column = column;
 
-		this._createFunction(fnBody);
+		this._fnBody = fnBody;
+	}
+
+	/**
+	 * Finalize this node by compiling the embedded script it represents. Should
+	 * be called after the parent node has finished being parsed so that we have
+	 * access to all declared template arguments (since they can be declared at
+	 * any point, including after a Script Template that actually utilizes it,
+	 * even though it'd be silly to do that in practice) for creation of the
+	 * shortcut `$` variables
+	 */
+	public finalize(): void
+	{
+		this._createFunction(this._fnBody);
 	}
 
 	/**
@@ -52,11 +67,26 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 	}
 
 	/**
+	 * Implicitly declare shortcut variables for all declared template arguments
+	 * and prefix the given function body with them
+	 */
+	private _argsWrap(fnBody: string): string
+	{
+		const args: string = Object.keys(this.parent.params)
+			.map(arg => `let $${arg} = args.${arg};`)
+			.join('\n');
+
+		return `${args}\n${fnBody}`;
+	}
+
+	/**
 	 * Create the Script Template function from the given function body string
 	 */
-	private _createFunction(fnBody: string): void
+	private _createFunction(originalFnBody: string): void
 	{
 		let fn!: Function;
+
+		const fnBody: string = this._argsWrap(originalFnBody);
 
 		// Defer syntax error handling to the vm Script because
 		// it will actually detail the code in question in the error
@@ -77,7 +107,12 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 				.split('\n')
 				.slice(0, 5);
 
-			let scriptLine: number = parseInt(errStackLines[0].split(':')[1]) - 3 + this.bodyStartLine;
+			// Offset by the number of additional lines created by the function wrapper,
+			// the number of declared template args that will have shortcut vars created,
+			// and the .lang file line the script starts on
+			const lineOffset: number = 3 - Object.keys(this.parent.params).length + this.bodyStartLine;
+
+			let scriptLine: number = parseInt(errStackLines[0].split(':')[1]) - lineOffset;
 
 			// If the error is an unexpected `}`, chances are the line will be off
 			// since it is affected by the braces of the function wrapper itself
@@ -87,8 +122,8 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 			if (errStackLines[4].includes('Unexpected token }'))
 				scriptLine = this.line;
 
-			errStackLines[0] = 'Error compiling template script:\n';
-			errStackLines.push(`    at Template Script (${this.parent.container}:${scriptLine})`);
+			errStackLines[0] = 'Error compiling script template:\n';
+			errStackLines.push(`    at Script Template (${this.parent.container}:${scriptLine})`);
 
 			error.stack = errStackLines.join('\n');
 
@@ -98,7 +133,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 		// Attempt to create the coerced implicit return function
 		try
 		{
-			const newFnBody: string = `return ${fnBody.replace(/^[\s]+/, '')}`;
+			const newFnBody: string = this._argsWrap(`return ${originalFnBody.replace(/^[\s]+/, '')}`);
 			// eslint-disable-next-line no-new-func
 			const implicitReturnFn: Function = new Function('args', 'res', newFnBody);
 			this._impFn = implicitReturnFn;
@@ -119,8 +154,8 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 
 		error.message = err.message;
 
-		stack.push(`TemplateScriptError: ${error.message}`);
-		stack.push(`    at Template Script (${this.parent.container}:${this.line})`);
+		stack.push(`ScriptTemplateError: ${error.message}`);
+		stack.push(`    at Script Template (${this.parent.container}:${this.line})`);
 		if (typeof _meta._cl !== 'undefined')
 			stack.push(_meta._cl);
 
