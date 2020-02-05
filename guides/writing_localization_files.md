@@ -30,7 +30,8 @@ organization of localization resources without extra effort in loading them.
 
 ## Defining String Resources
 
-Localization string resources are defined as key-value pairs within `.lang` files. The key itself must be
+Localization string resources are defined as key-value pairs within `.lang` files where the value is the
+body containing all text between its key and the next, or the end of the file. The key itself must be
 alpha-numeric with underscores allowed, and must be the first thing on a line. Whitespace is not allowed
 anywhere within the key declaration syntax. Anything resembling a localization string resource key that
 is syntactically invalid will be parsed as part of the previous string resource, or discarded as header
@@ -39,8 +40,9 @@ comments if appearing as the first item in a `.lang` file.
 Localization string resource definition syntax is as follows:
 
 ```
-Anything present above the first string resource will be discarded as header comments.
-Comments can appear anywhere else within the .lang file via `##` syntax.
+Anything present above the first string resource will be discarded as
+header comments. Comments can appear anywhere else within the .lang file
+via `##` syntax.
 
 ## example.lang
 [KEY_1]
@@ -50,9 +52,23 @@ foo bar baz
 boo far faz
 ```
 
-This creates two keys, `KEY_1`, and `KEY_2`, when this file is loaded. Their content will consist of
-`foo bar baz` and `boo far faz`, respectively. Localization resource content is trimmed when the resource
-is called at runtime.
+This creates two keys, `KEY_1`, and `KEY_2`, when this file is loaded. Their values will consist of
+`foo bar baz` and `boo far faz`, respectively.
+
+```
+## One-line strings are possible as well
+[ONE_LINE_1] foo bar baz
+
+## They can technically span multiple lines, but this looks kind of silly
+[ONE_LINE_2] foo bar baz
+boo far faz
+```
+
+> **Note:** Localization resource content will have ending whitespace trimmed by the Localization string
+builder when the resource is called at runtime. Beginning whitespace is preserved in case it is desired
+for formatting purposes. In the case of one-line resources, the whitespace prior to the resource content
+will be ignored as any whitespace up to and including a linebreak after a Localization resource key is
+explicitly discarded by the parser regardless.
 
 ### Categories and subcategories
 Additional distinction can be optionally applied to localization resources via categories and subcategories.
@@ -60,10 +76,10 @@ These are an addition to the syntax of resource keys. Categories and subcategori
 must be alpha-numeric with underscores allowed, and use the syntax `[category(subcategory):RESOURCE_KEY]`,
 where the subcategory is optional (`[category:RESOURCE_KEY]`).
 
-This affords basically limitless arbitrary distinction between resource keys. For example, the Localization
-module provides a `CommandInfoProvider` function that operates on top of category/subcategory functionality
-that can be given to the Command module to allow it to pull localized command information from the
-Localization module for use within the base `help` command.
+This affords simple arbitrary distinction between otherwise identical resource keys. For example, the
+Localization module provides a `CommandInfoProvider` function that operates on top of category/subcategory
+functionality that can be given to the Command module to allow it to pull localized command information
+from the Localization module for use within the base `help` command.
 
 ```
 [command(ping):desc]
@@ -85,10 +101,15 @@ Which would set the shortcut "h" to call the command "help"
 ...
 ```
 
-At the time of writing this, Samba has no base commands written, so we are using examples from YAMDBF
-for how command information can be provided via Samba's Localization module. As you can see, we're
+Samba has no base commands written at the time of writing this, so we are using examples from YAMDBF
+for how command information could be provided via Samba's Localization module. As you can see, we're
 providing information for two commands via the `desc` and `help` keys. Because there is a distinction
 between the subcategories for the two sets of keys, there is no overlap.
+
+> **Tip:** If simple distinction via a single category and single subcategory is not adequate for your
+purposes, you can effictively apply infinite arbitrary distinction with just the category by treating
+it like any other language identifier and using multiple words. `camel_case`, `snakeCase`, or even
+`PascalCase` are your friends here. The same can be said for subcategories.
 
 ## Templating
 `.lang` files allow for more than just simple strings. String building would be a nightmare if interpolation
@@ -103,16 +124,17 @@ to use within your localization resources:
 
 The different template kinds will be discussed later.
 
-Templates operate on top of arguments passed to a string resource when it is called at runtime.
+Templates operate on top of arguments passed to a Localization string resource when it is called at
+runtime.
 
 ### Template Arguments
 Template arguments are passed to localization resources as an object that maps argument names to argument
 values. Any arguments not consumed via templates within the resource itself will be ignored when the
 resource is assembled.
 
-Arguments can be preemptively declared within a resource definition via `##!` syntax. This is a type-declaration
-comment. This allows (or rather necessitates) specifying a type for the argument, which will be type-checked
-at runtime. The allowed types are:
+Arguments can be preemptively declared within a resource definition via `##!` syntax. This is a
+type-declaration comment. This allows (or rather necessitates) specifying a type for any arguments,
+which will be type-checked at runtime. The allowed types are:
 
  - `String`
  - `Number`
@@ -121,9 +143,10 @@ at runtime. The allowed types are:
  - An array of any of the above
    - Denoted with `[]`, for example: `String[]`
 
-For convenience, these types are case-insensitive, however the argument identifiers are not. Resource
-type declarations follow the syntax of `ident: type`, or `ident?: type`, delimited by comma. Dangling
-commas are not permitted and will throw a parser error when the containing file is loaded.
+For convenience, these types are case-insensitive, however the argument identifiers are not as they
+must match with the template argument object keys. Resource type declarations follow the syntax of
+`ident: type`, or `ident?: type`, delimited by comma. Dangling commas are not permitted and will throw
+a parser error when the containing file is loaded.
 
 Identifiers ending in `?` denote optional arguments. These arguments are allowed to be omitted, and
 should generally be associated with Optional Templates and Script Templates that provide handling
@@ -143,7 +166,8 @@ foo{{ bar }}{{? baz }}
 
 Argument type-declarations can be split accross multiple type-declaration comments if desired. This
 helps keep line-length from getting out of hand if you have a particularly large set of arguments
-being passed to a resource.
+being passed to a resource. Just be mindful of dangling commas, which again are not allowed. (Yes,
+I'm opinionated and so is the parser.)
 
 {% raw %}
 ```
@@ -157,7 +181,7 @@ foo{{ bar }}{{? baz }}
 Type-checking your arguments provides feedback to you, the developer, so you can be sure you are
 passing the correct data to your localization resources. If you encounter a runtime error due to
 invalid types being passed, you can interpret this as a bug in your code. The Localization module
-will give you a detailed report on what resource triggered the error and where you attempted to
+will give you a detailed report on which resource triggered the error and where you attempted to
 call the resource:
 
 ```
@@ -172,10 +196,14 @@ LocalizationStringError: Expected type 'string', got number
     ...
 ```
 
+> **Note:** Type-checking your arguments is entirely optional. You do not need to write type declarations
+for your template arguments if you do not want type-checking at runtime.
+
 ### Regular Templates
+> Syntax: {% raw %}`{{ argument_name }}`{% endraw %}
+
 Regular Templates are the simplest of the template kinds. Regular templates are equivalent to passing
-a single variable to a Javascript template string. Regular templates use the syntax
-{% raw %}`{{ argument_name }}`{% endraw %}.
+a single variable to a Javascript template string.
 
 For example:
 
@@ -197,8 +225,10 @@ If instead you intended to have a template that evaluates to nothing when no val
 Optional Template.
 
 ### Optional Templates
+> Syntax: {% raw %}`{{? argument_name }}`{% endraw %}
+
 Optional Templates function like regular templates, except they evaluate to nothing when no matching
-argument is given. Optional templates use the syntax {% raw %}`{{? argument_name }}`{% endraw %}.
+argument is given.
 
 {% raw %}
 ```
@@ -207,7 +237,7 @@ foo{{? bar }}baz
 ```
 {% endraw %}
 
-The above example will return `'foobarbaz'` when given an arguments object consisting of `{ bar: 'bar' }`,
+When given an arguments object consisting of `{ bar: 'bar' }`, the above example will return `'foobarbaz'`,
 but will return `'foobaz'` when given an arguments object that does not contain a value for `bar`.
 
 Additionally, if an Optional Template is the only thing occupying a line and it is not fulfilled when
@@ -231,8 +261,9 @@ In the example above, `EXAMPLE_5` will return `'foo\nbaz'`, whereas `EXAMPLE_6` 
 The empty line can, however, be preserved if the value of the optional argument is an empty string (`''`).
 
 ### Forward Templates
+> Syntax: {% raw %}`{{> resource_name }}`{% endraw %}
+
 Forward Templates provide an easy way for a localization resource to embed another localization resource.
-Forward templates use the syntax {% raw %}`{{> resource_name }}`{% endraw %}.
 
 {% raw %}
 ```
@@ -263,13 +294,16 @@ foo{{> EXAMPLE_9 }}
 In the example above, `EXAMPLE_9` expects an argument called `baz`, so this must be passed when calling
 `EXAMPLE_10` so that the argument may be forwarded to `EXAMPLE_9` when it is loaded as well.
 
-**Note:** Forward templates cannot load any chain of forward templates that will eventually load its
+> **Note:** Forward templates cannot call any chain of forward templates that will eventually load its
 own containing parent resource. This prevents infinite loops. You will receive an error when you attempt
 to call a resource that does not adhere to this restriction.
 
 Resources can also embed other resources via Script Templates, detailed later.
 
 ### Script Templates
+> Syntax: {% raw %}`{{! 'foo' + 'bar' + 'baz' !}}`{% endraw%}<br>
+> Supports any valid Javascript code between the template braces
+
 Script templates allow you to embed arbitrary Javascript code in your templates. This code will be
 pre-compiled to check for syntax errors when the `.lang` file containing it is loaded. You will also
 be presented with errors detailing where in the `.lang` file the script template is located if a script
@@ -279,8 +313,7 @@ Script templates are the ultimate solution to any disparity between the structur
 The primary example that comes to mind is pluralization. English-like pluralization is not the end-all
 solution to pluralization and can not necessarily be represented similarly in many languages.
 
-Script templates use the syntax {% raw %}`{{! 'foo' + 'bar' + 'baz' !}}`{% endraw%}. Using the example
-from before, simple pluralization in English could look like:
+Using the example from before, simple pluralization in English could look like:
 
 {% raw %}
 ```
@@ -314,7 +347,7 @@ Guess what? {{> EXAMPLE_11 }}
 ```
 {% endraw %}
 
-**Note:** Just like with forward templates, there is recursion protection in place for loading other
+> **Note:** Just like with forward templates, there is recursion protection in place for loading other
 localization resources via `res`. Also note that when calling other resources via `res`, you do not
 need to explicitly pass the arguments to the resource function. They are forwarded automatically.
 You can, however, pass an arguments object specific to that script template if desired.
