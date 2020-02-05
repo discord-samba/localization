@@ -128,7 +128,7 @@ export class LocalizationStringBuilder
 		return results
 			.map(r => `${r.value}`)
 			.join('')
-			.trim();
+			.trimRight();
 	}
 
 	/**

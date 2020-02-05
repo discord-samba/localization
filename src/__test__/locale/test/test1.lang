@@ -5,6 +5,9 @@ foobarbaz
 
 [oneLine:test1] boofarfaz
 
+[oneLine:test2] boofarfaz
+foobarbaz
+
 [test2]
 ## Test regular template
 ## Should equal: foobarbaz

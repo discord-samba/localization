@@ -27,6 +27,11 @@ describe('Loading string resources', () =>
 		expect(Localization.resource(['test', 'oneLine'], 'test1')).toBe('boofarfaz');
 	});
 
+	it('Should accept one-line strings that span multiple lines', () =>
+	{
+		expect(Localization.resource(['test', 'oneLine'], 'test2')).toBe('boofarfaz\nfoobarbaz');
+	});
+
 	it('Should handle regular templates', () =>
 	{
 		expect(Localization.resource('test', 'test2', { bar: 'bar' })).toBe('foobarbaz');
