@@ -29,13 +29,3 @@ jobs:
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Setup GPR registry
-        uses: actions/setup-node@v1
-        with:
-          registry-url: https://npm.pkg.github.com/
-      
-      - name: Publish to GPR
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
