@@ -40,6 +40,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           registry-url: https://npm.pkg.github.com/
+          scope: "@discord-samba"
       
       - name: Publish to GPR
         run: npm publish --tag dev --access public
