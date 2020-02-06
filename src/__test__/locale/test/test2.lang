@@ -72,3 +72,7 @@ boo{{!
 	let baz = 'far';
 	return $far + baz;
 !}}faz
+
+[args:test7]
+## Testing usage of `$` vars for undeclared template arguments
+foo{{! $bar ? 'bar' : 'baz' !}}baz

@@ -15,19 +15,19 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 {
 	public readonly kind: LocalizationStringNodeKind = LocalizationStringNodeKind.ScriptTemplate;
 
+	private static readonly _argRegex: RegExp = /\B\$(?:(?=[a-zA-Z_][\w]*)[\w]+|[a-zA-Z])\b/g;
+
 	private _fn!: Function;
 	private _impFn?: Function;
-
-	private _fnBody: string;
 
 	// Should be the line that the script template body actually begins on.
 	// Can be different than the line the script template braces are opened
 	// which would be the `line` property
-	public bodyStartLine: number;
+	public readonly bodyStartLine: number;
 
-	public parent: LocalizationStringParentNode;
-	public line: number;
-	public column: number;
+	public readonly parent: LocalizationStringParentNode;
+	public readonly line: number;
+	public readonly column: number;
 
 	public constructor(
 		fnBody: string,
@@ -42,20 +42,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 		this.line = line;
 		this.column = column;
 
-		this._fnBody = fnBody;
-	}
-
-	/**
-	 * Finalize this node by compiling the embedded script it represents. Should
-	 * be called after the parent node has finished being parsed so that we have
-	 * access to all declared template arguments (since they can be declared at
-	 * any point, including after a Script Template that actually utilizes it,
-	 * even though it'd be silly to do that in practice) for creation of the
-	 * shortcut `$` variables
-	 */
-	public finalize(): void
-	{
-		this._createFunction(this._fnBody);
+		this._createFunction(fnBody);
 	}
 
 	/**
@@ -67,16 +54,17 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 	}
 
 	/**
-	 * Implicitly declare shortcut variables for all declared template arguments
-	 * and prefix the given function body with them
+	 * Implicitly declare shortcut variables for all `$template_argument` found in
+	 * the given function body and prefix the given function body with them.
+	 *
+	 * Returns the wrapped function body and the number of arguments declared
 	 */
-	private _argsWrap(fnBody: string): string
+	private _argsWrap(fnBody: string): [string, number]
 	{
-		const args: string = Object.keys(this.parent.params)
-			.map(arg => `let $${arg} = args.${arg};`)
-			.join('\n');
+		const args: string[] = Array.from(new Set(fnBody.match(NodeKindImplScriptTemplate._argRegex)))
+			.map(arg => `let $${arg.slice(1)} = args.${arg.slice(1)};`);
 
-		return `${args}\n${fnBody}`;
+		return [`${args.join('\n')}${args.length > 0 ? '\n' : ''}${fnBody}`, args.length];
 	}
 
 	/**
@@ -86,7 +74,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 	{
 		let fn!: Function;
 
-		const fnBody: string = this._argsWrap(originalFnBody);
+		const [fnBody, numArgs]: [string, number] = this._argsWrap(originalFnBody);
 
 		// Defer syntax error handling to the vm Script because
 		// it will actually detail the code in question in the error
@@ -108,9 +96,9 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 				.slice(0, 5);
 
 			// Offset by the number of additional lines created by the function wrapper,
-			// the number of declared template args that will have shortcut vars created,
+			// the number of used template args that will have shortcut vars created,
 			// and the .lang file line the script starts on
-			const lineOffset: number = 3 - Object.keys(this.parent.params).length + this.bodyStartLine;
+			const lineOffset: number = 3 - numArgs + this.bodyStartLine;
 
 			let scriptLine: number = parseInt(errStackLines[0].split(':')[1]) - lineOffset;
 
@@ -133,7 +121,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 		// Attempt to create the coerced implicit return function
 		try
 		{
-			const newFnBody: string = this._argsWrap(`return ${originalFnBody.replace(/^[\s]+/, '')}`);
+			const newFnBody: string = this._argsWrap(`return ${originalFnBody.replace(/^[\s]+/, '')}`)[0];
 			// eslint-disable-next-line no-new-func
 			const implicitReturnFn: Function = new Function('args', 'res', newFnBody);
 			this._impFn = implicitReturnFn;

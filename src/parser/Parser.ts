@@ -1,6 +1,5 @@
 import { LocalizationStringChildNode } from '../interfaces/LocalizationStringChildNode';
 import { LocalizationStringChunkKind } from '../types/LocalizationStringChunkKind';
-import { LocalizationStringNodeKind } from '../types/LocalizationStringNodeKind';
 import { LocalizationStringParentKeyData } from '../types/LocalizationStringParentKeyData';
 import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 import { LocalizationStringTemplateKind } from '../types/LocalizationStringTemplateKind';
@@ -106,11 +105,6 @@ export class Parser
 					else if (finalizerKinds.includes(nextChunkKind))
 						break;
 				}
-
-				// Finalize script template children of this parent node
-				for (const child of currentNode.children)
-					if (child.kind === LocalizationStringNodeKind.ScriptTemplate)
-						(child as NodeKindImplScriptTemplate).finalize();
 
 				nodeList.push(currentNode);
 			}

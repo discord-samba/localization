@@ -166,7 +166,7 @@ foo{{ bar }}{{? baz }}
 
 Argument type-declarations can be split accross multiple type-declaration comments if desired. This
 helps keep line-length from getting out of hand if you have a particularly large set of arguments
-being passed to a resource. Just be mindful of dangling commas, which again are not allowed. (Yes,
+being passed to a resource. Just be mindful of dangling commas which, again, are not allowed. (Yes,
 I'm opinionated and so is the parser.)
 
 {% raw %}
@@ -197,9 +197,7 @@ LocalizationStringError: Expected type 'string', got number
 ```
 
 > **Note:** Type-checking your arguments is entirely optional. You do not need to write type declarations
-> for your template arguments if you do not want type-checking at runtime. However, neglecting to declare
-> your template arguments means you will not have access to `$` vars for convenience in Script Templates
-> (detailed later).
+> for your template arguments if you do not want type-checking at runtime.
 
 ### Regular Templates
 > Syntax: {% raw %}`{{ argument_name }}`{% endraw %}
@@ -333,9 +331,9 @@ In the example above, you can see that resource arguments can be accessed within
 | `{ qty: 1 }` | `'I have an apple!'` |
 | `{ qty: 2 }` | `'I have 2 apples!'` |
 
-> **Tip:** For convenience, if a template argument has been declared, it will also be available within
-> Script templates via `$` instead of accessing it directly via `args`. This can really save a lot of
-> space in complex resources with many script templates. The above example could be rewritten using `$`:
+> **Tip:** For convenience, template arguments can also be used within script templates by prefixing
+> them with `$`, rather than accessing them directly via `args`. The above example could be rewritten
+> using `$`:
 > 
 > {% raw %}
 > ```
@@ -375,9 +373,9 @@ multi-line script templates can be written as well, but you will need to explici
 [EXAMPLE_14]
 ##! foo: Number, bar: Number
 foo{{!
-    let foo = args.foo;
-    let bar = args.bar;
-    return foo + bar;
+    let a = $foo * 10;
+    let b = $bar * 20;
+    return a + b;
 !}}baz
 ```
 {% endraw %}
@@ -394,7 +392,7 @@ Script templates present this same behavior when they return `undefined`.
 [EXAMPLE_15]
 ##! bar?: String
 foo
-{{! args.bar !}}
+{{! $bar !}}
 baz
 ```
 {% endraw %}
