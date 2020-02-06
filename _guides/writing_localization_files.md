@@ -30,12 +30,13 @@ organization of localization resources without extra effort in loading them.
 
 ## Defining String Resources
 
-Localization string resources are defined as key-value pairs within `.lang` files where the value is the
-body containing all text between its key and the next, or the end of the file. The key itself must be
-alpha-numeric with underscores allowed, and must be the first thing on a line. Whitespace is not allowed
-anywhere within the key declaration syntax. Anything resembling a localization string resource key that
-is syntactically invalid will be parsed as part of the previous string resource, or discarded as header
-comments if appearing as the first item in a `.lang` file.
+Localization string resources are defined as key-value pairs within `.lang` files where the value
+is the body containing all text between its key and the next, or the end of the file. The key itself
+must be alpha-numeric with underscores allowed (Following Javascript's identifier rules), and the key
+declaration must be the first thing on a line. Whitespace is not allowed anywhere within the key
+declaration. Anything resembling a localization string resource key that is syntactically invalid
+will be parsed as part of the previous string resource, or discarded as header comments if appearing
+as the first item in a `.lang` file.
 
 Localization string resource definition syntax is as follows:
 
@@ -73,7 +74,7 @@ boo far faz
 ### Categories and subcategories
 Additional distinction can be optionally applied to localization resources via categories and subcategories.
 These are an addition to the syntax of resource keys. Categories and subcategories, like resource keys,
-must be alpha-numeric with underscores allowed, and use the syntax `[category(subcategory):RESOURCE_KEY]`,
+must follow Javascript's identifier rules, and use the syntax `[category(subcategory):RESOURCE_KEY]`,
 where the subcategory is optional (`[category:RESOURCE_KEY]`).
 
 This affords simple arbitrary distinction between otherwise identical resource keys. For example, the
