@@ -16,6 +16,8 @@ import { StringReader } from './StringReader';
 /** @internal */
 export class Parser
 {
+	private static readonly _validIdent: RegExp = /^(?:(?=[a-zA-Z_][\w]*)[\w]+|[a-zA-Z])$/;
+
 	/**
 	 * Parse the given input into a list of abstract localization string nodes.
 	 * Will automatically convert `\r\n` to `\n`. The container for the first
@@ -228,12 +230,6 @@ export class Parser
 			}
 		}
 
-		// Set subcategory default if none was found. We don't need
-		// to set a default for category because this method won't
-		// be called if a category isn't found to begin with
-		if (subcategory === '')
-			subcategory = 'default';
-
 		return { category, subcategory };
 	}
 
@@ -249,6 +245,8 @@ export class Parser
 
 		// Discard the opening `[`
 		reader.discard();
+
+		const { line, column } = reader;
 
 		while (reader.peek() !== ']')
 		{
@@ -277,6 +275,30 @@ export class Parser
 
 		if (subcategory === '')
 			subcategory = 'default';
+
+		if (!Parser._validIdent.test(category))
+			throw new ParseError(
+				'Invalid category identifier',
+				container,
+				line,
+				column
+			);
+
+		if (!Parser._validIdent.test(subcategory))
+			throw new ParseError(
+				'Invalid subcategory identifier',
+				container,
+				line,
+				column
+			);
+
+		if (!Parser._validIdent.test(key))
+			throw new ParseError(
+				'Invalid resource key identifier',
+				container,
+				line,
+				column
+			);
 
 		// Discard the closing `]`
 		reader.discard();
@@ -500,6 +522,14 @@ export class Parser
 				return types;
 
 			const { ident, isOptional, line, column } = Parser._consumeDeclarationIdent(parent, reader);
+
+			if (!Parser._validIdent.test(ident))
+				throw new ParseError(
+					'Invalid template argument identifier',
+					parent.container,
+					line,
+					column
+				);
 
 			// Discard whitespace before separator
 			Parser._discardWhitespace(reader);
@@ -738,8 +768,18 @@ export class Parser
 		// Discard the closing braces
 		reader.discard(2);
 
+		key = key.trim();
+
+		if (!Parser._validIdent.test(key))
+			throw new ParseError(
+				'Invalid template identifier',
+				parent.container,
+				line,
+				column
+			);
+
 		const node: NodeKindImplRegularTemplate =
-			new NodeKindImplRegularTemplate(key.trim(), parent, line, column);
+			new NodeKindImplRegularTemplate(key, parent, line, column);
 
 		return node;
 	}
@@ -765,8 +805,18 @@ export class Parser
 		// Discard the closing braces
 		reader.discard(2);
 
+		key = key.trim();
+
+		if (!Parser._validIdent.test(key))
+			throw new ParseError(
+				'Invalid forward template identifier',
+				parent.container,
+				line,
+				column
+			);
+
 		const node: NodeKindImplForwardTemplate =
-			new NodeKindImplForwardTemplate(key.trim(), parent, line, column);
+			new NodeKindImplForwardTemplate(key, parent, line, column);
 
 		return node;
 	}
@@ -792,8 +842,18 @@ export class Parser
 		// Discard the closing braces
 		reader.discard(2);
 
+		key = key.trim();
+
+		if (!Parser._validIdent.test(key))
+			throw new ParseError(
+				'Invalid template identifier',
+				parent.container,
+				line,
+				column
+			);
+
 		const node: NodeKindImplOptionalTemplate =
-			new NodeKindImplOptionalTemplate(key.trim(), parent, line, column);
+			new NodeKindImplOptionalTemplate(key, parent, line, column);
 
 		return node;
 	}

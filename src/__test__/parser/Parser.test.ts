@@ -90,6 +90,21 @@ describe('Throwing parser errors', () =>
 		expect(() => Parser.parse(c, '[test]\nfoo{{$ bar }}baz')).toThrow(e);
 	});
 
+	it('Should error on invalid template identifiers (template argument keys)', () =>
+	{
+		const e: string = 'Invalid template identifier';
+		expect(() => Parser.parse(c, '[test]\n{{ 1 }}')).toThrow(e);
+		expect(() => Parser.parse(c, '[test]\n{{ 2foo }}')).toThrow(e);
+		expect(() => Parser.parse(c, '[test]\n{{ 3_bar }}')).toThrow(e);
+		expect(() => Parser.parse(c, '[test]\n{{ 4 baz }}')).toThrow(e);
+		expect(() => Parser.parse(c, '[test]\n{{ foo bar }}')).toThrow(e);
+		expect(() => Parser.parse(c, '[test]\n{{? 1 }}')).toThrow(e);
+		expect(() => Parser.parse(c, '[test]\n{{? 2foo }}')).toThrow(e);
+		expect(() => Parser.parse(c, '[test]\n{{? 3_bar }}')).toThrow(e);
+		expect(() => Parser.parse(c, '[test]\n{{? 4 baz }}')).toThrow(e);
+		expect(() => Parser.parse(c, '[test]\n{{? foo bar }}')).toThrow(e);
+	});
+
 	it('Should error when encountering a key without encountering a body', () =>
 	{
 		expect(() => Parser.parse(c, '[test]\n[foo]\nfoobarbaz'))
@@ -156,6 +171,24 @@ describe('Throwing parser errors', () =>
 			expect(() => Parser.parse(c, '[test((test):test]\nfoobarbaz'))
 				.toThrow('Unexpected token \'(\', expected [a-zA-Z0-9_]');
 		});
+
+		it('Should error on invalid category identifiers', () =>
+		{
+			expect(() => Parser.parse(c, '[1:test]\nfoobarbaz'))
+				.toThrow('Invalid category identifier');
+		});
+
+		it('Should error on invalid subcategory identifiers', () =>
+		{
+			expect(() => Parser.parse(c, '[test(1):test]\nfoobarbaz'))
+				.toThrow('Invalid subcategory identifier');
+		});
+
+		it('Should error on invalid resource key identifiers', () =>
+		{
+			expect(() => Parser.parse(c, '[1]\nfoobarbaz'))
+				.toThrow('Invalid resource key identifier');
+		});
 	});
 
 	describe('Argument type declaration errors', () =>
@@ -220,6 +253,14 @@ describe('Throwing parser errors', () =>
 			expect(() => Parser.parse(c, '[test]\n##! foo: Error')).toThrow(e);
 			expect(() => Parser.parse(c, '[test]\n##! foo: Array')).toThrow(e);
 			expect(() => Parser.parse(c, '[test]\n##! foo: Map[]')).toThrow(e);
+		});
+
+		it('Should error when on invalid identifiers', () =>
+		{
+			const e: string = 'Invalid template argument identifier';
+			expect(() => Parser.parse(c, '[test]\n##! 1: String')).toThrow(e);
+			expect(() => Parser.parse(c, '[test]\n##! 2foo: String')).toThrow(e);
+			expect(() => Parser.parse(c, '[test]\n##! 3 foo: String')).toThrow(e);
 		});
 	});
 });
