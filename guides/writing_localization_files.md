@@ -382,7 +382,7 @@ foo{{!
 {% endraw %}
 
 Given the example above and an arguments object consisting of `{ foo: 1, bar: 2 }` you can expect the
-resource to return `'foo3baz'` when called.
+resource to return `'foo50baz'` when called.
 
 If you recall in [Optional Templates](#optional-templates) we went over how optional templates isolated
 on their own line without whitespace will not preserve the empty line if the argument is not satisfied.
