@@ -241,3 +241,30 @@ describe('Using argument type declarations', () =>
 		expect(argsProxy.test7({ bar: false })).toBe('foobazbaz');
 	});
 });
+
+describe('Misc.', () =>
+{
+	it('Should provide a list of all keys for the given language/path', () =>
+	{
+		const values: string[][] = [
+			['test1', 'test2', 'test3', 'test4', 'test5', 'test6', 'test7', 'test8', 'test9', 'test10', 'test11'],
+			['test1', 'test2', 'test3', 'test4', 'test5', 'test6', 'test7'],
+			['test1', 'test2'],
+			['test1']
+		];
+
+		expect(Localization.getKeys('test')).toStrictEqual(values[0]);
+		expect(Localization.getKeys(['test', 'args'])).toStrictEqual(values[1]);
+		expect(Localization.getKeys(['test', 'oneLine'])).toStrictEqual(values[2]);
+		expect(Localization.getKeys(['test', 'testCat', 'testSub'])).toStrictEqual(values[3]);
+	});
+
+	it('Should provide an empty list of keys for nonexistant languages/paths', () =>
+	{
+		expect(Localization.getKeys('foo')).toStrictEqual([]);
+		expect(Localization.getKeys(['test', 'foo'])).toStrictEqual([]);
+		expect(Localization.getKeys(['test', 'default', 'foo'])).toStrictEqual([]);
+		expect(Localization.getKeys(['test', 'oneLine', 'foo'])).toStrictEqual([]);
+		expect(Localization.getKeys(['test', 'testCat', 'foo'])).toStrictEqual([]);
+	});
+});

@@ -215,4 +215,24 @@ export class Localization
 
 		return proxy;
 	}
+
+	/**
+	 * Returns an array of resource keys for the given language path.
+	 * The array will be empty if none exist.
+	 */
+	public static getKeys(
+		path: string | [string] | [string, string] | [string, string, string]
+	): string[]
+	{
+		let language: string;
+		let category: string;
+		let subcategory: string;
+
+		if (typeof path === 'string')
+			[language, category, subcategory] = [path, 'default', 'default'];
+		else
+			[language, category = 'default', subcategory = 'default'] = path;
+
+		return LocalizationCache.getKeys([language, category, subcategory]);
+	}
 }

@@ -213,4 +213,21 @@ export class LocalizationCache
 			.get(category)!
 			.set(subcategory, proxy);
 	}
+
+	/**
+	 * Returns an array of resource keys for the given language path.
+	 * The array will be empty if none exist.
+	 */
+	public static getKeys(path: [string, string, string]): string[]
+	{
+		const [language, category = 'default', subcategory = 'default'] = path;
+
+		return Array.from(
+			LocalizationCache._instance._cache
+				.get(language)
+				?.get(category)
+				?.get(subcategory)
+				?.keys() ?? []
+		);
+	}
 }
