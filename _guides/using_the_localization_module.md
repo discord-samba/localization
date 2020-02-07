@@ -167,7 +167,9 @@ access the resource keys contained within that resource path as methods on the p
 also accept `TemplateArguments` objects.
 
 Let's use the example Localization file from [Simple Strings](#simple-strings). To create a resource
-proxy, use the `Localization.getResourceProxy()` method:
+proxy, use the [`Localization.getResourceProxy()`](/localization/docs/classes/localization.html#getresourceproxy)
+method:
+
 ```js
 const proxy1 = Localization.getResourceProxy('en-US');
 console.log(proxy1.EXAMPLE_1());
@@ -186,3 +188,52 @@ const proxy2 = Localization.getResourceProxy(['en-US', 'cat', 'sub']);
 console.log(proxy2.EXAMPLE_2());
 // Outputs 'Boo far faz'
 ```
+
+### Typescript Interop
+Localization resource proxies (and really any Javascript `Proxy` in general) are a bit more finnicky
+in Typescript because the Typescript compiler views a `Proxy` as an empty object. To combat this,
+generally you would cast the proxy to another type and benefit from type hinting as if the proxy
+were actually that type. `LocalizationResourceProxy` accepts a generic parameter, where you can pass
+in an object type that contains keys representing the resource keys of the language your proxy points
+to, which will allow type hinting to display all the given keys as available methods on the proxy.
+
+```js
+interface Foo {
+    EXAMPLE_3: any,
+    EXAMPLE_4: any
+}
+
+// or `type Foo = { ... }`
+
+const proxy3: LocalizationResourceProxy<Foo> =
+    Localization.getResourceProxy('en-US');
+
+console.log(proxy3.EXAMPLE_3());
+```
+
+You can also use an enum via `typeof`, which can save a bit of extra typing by not having to provide
+member types on the interface/type. Personally, I prefer this method because I think it looks cleaner.
+
+```js
+enum Foo {
+    EXAMPLE_3,
+    EXAMPLE_4
+}
+
+const proxy3: LocalizationResourceProxy<typeof Foo> =
+    Localization.getResourceProxy('en-US');
+
+console.log(proxy3.EXAMPLE_3());
+```
+
+Of course if you have a large number of resources, writing this by hand could become tedious. The
+easiest solution would be to simply pass `any` for the `LocalizationResourceProxy` generic and eliminate
+the problem right there. This of course provides no type-hinting for your resources which are certainly
+helpful to have.
+
+Another solution would be to write a script that automatically generates a file containing an exported
+object populated with all of your resource keys. You can retrieve all loaded resource keys by using
+[`Localization.getKeys()`](/localization/docs/classes/localization.html#getkeys) at runtime after
+all of your localization resources have been loaded. Of course, you will need to iterate over all
+categories and subcategories you've created as well, which you would want to create distinct objects
+for, given they are all distinct subsets of the language you've loaded.
