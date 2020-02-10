@@ -193,9 +193,9 @@ console.log(proxy2.EXAMPLE_2());
 Localization resource proxies (and really any Javascript `Proxy` in general) are a bit more finnicky
 in Typescript because the Typescript compiler views a `Proxy` as an empty object. To combat this,
 generally you would cast the proxy to another type and benefit from type hinting as if the proxy
-were actually that type. `LocalizationResourceProxy` accepts a generic parameter, where you can pass
-in an object type that contains keys representing the resource keys of the language your proxy points
-to, which will allow type hinting to display all the given keys as available methods on the proxy.
+were actually that type. `LocalizationResourceProxy` accepts a generic parameter that allows you to
+pass in an object type that contains keys representing the resource keys of the language your proxy
+points to, which will allow type hinting to display all the given keys as available methods on the proxy.
 
 ```js
 interface Foo {
@@ -226,10 +226,9 @@ const proxy3: LocalizationResourceProxy<typeof Foo> =
 console.log(proxy3.EXAMPLE_3());
 ```
 
-Of course if you have a large number of resources, writing this by hand could become tedious. The
-easiest solution would be to simply pass `any` for the `LocalizationResourceProxy` generic and eliminate
-the problem right there. This of course provides no type-hinting for your resources which are certainly
-helpful to have.
+Writing this by hand could become tedious if you have a large number of resources. The easiest solution
+would be to simply pass `any` for the `LocalizationResourceProxy` generic and eliminate the problem right
+there. This of course provides no type-hinting for your resources which are certainly helpful to have.
 
 Another solution would be to write a script that automatically generates a file containing an exported
 object populated with all of your resource keys. You can retrieve all loaded resource keys by using
