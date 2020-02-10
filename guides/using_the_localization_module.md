@@ -147,7 +147,9 @@ obviously cannot load a resource that does not exist. You can, however, provide 
 which will allow the module to default to that language in the event that a resource does not exist.
 This way, at least some output can be returned, even if it is not translated yet.
 
-To set a fallback language, use the `setFallbackLanguage()` method:
+To set a fallback language, use the [`setFallbackLanguage()`](/localization/docs/classes/localization.html#setfallbacklanguage)
+method:
+
 ```js
 Localization.setFallbackLanguage('fr-FR');
 ```
