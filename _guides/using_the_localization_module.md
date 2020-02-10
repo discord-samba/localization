@@ -36,8 +36,8 @@ and the second is
 like this:
 ```
 locale/
-    en-US.lang
-    fr-FR.lang
+|---en-US.lang
+`---fr-FR.lang
 ```
 You can load them like so:
 ```js
@@ -52,12 +52,12 @@ the two methods to use if you prefer splitting your localizations across multipl
 organization. For example, given a directory structure like this:
 ```
 locale/
-    en-US/
-        foo.lang
-        bar.lang
-    fr-FR/
-        foo.lang
-        bar.lang
+|---en-US/
+|   |---foo.lang
+|   `---bar.lang
+`---fr-FR/
+    |---foo.lang
+    `---bar.lang
 ```
 You can load the files for each language like so:
 ```js
@@ -234,6 +234,7 @@ helpful to have.
 Another solution would be to write a script that automatically generates a file containing an exported
 object populated with all of your resource keys. You can retrieve all loaded resource keys by using
 [`Localization.getKeys()`](/localization/docs/classes/localization.html#getkeys) at runtime after
-all of your localization resources have been loaded. Of course, you will need to iterate over all
-categories and subcategories you've created as well, which you would want to create distinct objects
-for, given they are all distinct subsets of the language you've loaded.
+all of your localization resources have been loaded. You will want to create distinct objects for
+specific categories and subcategories as well as they are all distinct subsets of the language you've
+loaded and proxies targeting them represent those subsets with regards to the resources the proxy
+has access to.
