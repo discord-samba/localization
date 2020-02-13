@@ -28,24 +28,18 @@ export class ParseError
 
 		if (typeof fileContents !== 'undefined')
 		{
-			newStack.push(`${container}:${line}`);
 			const lines: string[] = fileContents.split('\n');
 			const errorLine: string = ` ${line} | ${lines[line - 1]}`;
-			const arrow: string = `${' '.repeat(line.toString().length + column + 3)}^`;
-			newStack.push('');
-			newStack.push(errorLine);
-			newStack.push(arrow);
-			newStack.push('');
-			newStack.push(`${this.name}: ${this.message}`);
+			const arrow: string = '^'.padStart(line.toString().length + column + 4);
+
+			newStack.push(`${container}:${line}`, '', errorLine, arrow, '', `${this.name}: ${this.message}`);
 		}
 		else
 		{
 			newStack.push(`${this.name}: ${this.message}`);
 		}
 
-		newStack.push(`    at Localization Container (${container}:${line}:${column})`);
-		newStack.push(...oldStack);
-		newStack.push('');
+		newStack.push(`    at Localization Container (${container}:${line}:${column})`, ...oldStack, '');
 
 		this.stack = newStack.join('\n');
 	}
