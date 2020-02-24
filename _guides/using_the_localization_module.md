@@ -195,9 +195,9 @@ console.log(proxy2.EXAMPLE_2());
 Localization resource proxy methods optionally accept a template arguments object as their only argument.
 
 ```js
-const proxy2 = Localization.getResourceProxy('en-US');
+const proxy3 = Localization.getResourceProxy('en-US');
 const templateArgs = { bar: 12 };
-console.log(proxy2.EXAMPLE_3(templateArgs));
+console.log(proxy3.EXAMPLE_3(templateArgs));
 // Outputs 'foo12baz'
 ```
 
@@ -217,15 +217,16 @@ interface Foo {
 
 // or `type Foo = { ... }`
 
-const proxy3: LocalizationResourceProxy<Foo> =
+const proxy4: LocalizationResourceProxy<Foo> =
     Localization.getResourceProxy('en-US');
 
-console.log(proxy3.EXAMPLE_1());
+console.log(proxy4.EXAMPLE_1());
 // Outputs 'Foo bar baz'
 ```
 
 You can also use an enum via `typeof`, which can save a bit of extra typing by not having to provide
 member types on the interface/type. Personally, I prefer this method because I think it looks cleaner.
+The above example can be rewritten like so:
 
 ```js
 enum Foo {
@@ -233,16 +234,17 @@ enum Foo {
     EXAMPLE_3
 }
 
-const proxy3: LocalizationResourceProxy<typeof Foo> =
+const proxy4: LocalizationResourceProxy<typeof Foo> =
     Localization.getResourceProxy('en-US');
 
-console.log(proxy3.EXAMPLE_1());
+console.log(proxy4.EXAMPLE_1());
 // Outputs 'Foo bar baz'
 ```
 
-Writing this by hand could become tedious if you have a large number of resources. The easiest solution
-would be to simply pass `any` for the `LocalizationResourceProxy` generic and eliminate the problem right
-there. This of course provides no type-hinting for your resources which are certainly helpful to have.
+Writing these types/interfaces/enums by hand could become tedious if you have a large number of resources.
+The easiest solution would be to simply pass `any` for the `LocalizationResourceProxy` generic and
+eliminate the problem right there. This of course provides no type-hinting for your resources which
+are certainly helpful to have.
 
 Another solution would be to write a script that automatically generates a file containing an exported
 object populated with all of your resource keys. You can retrieve all loaded resource keys by using
