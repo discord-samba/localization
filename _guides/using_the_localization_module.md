@@ -112,7 +112,7 @@ so you should already be familiar with how to use them.
 Localization string resources accept a [`TemplateArguments`](/localization/docs/interfaces/templatearguments.html)
 object via the third argument for the `Localization.resource()` method.
 
-Given a Localization file consisiting of:
+Appending to the Localization file from earlier:
 {% raw %}
 ```
 [EXAMPLE_3]
@@ -191,6 +191,16 @@ console.log(proxy2.EXAMPLE_2());
 // Outputs 'Boo far faz'
 ```
 
+### Passing Template Arguments
+Localization resource proxy methods optionally accept a template arguments object as their only argument.
+
+```js
+const proxy2 = Localization.getResourceProxy('en-US');
+const templateArgs = { bar: 12 };
+console.log(proxy2.EXAMPLE_3(templateArgs));
+// Outputs 'foo12baz'
+```
+
 ### Typescript Interop
 Localization resource proxies (and really any Javascript `Proxy` in general) are a bit more finnicky
 in Typescript because the Typescript compiler views a `Proxy` as an empty object. To combat this,
@@ -201,8 +211,8 @@ points to, which will allow type hinting to display all the given keys as availa
 
 ```js
 interface Foo {
-    EXAMPLE_3: any,
-    EXAMPLE_4: any
+	EXAMPLE_1: any,
+    EXAMPLE_3: any
 }
 
 // or `type Foo = { ... }`
@@ -210,7 +220,8 @@ interface Foo {
 const proxy3: LocalizationResourceProxy<Foo> =
     Localization.getResourceProxy('en-US');
 
-console.log(proxy3.EXAMPLE_3());
+console.log(proxy3.EXAMPLE_1());
+// Outputs 'Foo bar baz'
 ```
 
 You can also use an enum via `typeof`, which can save a bit of extra typing by not having to provide
@@ -218,14 +229,15 @@ member types on the interface/type. Personally, I prefer this method because I t
 
 ```js
 enum Foo {
-    EXAMPLE_3,
-    EXAMPLE_4
+	EXAMPLE_1,
+    EXAMPLE_3
 }
 
 const proxy3: LocalizationResourceProxy<typeof Foo> =
     Localization.getResourceProxy('en-US');
 
-console.log(proxy3.EXAMPLE_3());
+console.log(proxy3.EXAMPLE_1());
+// Outputs 'Foo bar baz'
 ```
 
 Writing this by hand could become tedious if you have a large number of resources. The easiest solution
