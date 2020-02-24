@@ -211,7 +211,7 @@ points to, which will allow type hinting to display all the given keys as availa
 
 ```js
 interface Foo {
-	EXAMPLE_1: any,
+    EXAMPLE_1: any,
     EXAMPLE_3: any
 }
 
@@ -230,7 +230,7 @@ The above example can be rewritten like so:
 
 ```js
 enum Foo {
-	EXAMPLE_1,
+    EXAMPLE_1,
     EXAMPLE_3
 }
 
