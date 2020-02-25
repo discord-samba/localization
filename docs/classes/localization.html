@@ -2390,10 +2390,19 @@ img {
 			<a href="localization.html" class="tsd-kind-icon">Localization</a>
 			<ul>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a href="localization.html#addpipefunction" class="tsd-kind-icon">add<wbr>Pipe<wbr>Function</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a href="localization.html#getkeys" class="tsd-kind-icon">get<wbr>Keys</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a href="localization.html#getpipefunction" class="tsd-kind-icon">get<wbr>Pipe<wbr>Function</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
 					<a href="localization.html#getresourceproxy" class="tsd-kind-icon">get<wbr>Resource<wbr>Proxy</a>
+				</li>
+				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<a href="localization.html#haspipefunction" class="tsd-kind-icon">has<wbr>Pipe<wbr>Function</a>
 				</li>
 				<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
 					<a href="localization.html#loadfromdirectory" class="tsd-kind-icon">load<wbr>From<wbr>Directory</a>
@@ -2423,6 +2432,9 @@ img {
 		</li>
 		<li class=" tsd-kind-type-alias">
 			<a href="../globals.html#commandinfoprovider" class="tsd-kind-icon">Command<wbr>Info<wbr>Provider</a>
+		</li>
+		<li class=" tsd-kind-type-alias">
+			<a href="../globals.html#localizationpipefunction" class="tsd-kind-icon">Localization<wbr>Pipe<wbr>Function</a>
 		</li>
 		<li class=" tsd-kind-type-alias tsd-has-type-parameter">
 			<a href="../globals.html#localizationresourceproxy" class="tsd-kind-icon">Localization<wbr>Resource<wbr>Proxy</a>
@@ -2458,8 +2470,11 @@ img {
 					<section class="tsd-index-section ">
 						<h3>Methods</h3>
 						<ul class="tsd-index-list">
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="localization.html#addpipefunction" class="tsd-kind-icon">add<wbr>Pipe<wbr>Function</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="localization.html#getkeys" class="tsd-kind-icon">get<wbr>Keys</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="localization.html#getpipefunction" class="tsd-kind-icon">get<wbr>Pipe<wbr>Function</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static"><a href="localization.html#getresourceproxy" class="tsd-kind-icon">get<wbr>Resource<wbr>Proxy</a></li>
+							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="localization.html#haspipefunction" class="tsd-kind-icon">has<wbr>Pipe<wbr>Function</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="localization.html#loadfromdirectory" class="tsd-kind-icon">load<wbr>From<wbr>Directory</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="localization.html#loadlangfile" class="tsd-kind-icon">load<wbr>Lang<wbr>File</a></li>
 							<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="localization.html#resource" class="tsd-kind-icon">resource</a></li>
@@ -2473,6 +2488,37 @@ img {
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Methods</h2>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+				<a name="addpipefunction" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagStatic">Static</span> add<wbr>Pipe<wbr>Function</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<li class="tsd-signature tsd-kind-icon">add<wbr>Pipe<wbr>Function<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fn<span class="tsd-signature-symbol">: </span><a href="../globals.html#localizationpipefunction" class="tsd-signature-type">LocalizationPipeFunction</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/0a0856a/src/Localization.ts#L251">Localization.ts:251</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Adds a <a href="../globals.html#localizationpipefunction">LocalizationPipeFunction</a> for the given key to the cache</p>
+							</div>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>key: <span class="tsd-signature-type">string</span></h5>
+							</li>
+							<li>
+								<h5>fn: <a href="../globals.html#localizationpipefunction" class="tsd-signature-type">LocalizationPipeFunction</a></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 				<a name="getkeys" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Keys</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -2482,7 +2528,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/2ce17ae/src/Localization.ts#L223">Localization.ts:223</a></li>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/0a0856a/src/Localization.ts#L224">Localization.ts:224</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2501,6 +2547,37 @@ img {
 					</li>
 				</ul>
 			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+				<a name="getpipefunction" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Pipe<wbr>Function</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<li class="tsd-signature tsd-kind-icon">get<wbr>Pipe<wbr>Function<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../globals.html#localizationpipefunction" class="tsd-signature-type">LocalizationPipeFunction</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/0a0856a/src/Localization.ts#L259">Localization.ts:259</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Gets a <a href="../globals.html#localizationpipefunction">LocalizationPipeFunction</a> for the given key from the cache and returns it</p>
+							</div>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>key: <span class="tsd-signature-type">string</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <a href="../globals.html#localizationpipefunction" class="tsd-signature-type">LocalizationPipeFunction</a>
+							<span class="tsd-signature-symbol"> | </span>
+							<span class="tsd-signature-type">undefined</span>
+						</h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter tsd-is-static">
 				<a name="getresourceproxy" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Resource<wbr>Proxy</h3>
@@ -2511,7 +2588,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/2ce17ae/src/Localization.ts#L188">Localization.ts:188</a></li>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/0a0856a/src/Localization.ts#L189">Localization.ts:189</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2542,6 +2619,34 @@ img {
 				</ul>
 			</section>
 			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
+				<a name="haspipefunction" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagStatic">Static</span> has<wbr>Pipe<wbr>Function</h3>
+				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
+					<li class="tsd-signature tsd-kind-icon">has<wbr>Pipe<wbr>Function<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/0a0856a/src/Localization.ts#L243">Localization.ts:243</a></li>
+							</ul>
+						</aside>
+						<div class="tsd-comment tsd-typography">
+							<div class="lead">
+								<p>Returns whether or not the cache has a <a href="../globals.html#localizationpipefunction">LocalizationPipeFunction</a> for the given key</p>
+							</div>
+						</div>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5>key: <span class="tsd-signature-type">string</span></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
 				<a name="loadfromdirectory" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagStatic">Static</span> load<wbr>From<wbr>Directory</h3>
 				<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
@@ -2551,7 +2656,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/2ce17ae/src/Localization.ts#L21">Localization.ts:21</a></li>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/0a0856a/src/Localization.ts#L22">Localization.ts:22</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2583,7 +2688,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/2ce17ae/src/Localization.ts#L29">Localization.ts:29</a></li>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/0a0856a/src/Localization.ts#L30">Localization.ts:30</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2614,7 +2719,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/2ce17ae/src/Localization.ts#L54">Localization.ts:54</a></li>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/0a0856a/src/Localization.ts#L55">Localization.ts:55</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2654,7 +2759,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/2ce17ae/src/Localization.ts#L160">Localization.ts:160</a></li>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/0a0856a/src/Localization.ts#L161">Localization.ts:161</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
@@ -2693,7 +2798,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/2ce17ae/src/Localization.ts#L38">Localization.ts:38</a></li>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/0a0856a/src/Localization.ts#L39">Localization.ts:39</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">

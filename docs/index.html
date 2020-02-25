@@ -2401,6 +2401,9 @@ img {
 		<li class=" tsd-kind-type-alias">
 			<a href="globals.html#commandinfoprovider" class="tsd-kind-icon">Command<wbr>Info<wbr>Provider</a>
 		</li>
+		<li class=" tsd-kind-type-alias">
+			<a href="globals.html#localizationpipefunction" class="tsd-kind-icon">Localization<wbr>Pipe<wbr>Function</a>
+		</li>
 		<li class=" tsd-kind-type-alias tsd-has-type-parameter">
 			<a href="globals.html#localizationresourceproxy" class="tsd-kind-icon">Localization<wbr>Resource<wbr>Proxy</a>
 		</li>
@@ -2448,6 +2451,7 @@ img {
 						<h3>Type aliases</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-type-alias"><a href="globals.html#commandinfoprovider" class="tsd-kind-icon">Command<wbr>Info<wbr>Provider</a></li>
+							<li class="tsd-kind-type-alias"><a href="globals.html#localizationpipefunction" class="tsd-kind-icon">Localization<wbr>Pipe<wbr>Function</a></li>
 							<li class="tsd-kind-type-alias tsd-has-type-parameter"><a href="globals.html#localizationresourceproxy" class="tsd-kind-icon">Localization<wbr>Resource<wbr>Proxy</a></li>
 						</ul>
 					</section>
@@ -2468,7 +2472,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Command<wbr>Info<wbr>Provider<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/2ce17ae/src/types/CommandInfoProvider.ts#L6">types/CommandInfoProvider.ts:6</a></li>
+						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/0a0856a/src/types/CommandInfoProvider.ts#L6">types/CommandInfoProvider.ts:6</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2517,13 +2521,63 @@ img {
 					</ul>
 				</div>
 			</section>
+			<section class="tsd-panel tsd-member tsd-kind-type-alias">
+				<a name="localizationpipefunction" class="tsd-anchor"></a>
+				<h3>Localization<wbr>Pipe<wbr>Function</h3>
+				<div class="tsd-signature tsd-kind-icon">Localization<wbr>Pipe<wbr>Function<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/0a0856a/src/types/LocalizationPipeFunction.ts#L17">types/LocalizationPipeFunction.ts:17</a></li>
+					</ul>
+				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Represents a function that can be used in Localization files by piping template
+							values into it. The function must accept the piped-in template value, and can
+							optionally accept any other static values of the types string, number, or boolean.
+						These additional values allow pipe functions to be configurable.</p>
+					</div>
+					<p>In the case of regular templates and optional templates, the piped-in value is
+						of whatever type the template argument value is. In the case of forward templates
+					the piped-in value is always a string</p>
+					<p>Realistically pipe functions can transform the piped in data in many ways and
+						can accept piped-in data of any type, given anything can be passed to Localization
+						resources as desired. However, you should always make sure to be aware of how
+						each function is transforming your data with regards to what is being piped
+					into the next.</p>
+				</div>
+				<div class="tsd-type-declaration">
+					<h4>Type declaration</h4>
+					<ul class="tsd-parameters">
+						<li class="tsd-parameter-siganture">
+							<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
+								<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>pipeValue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+							</ul>
+							<ul class="tsd-descriptions">
+								<li class="tsd-description">
+									<h4 class="tsd-parameters-title">Parameters</h4>
+									<ul class="tsd-parameters">
+										<li>
+											<h5>pipeValue: <span class="tsd-signature-type">any</span></h5>
+										</li>
+										<li>
+											<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></h5>
+										</li>
+									</ul>
+									<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-has-type-parameter">
 				<a name="localizationresourceproxy" class="tsd-anchor"></a>
 				<h3>Localization<wbr>Resource<wbr>Proxy</h3>
 				<div class="tsd-signature tsd-kind-icon">Localization<wbr>Resource<wbr>Proxy&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/2ce17ae/src/types/LocalizationResourceProxy.ts#L12">types/LocalizationResourceProxy.ts:12</a></li>
+						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/0a0856a/src/types/LocalizationResourceProxy.ts#L12">types/LocalizationResourceProxy.ts:12</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2563,7 +2617,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/2ce17ae/src/commandInfoProvider.ts#L10">commandInfoProvider.ts:10</a></li>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/0a0856a/src/commandInfoProvider.ts#L10">commandInfoProvider.ts:10</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
