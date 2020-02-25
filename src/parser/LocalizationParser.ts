@@ -14,7 +14,7 @@ import { ParseError } from './ParseError';
 import { StringReader } from './StringReader';
 
 /** @internal */
-export class Parser
+export class LocalizationParser
 {
 	private static readonly _validIdent: RegExp = /^(?:(?=[a-zA-Z_][\w]*)[\w]+|[a-zA-Z])$/;
 
@@ -45,11 +45,11 @@ export class Parser
 		// Begin parsing
 		while (!reader.eof())
 		{
-			const chunkKind: LocalizationStringChunkKind = Parser._peekChunkKind(reader);
+			const chunkKind: LocalizationStringChunkKind = LocalizationParser._peekChunkKind(reader);
 
 			// Header comments can be safely discarded
 			if (headerCommentKinds.includes(chunkKind))
-				Parser._discardCommentLine(reader);
+				LocalizationParser._discardCommentLine(reader);
 
 			// If the chunk kind is None, we're looking at EOF and can safely break
 			else if (chunkKind === LocalizationStringChunkKind.None)
@@ -72,10 +72,10 @@ export class Parser
 
 				const { line, column } = reader;
 				const parentKeyData: LocalizationStringParentKeyData =
-					Parser._consumeParentNodeKey(container, reader);
+					LocalizationParser._consumeParentNodeKey(container, reader);
 
 				// Error if we hit a valid string key without encountering a string body
-				if (Parser._peekChunkKind(reader) === LocalizationStringChunkKind.ParentKey)
+				if (LocalizationParser._peekChunkKind(reader) === LocalizationStringChunkKind.ParentKey)
 					throw new ParseError(
 						'Unexpected string key, expected string body',
 						container,
@@ -89,19 +89,19 @@ export class Parser
 				// Parse children of this parent node
 				while (true)
 				{
-					const nextChunkKind: LocalizationStringChunkKind = Parser._peekChunkKind(reader);
+					const nextChunkKind: LocalizationStringChunkKind = LocalizationParser._peekChunkKind(reader);
 
 					if (nextChunkKind === LocalizationStringChunkKind.Comment)
-						Parser._discardCommentLine(reader);
+						LocalizationParser._discardCommentLine(reader);
 
 					else if (nextChunkKind === LocalizationStringChunkKind.TypesDeclaration)
-						currentNode.addParams(Parser._consumeTypeDeclarationComment(currentNode, reader));
+						currentNode.addParams(LocalizationParser._consumeTypeDeclarationComment(currentNode, reader));
 
 					else if (nextChunkKind === LocalizationStringChunkKind.StringChunk)
-						currentNode.addChild(Parser._consumeStringChunk(currentNode, reader));
+						currentNode.addChild(LocalizationParser._consumeStringChunk(currentNode, reader));
 
 					else if (nextChunkKind === LocalizationStringChunkKind.Template)
-						currentNode.addChild(Parser._consumeTemplate(currentNode, reader));
+						currentNode.addChild(LocalizationParser._consumeTemplate(currentNode, reader));
 
 					// Finalize this parent node when we hit the next parent key or EOF
 					else if (finalizerKinds.includes(nextChunkKind))
@@ -260,9 +260,9 @@ export class Parser
 
 		while (reader.peek() !== ']')
 		{
-			if (Parser._peekValidParentNodeCategory(reader))
+			if (LocalizationParser._peekValidParentNodeCategory(reader))
 			{
-				({ category, subcategory } = Parser._consumeParentNodeCategory(container, reader));
+				({ category, subcategory } = LocalizationParser._consumeParentNodeCategory(container, reader));
 
 				// Discard category separator ':'
 				reader.discard();
@@ -288,7 +288,7 @@ export class Parser
 		if (subcategory === '')
 			subcategory = 'default';
 
-		if (!Parser._validIdent.test(category))
+		if (!LocalizationParser._validIdent.test(category))
 			throw new ParseError(
 				'Invalid category identifier',
 				container,
@@ -296,7 +296,7 @@ export class Parser
 				column
 			);
 
-		if (!Parser._validIdent.test(subcategory))
+		if (!LocalizationParser._validIdent.test(subcategory))
 			throw new ParseError(
 				'Invalid subcategory identifier',
 				container,
@@ -304,7 +304,7 @@ export class Parser
 				column
 			);
 
-		if (!Parser._validIdent.test(key))
+		if (!LocalizationParser._validIdent.test(key))
 			throw new ParseError(
 				'Invalid resource key identifier',
 				container,
@@ -316,7 +316,7 @@ export class Parser
 		reader.discard();
 
 		// Discard whitespace after key and newline if it exists
-		Parser._discardWhitespace(reader);
+		LocalizationParser._discardWhitespace(reader);
 		if (reader.peek() === '\n')
 			reader.discard();
 
@@ -345,7 +345,7 @@ export class Parser
 			return LocalizationStringChunkKind.Comment;
 		}
 
-		if (reader.peek() === '[' && Parser._peekValidParentNodeKey(reader))
+		if (reader.peek() === '[' && LocalizationParser._peekValidParentNodeKey(reader))
 			return LocalizationStringChunkKind.ParentKey;
 
 		if (reader.peekSegment(2) === '{{')
@@ -386,7 +386,7 @@ export class Parser
 		reader: StringReader
 	): { ident: string, isOptional: boolean, line: number, column: number }
 	{
-		Parser._discardWhitespace(reader);
+		LocalizationParser._discardWhitespace(reader);
 
 		let ident: string = '';
 		let isOptional: boolean = false;
@@ -495,7 +495,7 @@ export class Parser
 	{
 		// Discard ##! and following whitespace
 		reader.discard(3);
-		Parser._discardWhitespace(reader);
+		LocalizationParser._discardWhitespace(reader);
 
 		const types: LocalizationStringTypeDeclarationMapping = {};
 
@@ -514,7 +514,7 @@ export class Parser
 
 				// Discard comma and following whitespace
 				reader.discard();
-				Parser._discardWhitespace(reader);
+				LocalizationParser._discardWhitespace(reader);
 
 				if (reader.peek() === '\n')
 					throw new ParseError(
@@ -537,9 +537,9 @@ export class Parser
 			if (reader.eof())
 				return types;
 
-			const { ident, isOptional, line, column } = Parser._consumeDeclarationIdent(parent, reader);
+			const { ident, isOptional, line, column } = LocalizationParser._consumeDeclarationIdent(parent, reader);
 
-			if (!Parser._validIdent.test(ident))
+			if (!LocalizationParser._validIdent.test(ident))
 				throw new ParseError(
 					'Invalid template argument identifier',
 					parent.container,
@@ -548,7 +548,7 @@ export class Parser
 				);
 
 			// Discard whitespace before separator
-			Parser._discardWhitespace(reader);
+			LocalizationParser._discardWhitespace(reader);
 
 			if (reader.peek() !== ':')
 				throw new ParseError(
@@ -562,9 +562,9 @@ export class Parser
 
 			// Discard separator and following whitespace
 			reader.discard();
-			Parser._discardWhitespace(reader);
+			LocalizationParser._discardWhitespace(reader);
 
-			const { identType, isArrayType } = Parser._consumeDeclarationType(parent, reader);
+			const { identType, isArrayType } = LocalizationParser._consumeDeclarationType(parent, reader);
 
 			types[ident] = {
 				identType: identType.toLowerCase(),
@@ -575,7 +575,7 @@ export class Parser
 			};
 
 			// Discard whitespace following this argument type declaration
-			Parser._discardWhitespace(reader);
+			LocalizationParser._discardWhitespace(reader);
 		}
 
 		// Discard ending newline
@@ -598,7 +598,7 @@ export class Parser
 		while (true)
 		{
 			// Check if we are about to encounter a template or parent string key
-			if (reader.peekSegment(2, 1) === '{{' || Parser._peekValidParentNodeKey(reader, 1))
+			if (reader.peekSegment(2, 1) === '{{' || LocalizationParser._peekValidParentNodeKey(reader, 1))
 			{
 				// If it's not escaped, consume the next character and return this chunk
 				if (reader.peek() !== '\\')
@@ -728,12 +728,20 @@ export class Parser
 		reader: StringReader
 	): LocalizationStringChildNode
 	{
-		switch (Parser._peekTemplateKind(reader))
+		switch (LocalizationParser._peekTemplateKind(reader))
 		{
-			case LocalizationStringTemplateKind.Regular: return Parser._consumeRegularTemplate(parent, reader);
-			case LocalizationStringTemplateKind.Forward: return Parser._consumeForwardTemplate(parent, reader);
-			case LocalizationStringTemplateKind.Script: return Parser._consumeScriptTemplate(parent, reader);
-			case LocalizationStringTemplateKind.Optional: return Parser._consumeOptionalTemplate(parent, reader);
+			case LocalizationStringTemplateKind.Regular:
+				return LocalizationParser._consumeRegularTemplate(parent, reader);
+
+			case LocalizationStringTemplateKind.Forward:
+				return LocalizationParser._consumeForwardTemplate(parent, reader);
+
+			case LocalizationStringTemplateKind.Script:
+				return LocalizationParser._consumeScriptTemplate(parent, reader);
+
+			case LocalizationStringTemplateKind.Optional:
+				return LocalizationParser._consumeOptionalTemplate(parent, reader);
+
 			case LocalizationStringTemplateKind.Invalid:
 				throw new ParseError(
 					'Invalid template',
@@ -785,14 +793,14 @@ export class Parser
 		reader.discard(2);
 
 		while (reader.peekSegment(2) !== '}}')
-			key += Parser._consumeTemplateKeyChar(parent, reader);
+			key += LocalizationParser._consumeTemplateKeyChar(parent, reader);
 
 		// Discard the closing braces
 		reader.discard(2);
 
 		key = key.trim();
 
-		if (!Parser._validIdent.test(key))
+		if (!LocalizationParser._validIdent.test(key))
 			throw new ParseError(
 				'Invalid template identifier',
 				parent.container,
@@ -822,14 +830,14 @@ export class Parser
 		reader.discard(3);
 
 		while (reader.peekSegment(2) !== '}}')
-			key += Parser._consumeTemplateKeyChar(parent, reader);
+			key += LocalizationParser._consumeTemplateKeyChar(parent, reader);
 
 		// Discard the closing braces
 		reader.discard(2);
 
 		key = key.trim();
 
-		if (!Parser._validIdent.test(key))
+		if (!LocalizationParser._validIdent.test(key))
 			throw new ParseError(
 				'Invalid forward template identifier',
 				parent.container,
@@ -859,14 +867,14 @@ export class Parser
 		reader.discard(3);
 
 		while (reader.peekSegment(2) !== '}}')
-			key += Parser._consumeTemplateKeyChar(parent, reader);
+			key += LocalizationParser._consumeTemplateKeyChar(parent, reader);
 
 		// Discard the closing braces
 		reader.discard(2);
 
 		key = key.trim();
 
-		if (!Parser._validIdent.test(key))
+		if (!LocalizationParser._validIdent.test(key))
 			throw new ParseError(
 				'Invalid template identifier',
 				parent.container,

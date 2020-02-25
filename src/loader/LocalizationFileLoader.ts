@@ -2,8 +2,8 @@ import * as FS from 'fs';
 import * as Glob from 'glob';
 import * as Path from 'path';
 import { LocalizationCache } from '../LocalizationCache';
+import { LocalizationParser } from '../parser/LocalizationParser';
 import { NodeKindImplParentNode } from '../nodeKindImpl/NodeKindImplParentNode';
-import { Parser } from '../parser/Parser';
 
 /** @internal */
 export class LocalizationFileLoader
@@ -25,7 +25,7 @@ export class LocalizationFileLoader
 		if (fileContent.trim() === '')
 			throw new Error(`Localization file is empty: ${resolvedFile}`);
 
-		const nodeList: NodeKindImplParentNode[] = Parser.parse(resolvedFile, fileContent);
+		const nodeList: NodeKindImplParentNode[] = LocalizationParser.parse(resolvedFile, fileContent);
 		for (const node of nodeList)
 			LocalizationCache.set([language, node.category, node.subcategory], node.key, node);
 	}
