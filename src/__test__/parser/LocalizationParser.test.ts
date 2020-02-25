@@ -97,12 +97,10 @@ describe('Throwing parser errors', () =>
 		expect(() => Parser.parse(c, '[test]\n{{ 2foo }}')).toThrow(e);
 		expect(() => Parser.parse(c, '[test]\n{{ 3_bar }}')).toThrow(e);
 		expect(() => Parser.parse(c, '[test]\n{{ 4 baz }}')).toThrow(e);
-		expect(() => Parser.parse(c, '[test]\n{{ foo bar }}')).toThrow(e);
 		expect(() => Parser.parse(c, '[test]\n{{? 1 }}')).toThrow(e);
 		expect(() => Parser.parse(c, '[test]\n{{? 2foo }}')).toThrow(e);
 		expect(() => Parser.parse(c, '[test]\n{{? 3_bar }}')).toThrow(e);
 		expect(() => Parser.parse(c, '[test]\n{{? 4 baz }}')).toThrow(e);
-		expect(() => Parser.parse(c, '[test]\n{{? foo bar }}')).toThrow(e);
 	});
 
 	it('Should error when encountering a key without encountering a body', () =>

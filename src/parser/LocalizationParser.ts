@@ -1,17 +1,13 @@
-import { LocalizationStringChildNode } from '../interfaces/LocalizationStringChildNode';
 import { LocalizationStringChunkKind } from '../types/LocalizationStringChunkKind';
 import { LocalizationStringParentKeyData } from '../types/LocalizationStringParentKeyData';
 import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 import { LocalizationStringTemplateKind } from '../types/LocalizationStringTemplateKind';
 import { LocalizationStringTypeDeclarationMapping } from '../types/LocalizationStringTypeDeclarationMapping';
-import { NodeKindImplForwardTemplate } from '../nodeKindImpl/NodeKindImplForwardTemplate';
-import { NodeKindImplOptionalTemplate } from '../nodeKindImpl/NodeKindImplOptionalTemplate';
 import { NodeKindImplParentNode } from '../nodeKindImpl/NodeKindImplParentNode';
-import { NodeKindImplRegularTemplate } from '../nodeKindImpl/NodeKindImplRegularTemplate';
-import { NodeKindImplScriptTemplate } from '../nodeKindImpl/NodeKindImplScriptTemplate';
 import { NodeKindImplStringChunk } from '../nodeKindImpl/NodeKindImplStringChunk';
 import { ParseError } from './ParseError';
 import { StringReader } from './StringReader';
+import { TemplateParser } from './TemplateParser';
 
 /** @internal */
 export class LocalizationParser
@@ -101,7 +97,9 @@ export class LocalizationParser
 						currentNode.addChild(LocalizationParser._consumeStringChunk(currentNode, reader));
 
 					else if (nextChunkKind === LocalizationStringChunkKind.Template)
-						currentNode.addChild(LocalizationParser._consumeTemplate(currentNode, reader));
+						currentNode.addChild(
+							TemplateParser.parse(LocalizationParser._peekTemplateKind(reader), currentNode, reader)
+						);
 
 					// Finalize this parent node when we hit the next parent key or EOF
 					else if (finalizerKinds.includes(nextChunkKind))
@@ -406,7 +404,7 @@ export class LocalizationParser
 			// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
 			if (/\w/.test(reader.peek()) === false && reader.peek() !== '?')
 				throw new ParseError(
-					`Unexpected token '${reader.peek()}, expected identifier`,
+					`Unexpected token '${reader.peek()}', expected identifier`,
 					parent.container,
 					reader.line,
 					reader.column
@@ -717,209 +715,5 @@ export class LocalizationParser
 		}
 
 		return kind;
-	}
-
-	/**
-	 * Consumes a template from the input, including its content and braces,
-	 * and returns it
-	 */
-	private static _consumeTemplate(
-		parent: LocalizationStringParentNode,
-		reader: StringReader
-	): LocalizationStringChildNode
-	{
-		switch (LocalizationParser._peekTemplateKind(reader))
-		{
-			case LocalizationStringTemplateKind.Regular:
-				return LocalizationParser._consumeRegularTemplate(parent, reader);
-
-			case LocalizationStringTemplateKind.Forward:
-				return LocalizationParser._consumeForwardTemplate(parent, reader);
-
-			case LocalizationStringTemplateKind.Script:
-				return LocalizationParser._consumeScriptTemplate(parent, reader);
-
-			case LocalizationStringTemplateKind.Optional:
-				return LocalizationParser._consumeOptionalTemplate(parent, reader);
-
-			case LocalizationStringTemplateKind.Invalid:
-				throw new ParseError(
-					'Invalid template',
-					parent.container,
-					reader.line,
-					reader.column
-				);
-		}
-	}
-
-	/**
-	 * Consume and return a character as a template key segment,
-	 * erroring on invalid characters
-	 */
-	private static _consumeTemplateKeyChar(
-		parent: LocalizationStringParentNode,
-		reader: StringReader
-	): string
-	{
-		// TODO: Return to ! when highlighting is fixed
-		// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
-		if (/[\w\s]/.test(reader.peek()) === false)
-			throw new ParseError(
-				[
-					'Invalid character in template key. Template keys may',
-					'only inclue alpha-numeric characters and underscores'
-				].join(' '),
-				parent.container,
-				reader.line,
-				reader.column
-			);
-
-		return reader.consume();
-	}
-
-	/**
-	 * Consumes a regular template from the input, including its content and braces,
-	 * and returns it
-	 */
-	private static _consumeRegularTemplate(
-		parent: LocalizationStringParentNode,
-		reader: StringReader
-	): NodeKindImplRegularTemplate
-	{
-		let key: string = '';
-		const { line, column } = reader;
-
-		// Discard the opening braces
-		reader.discard(2);
-
-		while (reader.peekSegment(2) !== '}}')
-			key += LocalizationParser._consumeTemplateKeyChar(parent, reader);
-
-		// Discard the closing braces
-		reader.discard(2);
-
-		key = key.trim();
-
-		if (!LocalizationParser._validIdent.test(key))
-			throw new ParseError(
-				'Invalid template identifier',
-				parent.container,
-				line,
-				column
-			);
-
-		const node: NodeKindImplRegularTemplate =
-			new NodeKindImplRegularTemplate(key, parent, line, column);
-
-		return node;
-	}
-
-	/**
-	 * Consumes a forward template from the input, including its content and braces,
-	 * and returns it
-	 */
-	private static _consumeForwardTemplate(
-		parent: LocalizationStringParentNode,
-		reader: StringReader
-	): NodeKindImplForwardTemplate
-	{
-		let key: string = '';
-		const { line, column } = reader;
-
-		// Discard the opening braces
-		reader.discard(3);
-
-		while (reader.peekSegment(2) !== '}}')
-			key += LocalizationParser._consumeTemplateKeyChar(parent, reader);
-
-		// Discard the closing braces
-		reader.discard(2);
-
-		key = key.trim();
-
-		if (!LocalizationParser._validIdent.test(key))
-			throw new ParseError(
-				'Invalid forward template identifier',
-				parent.container,
-				line,
-				column
-			);
-
-		const node: NodeKindImplForwardTemplate =
-			new NodeKindImplForwardTemplate(key, parent, line, column);
-
-		return node;
-	}
-
-	/**
-	 * Consumes a optional template from the input, including its content and braces,
-	 * and returns it
-	 */
-	private static _consumeOptionalTemplate(
-		parent: LocalizationStringParentNode,
-		reader: StringReader
-	): NodeKindImplOptionalTemplate
-	{
-		let key: string = '';
-		const { line, column } = reader;
-
-		// Discard the opening `{{?`
-		reader.discard(3);
-
-		while (reader.peekSegment(2) !== '}}')
-			key += LocalizationParser._consumeTemplateKeyChar(parent, reader);
-
-		// Discard the closing braces
-		reader.discard(2);
-
-		key = key.trim();
-
-		if (!LocalizationParser._validIdent.test(key))
-			throw new ParseError(
-				'Invalid template identifier',
-				parent.container,
-				line,
-				column
-			);
-
-		const node: NodeKindImplOptionalTemplate =
-			new NodeKindImplOptionalTemplate(key, parent, line, column);
-
-		return node;
-	}
-
-	/**
-	 * Consumes a script template from the input, including its content and braces,
-	 * and returns it
-	 */
-	private static _consumeScriptTemplate(
-		parent: LocalizationStringParentNode,
-		reader: StringReader
-	): NodeKindImplScriptTemplate
-	{
-		let scriptBody: string = '';
-		let bodyStartLine: number = 0;
-		const { line, column } = reader;
-
-		// Discard the opening braces
-		reader.discard(3);
-
-		while (reader.peekSegment(3) !== '!}}')
-		{
-			// TODO: Return to ! when highlighting is fixed
-			// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
-			if (bodyStartLine === 0 && /\s/.test(reader.peek()) === false)
-				bodyStartLine = reader.line;
-
-			scriptBody += reader.consume();
-		}
-
-		// Discard the closing braces
-		reader.discard(3);
-
-		const node: NodeKindImplScriptTemplate =
-			new NodeKindImplScriptTemplate(scriptBody, bodyStartLine, parent, line, column);
-
-		return node;
 	}
 }

@@ -1,3 +1,4 @@
+import { LocalizationPipeFunction } from './types/LocalizationPipeFunction';
 import { LocalizationResourceProxy } from './types/LocalizationResourceProxy';
 import { LocalizationStringBuilder } from './LocalizationStringBuilder';
 import { LocalizationStringParentNode } from './interfaces/LocalizationStringParentNode';
@@ -18,6 +19,8 @@ export class LocalizationCache
 	// Language -> Category -> Subcategory -> LocalizationResourceProxy
 	private _proxyCache: Map<string, Map<string, Map<string, LocalizationResourceProxy>>>;
 
+	private _pipeCache: Map<string, LocalizationPipeFunction>;
+
 	private _fallbackLang!: string;
 
 	private constructor()
@@ -28,6 +31,11 @@ export class LocalizationCache
 		LocalizationCache._staticInstance = this;
 		this._cache = new Map();
 		this._proxyCache = new Map();
+		this._pipeCache = new Map();
+
+		// Add base pipe functions
+		this._pipeCache.set('toUpperCase', (pipeVal: string) => pipeVal.toUpperCase());
+		this._pipeCache.set('toLowerCase', (pipeVal: string) => pipeVal.toLowerCase());
 	}
 
 	/**
@@ -229,5 +237,29 @@ export class LocalizationCache
 				?.get(subcategory)
 				?.keys() ?? []
 		);
+	}
+
+	/**
+	 * Returns whether or not the cache has a LocalizationPipeFunction for the given key
+	 */
+	public static hasPipeFunction(key: string): boolean
+	{
+		return LocalizationCache._instance._pipeCache.has(key);
+	}
+
+	/**
+	 * Adds a LocalizationPipeFunction for the given key to the cache
+	 */
+	public static addPipeFunction(key: string, fn: LocalizationPipeFunction): void
+	{
+		LocalizationCache._instance._pipeCache.set(key, fn);
+	}
+
+	/**
+	 * Gets a LocalizationPipeFunction for the given key from the cache and returns it
+	 */
+	public static getPipeFunction(key: string): LocalizationPipeFunction | undefined
+	{
+		return LocalizationCache._instance._pipeCache.get(key);
 	}
 }

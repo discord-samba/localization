@@ -1,4 +1,5 @@
 import { Localization } from './Localization';
+import { LocalizationPipeFunction } from './types/LocalizationPipeFunction';
 import { LocalizationResrouceMetaData } from './types/LocalizationResourceMetaData';
 import { LocalizationStringChildNode } from './interfaces/LocalizationStringChildNode';
 import { LocalizationStringChildResultNode } from './types/LocalizationStringChildResultNode';
@@ -12,6 +13,7 @@ import { NodeKindImplRegularTemplate } from './nodeKindImpl/NodeKindImplRegularT
 import { NodeKindImplScriptTemplate } from './nodeKindImpl/NodeKindImplScriptTemplate';
 import { NodeKindImplStringChunk } from './nodeKindImpl/NodeKindImplStringChunk';
 import { TemplateArguments } from './types/TemplateArguments';
+import { TemplatePipe } from './types/TemplatePipe';
 
 /**
  * Stores a localization string parent node and builds a string
@@ -61,7 +63,8 @@ export class LocalizationStringBuilder
 				case LocalizationStringNodeKind.RegularTemplate:
 				case LocalizationStringNodeKind.OptionalTemplate:
 					this._childIs<NodeKindImplRegularTemplate | NodeKindImplOptionalTemplate>(child);
-					results.push(this._makeResult(child.kind, args[child.key]));
+					const templateArgValue: any = this._runPipes(child, args[child.key], child.pipes);
+					results.push(this._makeResult(child.kind, templateArgValue));
 					break;
 
 				case LocalizationStringNodeKind.ForwardTemplate:
@@ -90,10 +93,13 @@ export class LocalizationStringBuilder
 							_meta
 						);
 
-					results.push(this._makeResult(
-						child.kind,
-						(Localization.resource as any)(path, child.forwardKey, args, _meta)
-					));
+					const forwardTemplateValue: any = this._runPipes(
+						child,
+						(Localization.resource as any)(path, child.forwardKey, args, _meta),
+						child.pipes
+					);
+
+					results.push(this._makeResult(child.kind, forwardTemplateValue));
 
 					break;
 
@@ -224,6 +230,27 @@ export class LocalizationStringBuilder
 			return next.value!.startsWith('\n');
 
 		return false;
+	}
+
+	private _runPipes(child: LocalizationStringChildNode, value: string, pipes: TemplatePipe[]): any
+	{
+		let result: any = value;
+
+		for (const pipe of pipes)
+		{
+			if (!Localization.hasPipeFunction(pipe[0]))
+				throw new LocalizationStringError(
+					`LocalizationPipeFunction '${pipe[0]}' does not exist`,
+					this.node.container,
+					child.line,
+					child.column
+				);
+
+			const pipeFn: LocalizationPipeFunction = Localization.getPipeFunction(pipe[0])!;
+			result = pipeFn(result, ...pipe.slice(1));
+		}
+
+		return result;
 	}
 
 	/**

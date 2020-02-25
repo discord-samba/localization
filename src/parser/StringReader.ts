@@ -66,6 +66,21 @@ export class StringReader
 	}
 
 	/**
+	 * Consumes all characters until the given regular expression matches.
+	 * Must be given a regular expression that matches only a single character,
+	 * otherwise it will consume until EOF
+	 */
+	public consumeUntil(match: RegExp): string
+	{
+		let result: string = '';
+
+		while (!match.test(this.peek()) && !this.eof())
+			result += this.consume();
+
+		return result;
+	}
+
+	/**
 	 * Same as `StringReader#consume()` but the characters are discarded.
 	 * This will eliminate any lint warnings for unused function returns
 	 * rather than using `consume()` just to advance the reader

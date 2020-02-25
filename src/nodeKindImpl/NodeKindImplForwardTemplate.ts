@@ -1,6 +1,7 @@
 import { LocalizationStringChildNode } from '../interfaces/LocalizationStringChildNode';
 import { LocalizationStringNodeKind } from '../types/LocalizationStringNodeKind';
 import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
+import { TemplatePipe } from '../types/TemplatePipe';
 
 /**
  * Represents an abstract Localization resource node for a template that will
@@ -16,12 +17,20 @@ export class NodeKindImplForwardTemplate implements LocalizationStringChildNode
 	public readonly parent: LocalizationStringParentNode;
 	public readonly line: number;
 	public readonly column: number;
+	public readonly pipes: TemplatePipe[];
 
-	public constructor(forwardKey: string, parent: LocalizationStringParentNode, line: number, column: number)
+	public constructor(
+		forwardKey: string,
+		parent: LocalizationStringParentNode,
+		line: number,
+		column: number,
+		pipes: TemplatePipe[]
+	)
 	{
 		this.forwardKey = forwardKey;
 		this.parent = parent;
 		this.line = line;
 		this.column = column;
+		this.pipes = pipes;
 	}
 }

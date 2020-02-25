@@ -242,6 +242,11 @@ describe('Using argument type declarations', () =>
 	});
 });
 
+describe('Using template pipes', () =>
+{
+	// TODO: Write template pipes tests
+});
+
 describe('Misc.', () =>
 {
 	it('Should provide a list of all keys for the given language/path', () =>

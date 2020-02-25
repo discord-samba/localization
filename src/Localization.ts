@@ -1,5 +1,6 @@
 import { LocalizationCache } from './LocalizationCache';
 import { LocalizationFileLoader } from './loader/LocalizationFileLoader';
+import { LocalizationPipeFunction } from './types/LocalizationPipeFunction';
 import { LocalizationResourceProxy } from './types/LocalizationResourceProxy';
 import { LocalizationResrouceMetaData } from './types/LocalizationResourceMetaData';
 import { LocalizationStringBuilder } from './LocalizationStringBuilder';
@@ -234,5 +235,29 @@ export class Localization
 			[language, category = 'default', subcategory = 'default'] = path;
 
 		return LocalizationCache.getKeys([language, category, subcategory]);
+	}
+
+	/**
+	 * Returns whether or not the cache has a [[LocalizationPipeFunction]] for the given key
+	 */
+	public static hasPipeFunction(key: string): boolean
+	{
+		return LocalizationCache.hasPipeFunction(key);
+	}
+
+	/**
+	 * Adds a [[LocalizationPipeFunction]] for the given key to the cache
+	 */
+	public static addPipeFunction(key: string, fn: LocalizationPipeFunction): void
+	{
+		LocalizationCache.addPipeFunction(key, fn);
+	}
+
+	/**
+	 * Gets a [[LocalizationPipeFunction]] for the given key from the cache and returns it
+	 */
+	public static getPipeFunction(key: string): LocalizationPipeFunction | undefined
+	{
+		return LocalizationCache.getPipeFunction(key);
 	}
 }
