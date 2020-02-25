@@ -150,8 +150,6 @@ export class TemplateParser
 			TemplateParser._discardWhitespace(reader);
 		}
 
-		// TODO: parse pipe function ident and pipe function args
-
 		return result;
 	}
 
