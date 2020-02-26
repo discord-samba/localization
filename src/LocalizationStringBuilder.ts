@@ -63,7 +63,7 @@ export class LocalizationStringBuilder
 				case LocalizationStringNodeKind.RegularTemplate:
 				case LocalizationStringNodeKind.OptionalTemplate:
 					this._childIs<NodeKindImplRegularTemplate | NodeKindImplOptionalTemplate>(child);
-					const templateArgValue: any = this._runPipes(child, args[child.key], child.pipes);
+					const templateArgValue: any = this._runPipes(child, args[child.key], child.pipes, _meta);
 					results.push(this._makeResult(child.kind, templateArgValue));
 					break;
 
@@ -96,7 +96,8 @@ export class LocalizationStringBuilder
 					const forwardTemplateValue: any = this._runPipes(
 						child,
 						(Localization.resource as any)(path, child.forwardKey, args, _meta),
-						child.pipes
+						child.pipes,
+						_meta
 					);
 
 					results.push(this._makeResult(child.kind, forwardTemplateValue));
@@ -235,7 +236,12 @@ export class LocalizationStringBuilder
 	/**
 	 * Run the given value through all pipes for the given child
 	 */
-	private _runPipes(child: LocalizationStringChildNode, value: string, pipes: TemplatePipe[]): any
+	private _runPipes(
+		child: LocalizationStringChildNode,
+		value: string,
+		pipes: TemplatePipe[],
+		_meta: LocalizationResrouceMetaData
+	): any
 	{
 		if (typeof value === 'undefined')
 			return value;
@@ -249,7 +255,8 @@ export class LocalizationStringBuilder
 					`LocalizationPipeFunction '${pipe[0]}' does not exist`,
 					this.node.container,
 					child.line,
-					child.column
+					child.column,
+					_meta
 				);
 
 			const pipeFn: LocalizationPipeFunction = Localization.getPipeFunction(pipe[0])!;
@@ -264,7 +271,8 @@ export class LocalizationStringBuilder
 					err.message,
 					pipe[1].container,
 					pipe[1].line,
-					pipe[1].column
+					pipe[1].column,
+					_meta
 				);
 			}
 		}
