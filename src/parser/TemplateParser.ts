@@ -121,7 +121,7 @@ export class TemplateParser
 
 	/**
 	 * Parses all template pipes and returns them. Should be called when the next character
-	 * is the first pipe encountered.
+	 * is the first pipe (`|`) encountered.
 	 */
 	private static _parsePipes(parent: LocalizationStringParentNode, reader: StringReader): TemplatePipe[]
 	{
@@ -148,7 +148,10 @@ export class TemplateParser
 				break;
 
 			const { line, column } = reader;
-			const templatePipe: TemplatePipe = [reader.consumeUntil(/[^\w]/)];
+			const templatePipe: TemplatePipe = [
+				reader.consumeUntil(/[^\w]/),
+				{ container: parent.container, line, column }
+			];
 
 			if (!TemplateParser._validIdent.test(templatePipe[0]))
 				throw new ParseError(

@@ -232,6 +232,9 @@ export class LocalizationStringBuilder
 		return false;
 	}
 
+	/**
+	 * Run the given value through all pipes for the given child
+	 */
 	private _runPipes(child: LocalizationStringChildNode, value: string, pipes: TemplatePipe[]): any
 	{
 		if (typeof value === 'undefined')
@@ -250,7 +253,20 @@ export class LocalizationStringBuilder
 				);
 
 			const pipeFn: LocalizationPipeFunction = Localization.getPipeFunction(pipe[0])!;
-			result = pipeFn(result, ...pipe.slice(1));
+
+			try
+			{
+				result = pipeFn(result, ...pipe.slice(2));
+			}
+			catch (err)
+			{
+				throw new LocalizationStringError(
+					err.message,
+					pipe[1].container,
+					pipe[1].line,
+					pipe[1].column
+				);
+			}
 		}
 
 		return result;
