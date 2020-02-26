@@ -191,14 +191,6 @@ export class TemplateParser
 							column
 						);
 
-					if (reader.eof())
-						throw new ParseError(
-							'Unexpected EOF',
-							parent.container,
-							reader.line,
-							reader.column
-						);
-
 					const argVal: string | number | boolean = TemplateParser._parsePipeArgument(parent, reader);
 					templatePipe.args.push(argVal);
 
@@ -309,9 +301,26 @@ export class TemplateParser
 		if (result === 'false')
 			return false;
 
+		// Error on missing value
+		if (reader.peek() === ',' && result === '')
+			throw new ParseError(
+				'Missing value, expected string, number, or boolean',
+				parent.container,
+				line,
+				column
+			);
+
+		if (result !== '')
+			throw new ParseError(
+				'Unexpected identifier, expected string, number, or boolean',
+				parent.container,
+				line,
+				column
+			);
+
 		// Throw a parser error if we've received anything other than `true`/`false` at this point
 		throw new ParseError(
-			'Unexpected identifier, expected string, number, or boolean',
+			`Unexpected token '${reader.peek()}', expected string, number, or boolean`,
 			parent.container,
 			line,
 			column
