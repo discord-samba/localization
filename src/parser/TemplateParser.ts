@@ -19,12 +19,11 @@ export class TemplateParser
 	 * and returns the parsed LocalizationStringChildNode
 	 */
 	public static parse(
-		kind: LocalizationStringTemplateKind,
 		parent: LocalizationStringParentNode,
 		reader: StringReader
 	): LocalizationStringChildNode
 	{
-		switch (kind)
+		switch (TemplateParser._peekTemplateKind(reader))
 		{
 			case LocalizationStringTemplateKind.Regular:
 				return TemplateParser._consumeRegularTemplate(parent, reader);
@@ -46,6 +45,69 @@ export class TemplateParser
 					reader.column
 				);
 		}
+	}
+
+	/**
+	 * Peeks the following chunk for its template kind
+	 */
+	private static _peekTemplateKind(reader: StringReader): LocalizationStringTemplateKind
+	{
+		let index: number = 0;
+		let kind: LocalizationStringTemplateKind = LocalizationStringTemplateKind.Invalid;
+
+		// Check for allowed template opening characters
+		// TODO: Return to ! when highlighting is fixed
+		// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
+		if (/[\w?>!\s]/.test(reader.peek(2)) === false)
+			return LocalizationStringTemplateKind.Invalid;
+
+		if (reader.peek(2) === '!')
+			kind = LocalizationStringTemplateKind.Script;
+
+		else if (reader.peek(2) === '>')
+			kind = LocalizationStringTemplateKind.Forward;
+
+		else if (reader.peek(2) === '?')
+			kind = LocalizationStringTemplateKind.Optional;
+
+		else
+			kind = LocalizationStringTemplateKind.Regular;
+
+		while (true)
+		{
+			if (reader.peekSegment(2, index) === '}}')
+			{
+				if (reader.peek(index - 1) === '!')
+				{
+					if (kind !== LocalizationStringTemplateKind.Script)
+						kind = LocalizationStringTemplateKind.Invalid;
+
+					break;
+				}
+
+				if (kind === LocalizationStringTemplateKind.Script)
+				{
+					if (reader.peek(index - 1) !== '!')
+						kind = LocalizationStringTemplateKind.Invalid;
+
+					break;
+				}
+
+				// TODO: Return to ! when highlighting is fixed
+				// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
+				if (/[\w\s]/.test(reader.peek(index - 1)) === false)
+					kind = LocalizationStringTemplateKind.Invalid;
+
+				break;
+			}
+
+			index++;
+
+			if (reader.eof(index))
+				return LocalizationStringTemplateKind.Invalid;
+		}
+
+		return kind;
 	}
 
 	/**
@@ -188,9 +250,7 @@ export class TemplateParser
 				}
 
 				if (reader.peek() === stringChar)
-				{
 					break;
-				}
 
 				result += reader.consume();
 

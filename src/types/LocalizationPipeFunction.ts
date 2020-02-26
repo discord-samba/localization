@@ -4,6 +4,11 @@
  * optionally accept any other static values of the types string, number, or boolean.
  * These additional values allow pipe functions to be configurable.
  *
+ * **Note:** The typings specify any type for these additional parameters, but
+ * the localization parser only supports string, number, and boolean primitives
+ * in the localization file syntax, which translate directly to their JavaScript
+ * equivalents
+ *
  * In the case of regular templates and optional templates, the piped-in value is
  * of whatever type the template argument value is. In the case of forward templates
  * the piped-in value is always a string
@@ -16,5 +21,5 @@
  */
 export type LocalizationPipeFunction = (
 	pipeValue: any,
-	...args: (string | number | boolean)[]
+	...args: any[]
 ) => any;

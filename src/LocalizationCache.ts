@@ -36,6 +36,14 @@ export class LocalizationCache
 		// Add base pipe functions
 		this._pipeCache.set('toUpperCase', (pipeVal: string) => pipeVal.toUpperCase());
 		this._pipeCache.set('toLowerCase', (pipeVal: string) => pipeVal.toLowerCase());
+		this._pipeCache.set('repeat', (pipeVal: string, n: number) => pipeVal.repeat(n));
+		this._pipeCache.set('padStart', (pipeVal: string, n: number, s: string = ' ') => pipeVal.padStart(n, s));
+		this._pipeCache.set('padEnd', (pipeVal: string, n: number, s: string = ' ') => pipeVal.padEnd(n, s));
+		this._pipeCache.set('trim', (pipeVal: string) => pipeVal.trim());
+		this._pipeCache.set('trimLeft', (pipeVal: string) => pipeVal.trimLeft());
+		this._pipeCache.set('trimRight', (pipeVal: string) => pipeVal.trimRight());
+		this._pipeCache.set('concat', (pipeVal: string, ...v: string[]) => pipeVal.concat(...v));
+		this._pipeCache.set('slice', (pipeVal: string, s: number, e: number) => pipeVal.slice(s, e));
 	}
 
 	/**

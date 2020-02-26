@@ -234,6 +234,9 @@ export class LocalizationStringBuilder
 
 	private _runPipes(child: LocalizationStringChildNode, value: string, pipes: TemplatePipe[]): any
 	{
+		if (typeof value === 'undefined')
+			return value;
+
 		let result: any = value;
 
 		for (const pipe of pipes)

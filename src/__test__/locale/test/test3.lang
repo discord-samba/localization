@@ -1,0 +1,14 @@
+[test12]
+foo{{ bar | toUpperCase }}baz
+
+[test13]
+foo{{? bar | toUpperCase }}baz
+
+[test14]
+foo{{> test12 | toUpperCase }}baz
+
+[test15]
+foo{{ bar | toUpperCase | toLowerCase }}baz
+
+[test16]
+foo{{ bar | repeat(3) }}baz

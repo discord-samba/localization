@@ -1,7 +1,6 @@
 import { LocalizationStringChunkKind } from '../types/LocalizationStringChunkKind';
 import { LocalizationStringParentKeyData } from '../types/LocalizationStringParentKeyData';
 import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
-import { LocalizationStringTemplateKind } from '../types/LocalizationStringTemplateKind';
 import { LocalizationStringTypeDeclarationMapping } from '../types/LocalizationStringTypeDeclarationMapping';
 import { NodeKindImplParentNode } from '../nodeKindImpl/NodeKindImplParentNode';
 import { NodeKindImplStringChunk } from '../nodeKindImpl/NodeKindImplStringChunk';
@@ -97,9 +96,7 @@ export class LocalizationParser
 						currentNode.addChild(LocalizationParser._consumeStringChunk(currentNode, reader));
 
 					else if (nextChunkKind === LocalizationStringChunkKind.Template)
-						currentNode.addChild(
-							TemplateParser.parse(LocalizationParser._peekTemplateKind(reader), currentNode, reader)
-						);
+						currentNode.addChild(TemplateParser.parse(currentNode, reader));
 
 					// Finalize this parent node when we hit the next parent key or EOF
 					else if (finalizerKinds.includes(nextChunkKind))
@@ -652,68 +649,5 @@ export class LocalizationParser
 			new NodeKindImplStringChunk(content, parent, line, column);
 
 		return node;
-	}
-
-	/**
-	 * Peeks the following chunk for its template kind
-	 */
-	private static _peekTemplateKind(reader: StringReader): LocalizationStringTemplateKind
-	{
-		let index: number = 0;
-		let kind: LocalizationStringTemplateKind = LocalizationStringTemplateKind.Invalid;
-
-		// Check for allowed template opening characters
-		// TODO: Return to ! when highlighting is fixed
-		// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
-		if (/[\w?>!\s]/.test(reader.peek(2)) === false)
-			return LocalizationStringTemplateKind.Invalid;
-
-		if (reader.peek(2) === '!')
-			kind = LocalizationStringTemplateKind.Script;
-
-		else if (reader.peek(2) === '>')
-			kind = LocalizationStringTemplateKind.Forward;
-
-		else if (reader.peek(2) === '?')
-			kind = LocalizationStringTemplateKind.Optional;
-
-		else
-			kind = LocalizationStringTemplateKind.Regular;
-
-		while (true)
-		{
-			if (reader.peekSegment(2, index) === '}}')
-			{
-				if (reader.peek(index - 1) === '!')
-				{
-					if (kind !== LocalizationStringTemplateKind.Script)
-						kind = LocalizationStringTemplateKind.Invalid;
-
-					break;
-				}
-
-				if (kind === LocalizationStringTemplateKind.Script)
-				{
-					if (reader.peek(index - 1) !== '!')
-						kind = LocalizationStringTemplateKind.Invalid;
-
-					break;
-				}
-
-				// TODO: Return to ! when highlighting is fixed
-				// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
-				if (/[\w\s]/.test(reader.peek(index - 1)) === false)
-					kind = LocalizationStringTemplateKind.Invalid;
-
-				break;
-			}
-
-			index++;
-
-			if (reader.eof(index))
-				return LocalizationStringTemplateKind.Invalid;
-		}
-
-		return kind;
 	}
 }

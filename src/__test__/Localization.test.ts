@@ -244,24 +244,51 @@ describe('Using argument type declarations', () =>
 
 describe('Using template pipes', () =>
 {
-	// TODO: Write template pipes tests
+	it('Should properly pipe values in regular templates', () =>
+	{
+		expect(Localization.resource('test', 'test12', { bar: 'bar' })).toBe('fooBARbaz');
+	});
+
+	it('Should properly pipe values in optional templates', () =>
+	{
+		expect(Localization.resource('test', 'test13')).toBe('foobaz');
+		expect(Localization.resource('test', 'test13', { bar: 'bar' })).toBe('fooBARbaz');
+	});
+
+	it('Should properly pipe forward template results', () =>
+	{
+		expect(Localization.resource('test', 'test14', { bar: 'bar' })).toBe('fooFOOBARBAZbaz');
+	});
+
+	it('Should properly pipe to multiple functions', () =>
+	{
+		expect(Localization.resource('test', 'test15', { bar: 'bar' })).toBe('foobarbaz');
+	});
+
+	it('Should properly pipe to functions accepting additional parameters', () =>
+	{
+		expect(Localization.resource('test', 'test16', { bar: 'bar' })).toBe('foobarbarbarbaz');
+	});
+
+	it('Should return expected results from base pipe functions', () =>
+	{
+		// TODO: Write test for all base pipe functions that haven't already been tested above
+	});
 });
 
 describe('Misc.', () =>
 {
 	it('Should provide a list of all keys for the given language/path', () =>
 	{
-		const values: string[][] = [
-			['test1', 'test2', 'test3', 'test4', 'test5', 'test6', 'test7', 'test8', 'test9', 'test10', 'test11'],
-			['test1', 'test2', 'test3', 'test4', 'test5', 'test6', 'test7'],
-			['test1', 'test2'],
-			['test1']
-		];
+		const genTestNames: (n: number) => string[] =
+			n => new Array(n)
+				.fill(0)
+				.map((_, i) => `test${i + 1}`);
 
-		expect(Localization.getKeys('test')).toStrictEqual(values[0]);
-		expect(Localization.getKeys(['test', 'args'])).toStrictEqual(values[1]);
-		expect(Localization.getKeys(['test', 'oneLine'])).toStrictEqual(values[2]);
-		expect(Localization.getKeys(['test', 'testCat', 'testSub'])).toStrictEqual(values[3]);
+		expect(Localization.getKeys('test')).toStrictEqual(genTestNames(16));
+		expect(Localization.getKeys(['test', 'args'])).toStrictEqual(genTestNames(7));
+		expect(Localization.getKeys(['test', 'oneLine'])).toStrictEqual(genTestNames(2));
+		expect(Localization.getKeys(['test', 'testCat', 'testSub'])).toStrictEqual(genTestNames(1));
 	});
 
 	it('Should provide an empty list of keys for nonexistant languages/paths', () =>
