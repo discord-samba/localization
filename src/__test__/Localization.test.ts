@@ -289,7 +289,8 @@ describe('Using template pipes', () =>
 				'foobarbaz',
 				'foobarbaz',
 				'foobarabcdbaz',
-				'foobabaz'
+				'foobabaz',
+				'foofoobarbaz'
 			].join('\n')
 		);
 	});

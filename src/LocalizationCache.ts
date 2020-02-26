@@ -44,6 +44,7 @@ export class LocalizationCache
 		this._pipeCache.set('trimRight', (pipeVal: string) => pipeVal.trimRight());
 		this._pipeCache.set('concat', (pipeVal: string, ...v: string[]) => pipeVal.concat(...v));
 		this._pipeCache.set('slice', (pipeVal: string, s: number, e: number) => pipeVal.slice(s, e));
+		this._pipeCache.set('prefix', (pipeVal: string, p: string) => p + pipeVal);
 	}
 
 	/**

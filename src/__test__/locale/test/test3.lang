@@ -39,3 +39,4 @@ foo{{ bar | padStart(10) | trimLeft }}baz
 foo{{ bar | padEnd(10) | trimRight }}baz
 foo{{ bar | concat('a', 'b', 'cd') }}baz
 foo{{ bar | slice(0, 2) }}baz
+foo{{ bar | prefix('foo') }}baz
