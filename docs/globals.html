@@ -2471,7 +2471,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Command<wbr>Info<wbr>Provider<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/077051b/src/types/CommandInfoProvider.ts#L6">types/CommandInfoProvider.ts:6</a></li>
+						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/67a877a/src/types/CommandInfoProvider.ts#L6">types/CommandInfoProvider.ts:6</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2526,7 +2526,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Localization<wbr>Pipe<wbr>Function<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/077051b/src/types/LocalizationPipeFunction.ts#L17">types/LocalizationPipeFunction.ts:17</a></li>
+						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/67a877a/src/types/LocalizationPipeFunction.ts#L22">types/LocalizationPipeFunction.ts:22</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2536,6 +2536,10 @@ img {
 							optionally accept any other static values of the types string, number, or boolean.
 						These additional values allow pipe functions to be configurable.</p>
 					</div>
+					<p><strong>Note:</strong> The typings specify any type for these additional parameters, but
+						the localization parser only supports string, number, and boolean primitives
+						in the localization file syntax, which translate directly to their JavaScript
+					equivalents</p>
 					<p>In the case of regular templates and optional templates, the piped-in value is
 						of whatever type the template argument value is. In the case of forward templates
 					the piped-in value is always a string</p>
@@ -2550,7 +2554,7 @@ img {
 					<ul class="tsd-parameters">
 						<li class="tsd-parameter-siganture">
 							<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
-								<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>pipeValue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+								<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>pipeValue<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, <span class="tsd-signature-symbol">...</span>args<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
 							</ul>
 							<ul class="tsd-descriptions">
 								<li class="tsd-description">
@@ -2560,7 +2564,7 @@ img {
 											<h5>pipeValue: <span class="tsd-signature-type">any</span></h5>
 										</li>
 										<li>
-											<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-symbol">(</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">true</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></h5>
+											<h5><span class="tsd-flag ts-flagRest">Rest</span> <span class="tsd-signature-symbol">...</span>args: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
 										</li>
 									</ul>
 									<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
@@ -2576,7 +2580,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Localization<wbr>Resource<wbr>Proxy&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/077051b/src/types/LocalizationResourceProxy.ts#L12">types/LocalizationResourceProxy.ts:12</a></li>
+						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/67a877a/src/types/LocalizationResourceProxy.ts#L12">types/LocalizationResourceProxy.ts:12</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2616,7 +2620,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/077051b/src/commandInfoProvider.ts#L10">commandInfoProvider.ts:10</a></li>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/67a877a/src/commandInfoProvider.ts#L10">commandInfoProvider.ts:10</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
