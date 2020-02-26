@@ -327,7 +327,7 @@ I have {{! args.qty === 1 ? 'an' : args.qty !}} apple{{! args.qty === 1 ? '' : '
 In the example above, you can see that resource arguments can be accessed within a script template via
 `args`. Given the following values to `qty`, you can expect the following results:
 
-|  arguments   |        result        |
+|  Arguments   |        Result        |
 | :----------: | :------------------: |
 | `{ qty: 1 }` | `'I have an apple!'` |
 | `{ qty: 2 }` | `'I have 2 apples!'` |
@@ -401,13 +401,104 @@ baz
 Given the example above and no arguments, you can expect the resource to return `'foo\nbaz'`. Just like
 with optional templates, this behavior can be circumvented by returning an empty string (`''`).
 
+### Transformer Functions (Pipes)
+Regular and Optional Template values, as well as Forward Template results can be piped into transformer
+functions in your Localization files using the pipe (`|`) operator:
+
+{% raw %}
+```
+[EXAMPLE_16]
+##! bar: String
+foo{{ bar | toUpperCase }}baz
+```
+{% endraw %}
+
+Given the example above and a template arguments object consisting of `{ bar: 'bar' }`, you can expect
+the resource to return `'fooBARbaz'`, as the template value for `bar` was piped into the `toUpperCase`
+transformer which, as you would expect, transformed `'bar'` to `'BAR'`.
+
+Transformer functions can also accept additional parameters like so:
+
+{% raw %}
+```
+[EXAMPLE_17]
+##! bar: String
+foo{{ bar | padStart(5, '@') | repeat(2) }}baz
+```
+{% endraw %}
+
+Given the example above and a template arguments object consisting of `{ bar: 'bar' }`, you can expect
+the resource to return `'foo@@bar@@barbaz'`. As you can see in the example, we're piping the value of
+`bar` into `padStart`, to which we are passing `5`, and `'@'` to pad to a length of `5` with `@`. We
+then pipe the result of this transformation into `repeat`, to which we are passing `2` to repeat the
+value twice.
+
+> **Note:** Additional values passed to transformer functions may only consist of `string`, `number`,
+> and `boolean`, as these are the only primitive literals that exist in the Localization "language".
+> Anything else (invalid identifiers, symbols, etc.) will be interpreted as a parser error of some kind.
+
+As you would expect, the transformers detailed here expect the piped-in value to be a string as they
+are analogous to the JavaScript `String` prototype functions of the same name. You can create your
+own transformer functions that you can pipe values into as well, which are not limited to receiving
+strictly strings for the piped-in value. You could write a transformer that sorts arrays of values,
+for example. Writing your own transformers is detailed in
+[*Using the Localization Module*](/localization/guides/writing_localization_files/).
+
+> **Tip:** Whitespace, including linebreaks and tabs, is allowed within templates. If you are piping
+> a template value through many transformers, you can freely use linebreaks, etc. to make it look cleaner.
+> For instance, `EXAMPLE_17` above could be restructured like so:
+> {% raw %}
+> ```
+> [EXAMPLE_17]
+> ##! bar: String
+> foo{{
+>     bar
+>     | padStart(5, '@')
+>     | repeat(2)
+> }}baz
+> ```
+> {% endraw %}
+
+#### Base Transformer Functions
+Transformer function syntax for the purposes of this section is as follows:
+```
+pipeValueType | ([argType[, argType? ...]]) -> returnType
+```
+
+Optional argument types are followed by `?` and repeatable/rest argument types are prefixed by `...`
+
+For example, for the function `padStart`, the function signature is
+```
+string | (number, string?) -> string
+```
+Meaning the pipe value type is expected to be `string`, it accepts a `number` (the pad length),
+optionally accepts a `string` (the fill string), and returns a `string`.
+
+The following is a list of all base transformer functions that can be use
+
+|   Transformer | Signature/Description                                                                                                                    |
+| ------------: | :--------------------------------------------------------------------------------------------------------------------------------------- |
+| `toUpperCase` | **`string | () -> string`** <br> *Uppercases the entire piped string value*                                                              |
+| `toLowerCase` | **`string | () -> string`** <br> *Lowercases the entire piped string value*                                                              |
+|      `repeat` | **`string | (number) -> string`** <br> *Repeats the piped string value `n` times*                                                        |
+|    `padStart` | **`string | (number, string?) -> string`** <br> *Pads the start of the piped string to the given length with the given filler, or `' '`* |
+|      `padEnd` | **`string | (number, string?) -> string`** <br> *Pads the end of the piped string to the given length with the given filler, or `' '`*   |
+|        `trim` | **`string | () -> string`** <br> *Trims whitespace at both ends of the piped string value*                                               |
+|    `trimLeft` | **`string | () -> string`** <br> *Trims whitespace on the left side of the piped string value*                                           |
+|   `trimRight` | **`string | () -> string`** <br> *Trims whitespace on the right side of the piped string value*                                          |
+|      `concat` | **`string | (...string) -> string`** <br> *Concatenates the given string values with the piped string value*                             |
+|       `slice` | **`string | (number?, number?) -> string`** <br> *Returns a slice of the piped string value*                                             |
+|      `prefix` | **`string | (string) -> string`** <br> *Prefixes the piped string value with the given string*                                           |
+
+> **Note:** This list may expand in the future.
+
 ## Escape Sequences
 All of the `.lang` format-specific syntax can be escaped with `\` if you need to use something that
 would otherwise be parsed as a resource key or template syntax. For example:
 
 {% raw %}
 ```
-[EXAMPLE_16]
+[EXAMPLE_18]
 \[NOT_A_KEY]
 \{{ Not a template }}
 ```
