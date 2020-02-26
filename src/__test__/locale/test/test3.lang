@@ -1,14 +1,41 @@
 [test12]
+## Test piping regular template values
 foo{{ bar | toUpperCase }}baz
 
 [test13]
+## Test piping optional template values
 foo{{? bar | toUpperCase }}baz
 
 [test14]
+## Test piping forward template results
 foo{{> test12 | toUpperCase }}baz
 
 [test15]
+## Test chaining pipes
 foo{{ bar | toUpperCase | toLowerCase }}baz
 
 [test16]
+## Test pipe functions with additional parameters
 foo{{ bar | repeat(3) }}baz
+
+[test17]
+## Test non existant pipe functions and also free formatting of templates
+foo{{
+	bar
+	| toUpperCase
+	| repeat(5)
+	| nonExistantFn
+}}baz
+
+[test18]
+## Test base pipe functions
+foo{{ bar | toUpperCase }}baz
+foo{{ bar | toLowerCase }}baz
+foo{{ bar | repeat(3) }}baz
+foo{{ bar | padStart(5, '@') }}baz
+foo{{ bar | padEnd(5, '@') }}baz
+foo{{ bar | padStart(10) | padEnd(20) | trim }}baz
+foo{{ bar | padStart(10) | trimLeft }}baz
+foo{{ bar | padEnd(10) | trimRight }}baz
+foo{{ bar | concat('a', 'b', 'cd') }}baz
+foo{{ bar | slice(0, 2) }}baz

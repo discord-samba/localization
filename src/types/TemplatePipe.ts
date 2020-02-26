@@ -4,8 +4,10 @@
  * passed to the pipe function at runtime after the piped-in value
  * @internal
  */
-export type TemplatePipe = [
-	string,
-	{ container: string, line: number, column: number },
-	...(string | number | boolean)[]
-];
+export interface TemplatePipe
+{
+	ident: string;
+	line: number;
+	column: number;
+	args: (string | number | boolean)[];
+}

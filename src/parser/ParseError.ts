@@ -28,7 +28,7 @@ export class ParseError
 
 		if (typeof fileContents !== 'undefined')
 		{
-			const lines: string[] = fileContents.split('\n');
+			const lines: string[] = fileContents.replace(/\t/g, ' ').split('\n');
 			const errorLine: string = ` ${line} | ${lines[line - 1]}`;
 			const arrow: string = '^'.padStart(line.toString().length + column + 4);
 

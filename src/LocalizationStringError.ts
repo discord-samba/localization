@@ -36,7 +36,7 @@ export class LocalizationStringError
 		if (typeof fileContents !== 'undefined')
 		{
 			stack.push(`${container}:${line}`);
-			const lines: string[] = fileContents.split('\n');
+			const lines: string[] = fileContents.replace(/\t/g, ' ').split('\n');
 			const errorLine: string = ` ${line} | ${lines[line - 1]}`;
 			const arrow: string = `${' '.repeat(line.toString().length + column + 3)}^`;
 			stack.push('');

@@ -148,12 +148,14 @@ export class TemplateParser
 				break;
 
 			const { line, column } = reader;
-			const templatePipe: TemplatePipe = [
-				reader.consumeUntil(/[^\w]/),
-				{ container: parent.container, line, column }
-			];
+			const templatePipe: TemplatePipe = {
+				ident: reader.consumeUntil(/[^\w]/),
+				args: [],
+				line,
+				column
+			};
 
-			if (!TemplateParser._validIdent.test(templatePipe[0]))
+			if (!TemplateParser._validIdent.test(templatePipe.ident))
 				throw new ParseError(
 					'Invalid pipe function identifier',
 					parent.container,
@@ -198,7 +200,7 @@ export class TemplateParser
 						);
 
 					const argVal: string | number | boolean = TemplateParser._parsePipeArgument(parent, reader);
-					templatePipe.push(argVal);
+					templatePipe.args.push(argVal);
 
 					// Discard surrounding whitespace
 					TemplateParser._discardWhitespace(reader);
