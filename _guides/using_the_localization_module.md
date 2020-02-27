@@ -253,3 +253,43 @@ all of your localization resources have been loaded. You will want to create dis
 specific categories and subcategories as well as they are all distinct subsets of the language you've
 loaded and proxies targeting them represent those subsets with regards to the resources the proxy
 has access to.
+
+## Providing Custom Transformers
+Transformer functions (detailed in
+[*Writing Localization Files*](/localization/guides/writing_localization_files/#transformer-functions-pipes))
+are useful for easily performing common transformations for your Localization data at runtime without
+having to drop down into Script Templates to manually manipulate the data every time or having to
+manipulate the data before passing it to the Localization resource.
+
+Samba comes with a handful of base transformers but writing your own transformers can be desirable.
+
+Providing custom transformers is done with the
+[`Localization.addPipeFunction()`](/localization/docs/classes/localization.html#addpipefunction) method.
+This method accepts a name string for the function which will be used in your Localization files to
+specify the function to pipe data into, and the
+[`LocalizationPipeFunction`](/localization/docs/globals.html#localizationpipefunction) itself which
+must accept at least one argument (the piped-in value) of any type, and optionally may receive additional
+arguments of types `string`, `number`, or `boolean` (the primitive type literals that exist within the
+Localization "language"). This function can return anything given that it is meant to transform the
+data in some way. Just be mindful of the return type of each function when chaining pipes.
+
+```js
+Localization.addPipeFunction('double', (pipeVal: number) => pipeVal * 2);
+Localization.addPipeFunction('square', (pipeVal: number) => pipeVal * pipeVal);
+```
+
+This creates two transformers, `double` and `square`, which can be used like so:
+{% raw %}
+```
+[EXAMPLE_4]
+##! bar: Number
+foo{{ bar | double }}baz
+foo{{ bar | square }}baz
+```
+{% endraw %}
+Using the example above and a template arguments object consisting of `{ bar: 5 }` you can expect the
+resource to return `'foo10baz\nfoo25baz'`.
+
+> **Note:** You should do your best to make sure your transformer functions are **pure**. Transformers
+> should not have any side-effects. They should predictably produce the same results every time when
+> given the same data.
