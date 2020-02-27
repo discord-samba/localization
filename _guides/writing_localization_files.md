@@ -495,19 +495,52 @@ foo{{ bar | padStart(10, '#') }}baz
 
 The following is a list of all base transformer functions that can be used:
 
-|   Transformer | Signature/Description                                                                                                                    |
-| ------------: | :--------------------------------------------------------------------------------------------------------------------------------------- |
-| `toUpperCase` | **`string | () -> string`** <br> *Uppercases the entire piped string value*                                                              |
-| `toLowerCase` | **`string | () -> string`** <br> *Lowercases the entire piped string value*                                                              |
-|      `repeat` | **`string | (number) -> string`** <br> *Repeats the piped string value `n` times*                                                        |
-|    `padStart` | **`string | (number, string?) -> string`** <br> *Pads the start of the piped string to the given length with the given filler, or `' '`* |
-|      `padEnd` | **`string | (number, string?) -> string`** <br> *Pads the end of the piped string to the given length with the given filler, or `' '`*   |
-|        `trim` | **`string | () -> string`** <br> *Trims whitespace at both ends of the piped string value*                                               |
-|    `trimLeft` | **`string | () -> string`** <br> *Trims whitespace on the left side of the piped string value*                                           |
-|   `trimRight` | **`string | () -> string`** <br> *Trims whitespace on the right side of the piped string value*                                          |
-|      `concat` | **`string | (...string) -> string`** <br> *Concatenates the given string values with the piped string value*                             |
-|       `slice` | **`string | (number?, number?) -> string`** <br> *Returns a slice of the piped string value*                                             |
-|      `prefix` | **`string | (string) -> string`** <br> *Prefixes the piped string value with the given string*                                           |
+|   Transformer | Signature/Description                                                                    |
+| ------------: | :--------------------------------------------------------------------------------------- |
+|     `default` | **`<T: string | number | boolean> any | (T) -> T`**                                      |
+|      &#x27A4; | *Returns given value if the piped value is undefined, otherwise returns the piped value* |
+|               |                                                                                          |
+| `toUpperCase` | **`string | () -> string`**                                                              |
+|      &#x27A4; | *Uppercases the entire piped string value*                                               |
+|               |                                                                                          |
+| `toLowerCase` | **`string | () -> string`**                                                              |
+|      &#x27A4; | *Lowercases the entire piped string value*                                               |
+|               |                                                                                          |
+|      `repeat` | **`string | (number) -> string`**                                                        |
+|      &#x27A4; | *Repeats the piped string value `n` times*                                               |
+|               |                                                                                          |
+|    `padStart` | **`string | (number, string?) -> string`**                                               |
+|      &#x27A4; | *Pads the start of the piped string to the given length with the given filler, or `' '`* |
+|               |                                                                                          |
+|      `padEnd` | **`string | (number, string?) -> string`**                                               |
+|      &#x27A4; | *Pads the end of the piped string to the given length with the given filler, or `' '`*   |
+|               |                                                                                          |
+|        `trim` | **`string | () -> string`**                                                              |
+|      &#x27A4; | *Trims whitespace at both ends of the piped string value*                                |
+|               |                                                                                          |
+|    `trimLeft` | **`string | () -> string`**                                                              |
+|      &#x27A4; | *Trims whitespace on the left side of the piped string value*                            |
+|               |                                                                                          |
+|   `trimRight` | **`string | () -> string`**                                                              |
+|      &#x27A4; | *Trims whitespace on the right side of the piped string value*                           |
+|               |                                                                                          |
+|      `concat` | **`string | (...string) -> string`**                                                     |
+|      &#x27A4; | *Concatenates the given string values with the piped string value*                       |
+|               |                                                                                          |
+|       `slice` | **`string | (number?, number?) -> string`**                                              |
+|      &#x27A4; | *Returns a slice of the piped string value*                                              |
+|               |                                                                                          |
+|      `prefix` | **`string | (string) -> string`**                                                        |
+|      &#x27A4; | *Prefixes the piped string value with the given string*                                  |
+|               |                                                                                          |
+|         `max` | **`number | (number) -> number`**                                                        |
+|      &#x27A4; | *Takes the maximum between the piped in number and the given number*                     |
+|               |                                                                                          |
+|         `min` | **`number | (number) -> number`**                                                        |
+|      &#x27A4; | *Takes the mininum between the piped in number and the given number*                     |
+|               |                                                                                          |
+|       `first` | **`<T> T[] | () -> T`**                                                                  |
+|      &#x27A4; | *Takes the first item from the piped array*                                              |
 
 > **Note:** This list may expand in the future.
 
