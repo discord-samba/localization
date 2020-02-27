@@ -402,8 +402,9 @@ Given the example above and no arguments, you can expect the resource to return 
 with optional templates, this behavior can be circumvented by returning an empty string (`''`).
 
 ### Transformer Functions (Pipes)
-Regular and Optional Template values, as well as Forward Template results can be piped into transformer
-functions in your Localization files using the pipe (`|`) operator:
+Transformer functions are functions that you can pipe data into to transform it in some way. Regular and
+Optional Template values, as well as Forward Template results can be piped into transformer functions in
+your Localization files using the pipe operator (`|`):
 
 {% raw %}
 ```
@@ -437,7 +438,7 @@ value twice.
 > and `boolean`, as these are the only primitive literals that exist in the Localization "language".
 > Anything else (invalid identifiers, symbols, etc.) will be interpreted as a parser error of some kind.
 
-As you would expect, the transformers detailed here expect the piped-in value to be a string as they
+As you would expect, the transformers detailed above expect the piped-in value to be a string as they
 are analogous to the JavaScript `String` prototype functions of the same name. You can create your
 own transformer functions that you can pipe values into as well, which are not limited to receiving
 strictly strings for the piped-in value. You could write a transformer that sorts arrays of values,
@@ -459,22 +460,39 @@ for example. Writing your own transformers is detailed in
 > ```
 > {% endraw %}
 
-#### Base Transformer Functions
-Transformer function syntax for the purposes of this section is as follows:
+#### Base Transformer List
+Transformer function signature syntax for the purposes of this section is as follows:
 ```
 pipeValueType | ([argType[, argType? ...]]) -> returnType
 ```
 
 Optional argument types are followed by `?` and repeatable/rest argument types are prefixed by `...`
 
-For example, for the function `padStart`, the function signature is
+For example, the function signature for `padStart` looks like:
 ```
 string | (number, string?) -> string
+|         |       |           |
+|         |       |           `--returnType
+|         |       `--optional argType 
+|         `--argType
+`--pipeValueType
 ```
-Meaning the pipe value type is expected to be `string`, it accepts a `number` (the pad length),
-optionally accepts a `string` (the fill string), and returns a `string`.
+This signature indicates the pipe value type is expected to be a `string`, it accepts a `number`
+(the pad length) for the first additional argument, optionally accepts a `string` (the fill string)
+for a second additional argument, and returns a value of type `string`. Usage of this function should
+look like this:
 
-The following is a list of all base transformer functions that can be use
+{% raw %}
+```
+[EXAMPLE_18]
+##! bar: String
+foo{{ bar | padStart(10) }}baz
+## Or with the optional fill string:
+foo{{ bar | padStart(10, '#') }}baz
+```
+{% endraw %}
+
+The following is a list of all base transformer functions that can be used:
 
 |   Transformer | Signature/Description                                                                                                                    |
 | ------------: | :--------------------------------------------------------------------------------------------------------------------------------------- |
@@ -498,7 +516,7 @@ would otherwise be parsed as a resource key or template syntax. For example:
 
 {% raw %}
 ```
-[EXAMPLE_18]
+[EXAMPLE_19]
 \[NOT_A_KEY]
 \{{ Not a template }}
 ```
