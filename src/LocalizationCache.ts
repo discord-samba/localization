@@ -34,6 +34,7 @@ export class LocalizationCache
 		this._pipeCache = new Map();
 
 		// Add base pipe functions
+		this._pipeCache.set('default', <T>(pipeVal: any, d: T): T => typeof pipeVal === 'undefined' ? d : pipeVal);
 		this._pipeCache.set('toUpperCase', (pipeVal: string) => pipeVal.toUpperCase());
 		this._pipeCache.set('toLowerCase', (pipeVal: string) => pipeVal.toLowerCase());
 		this._pipeCache.set('repeat', (pipeVal: string, n: number) => pipeVal.repeat(n));
@@ -45,6 +46,9 @@ export class LocalizationCache
 		this._pipeCache.set('concat', (pipeVal: string, ...v: string[]) => pipeVal.concat(...v));
 		this._pipeCache.set('slice', (pipeVal: string, s: number, e: number) => pipeVal.slice(s, e));
 		this._pipeCache.set('prefix', (pipeVal: string, p: string) => p + pipeVal);
+		this._pipeCache.set('max', (pipeVal: number, max: number) => Math.max(pipeVal, max));
+		this._pipeCache.set('min', (pipeVal: number, min: number) => Math.min(pipeVal, min));
+		this._pipeCache.set('first', <T>(pipeVal: T[]) => pipeVal[0]);
 	}
 
 	/**
