@@ -491,6 +491,7 @@ foo{{ bar | padStart(10) }}baz
 foo{{ bar | padStart(10, '#') }}baz
 ```
 {% endraw %}
+<br>
 
 The following is a list of all base transformer functions that can be used:
 
