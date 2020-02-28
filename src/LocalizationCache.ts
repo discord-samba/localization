@@ -34,7 +34,7 @@ export class LocalizationCache
 		this._pipeCache = new Map();
 
 		// Add base pipe functions
-		this._pipeCache.set('default', <T>(pipeVal: any, d: T): T => typeof pipeVal === 'undefined' ? d : pipeVal);
+		this._pipeCache.set('default', <T, U>(pipeVal: T, d: U): T | U => typeof pipeVal === 'undefined' ? d : pipeVal);
 		this._pipeCache.set('toUpperCase', (pipeVal: string) => pipeVal.toUpperCase());
 		this._pipeCache.set('toLowerCase', (pipeVal: string) => pipeVal.toLowerCase());
 		this._pipeCache.set('repeat', (pipeVal: string, n: number) => pipeVal.repeat(n));

@@ -497,50 +497,65 @@ The following is a list of all base transformer functions that can be used:
 
 |   Transformer | Signature/Description                                                                    |
 | ------------: | :--------------------------------------------------------------------------------------- |
-|     `default` | **`<T: string | number | boolean> any | (T) -> T`**                                      |
+|     `default` | **`<T: string | number | boolean, U> U | (T) -> U or T`**                                |
 |      &#x27A4; | *Returns given value if the piped value is undefined, otherwise returns the piped value* |
+|      &#x27A4; | {% raw %}`{{? foo | default(5) }}`{% endraw %}                                           |
 |               |                                                                                          |
 | `toUpperCase` | **`string | () -> string`**                                                              |
 |      &#x27A4; | *Uppercases the entire piped string value*                                               |
+|      &#x27A4; | {% raw %}`{{ foo | toUpperCase }}`{% endraw %}                                           |
 |               |                                                                                          |
 | `toLowerCase` | **`string | () -> string`**                                                              |
 |      &#x27A4; | *Lowercases the entire piped string value*                                               |
+|      &#x27A4; | {% raw %}`{{ foo | toLowerCase }}`{% endraw %}                                           |
 |               |                                                                                          |
 |      `repeat` | **`string | (number) -> string`**                                                        |
 |      &#x27A4; | *Repeats the piped string value `n` times*                                               |
+|      &#x27A4; | {% raw %}`{{ foo | repeat(5) }}`{% endraw %}                                             |
 |               |                                                                                          |
 |    `padStart` | **`string | (number, string?) -> string`**                                               |
 |      &#x27A4; | *Pads the start of the piped string to the given length with the given filler, or `' '`* |
+|      &#x27A4; | {% raw %}`{{ foo | padStart(5, "#") }}`{% endraw %}                                      |
 |               |                                                                                          |
 |      `padEnd` | **`string | (number, string?) -> string`**                                               |
 |      &#x27A4; | *Pads the end of the piped string to the given length with the given filler, or `' '`*   |
+|      &#x27A4; | {% raw %}`{{ foo | padEnd(10, "*") }}`{% endraw %}                                       |
 |               |                                                                                          |
 |        `trim` | **`string | () -> string`**                                                              |
 |      &#x27A4; | *Trims whitespace at both ends of the piped string value*                                |
+|      &#x27A4; | {% raw %}`{{ foo | trim }}`{% endraw %}                                                  |
 |               |                                                                                          |
 |    `trimLeft` | **`string | () -> string`**                                                              |
 |      &#x27A4; | *Trims whitespace on the left side of the piped string value*                            |
+|      &#x27A4; | {% raw %}`{{ foo | trimLeft }}`{% endraw %}                                              |
 |               |                                                                                          |
 |   `trimRight` | **`string | () -> string`**                                                              |
 |      &#x27A4; | *Trims whitespace on the right side of the piped string value*                           |
+|      &#x27A4; | {% raw %}`{{ foo | trimRight }}`{% endraw %}                                             |
 |               |                                                                                          |
 |      `concat` | **`string | (...string) -> string`**                                                     |
 |      &#x27A4; | *Concatenates the given string values with the piped string value*                       |
+|      &#x27A4; | {% raw %}`{{ foo | concat("bar", "baz") }}`{% endraw %}                                  |
 |               |                                                                                          |
 |       `slice` | **`string | (number?, number?) -> string`**                                              |
 |      &#x27A4; | *Returns a slice of the piped string value*                                              |
+|      &#x27A4; | {% raw %}`{{ foo | slice(1, -1) }}`{% endraw %}                                          |
 |               |                                                                                          |
 |      `prefix` | **`string | (string) -> string`**                                                        |
 |      &#x27A4; | *Prefixes the piped string value with the given string*                                  |
+|      &#x27A4; | {% raw %}`{{ foo | prefix('bar') }}`{% endraw %}                                         |
 |               |                                                                                          |
 |         `max` | **`number | (number) -> number`**                                                        |
 |      &#x27A4; | *Takes the maximum between the piped in number and the given number*                     |
+|      &#x27A4; | {% raw %}`{{ foo | max(100) }}`{% endraw %}                                              |
 |               |                                                                                          |
 |         `min` | **`number | (number) -> number`**                                                        |
 |      &#x27A4; | *Takes the mininum between the piped in number and the given number*                     |
+|      &#x27A4; | {% raw %}`{{ foo | min(10) }}`{% endraw %}                                               |
 |               |                                                                                          |
 |       `first` | **`<T> T[] | () -> T`**                                                                  |
 |      &#x27A4; | *Takes the first item from the piped array*                                              |
+|      &#x27A4; | {% raw %}`{{ foo | first }}`{% endraw %}                                                 |
 
 > **Note:** This list may expand in the future.
 
