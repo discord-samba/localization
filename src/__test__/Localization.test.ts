@@ -251,8 +251,9 @@ describe('Using template pipes', () =>
 
 	it('Should properly pipe values in optional templates', () =>
 	{
-		expect(Localization.resource('test', 'test13')).toBe('foobaz');
 		expect(Localization.resource('test', 'test13', { bar: 'bar' })).toBe('fooBARbaz');
+		expect(() => Localization.resource('test', 'test13'))
+			.toThrow('Cannot read property \'toUpperCase\' of undefined');
 	});
 
 	it('Should properly pipe forward template results', () =>
