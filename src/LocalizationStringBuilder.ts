@@ -241,9 +241,6 @@ export class LocalizationStringBuilder
 		_meta: LocalizationResrouceMetaData
 	): any
 	{
-		if (typeof value === 'undefined')
-			return value;
-
 		let result: any = value;
 
 		for (const pipe of pipes)

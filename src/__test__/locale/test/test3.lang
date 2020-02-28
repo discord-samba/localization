@@ -28,7 +28,8 @@ foo{{
 }}baz
 
 [test18]
-## Test base pipe functions
+## Test base pipe functions that accept strings
+##! bar: String
 foo{{ bar | toUpperCase }}baz
 foo{{ bar | toLowerCase }}baz
 foo{{ bar | repeat(3) }}baz
@@ -40,3 +41,11 @@ foo{{ bar | padEnd(10) | trimRight }}baz
 foo{{ bar | concat('a', 'b', 'cd') }}baz
 foo{{ bar | slice(0, 2) }}baz
 foo{{ bar | prefix('foo') }}baz
+
+[test19]
+## Test other base pipe functions
+##! bar?: String, baz: Number, boo: String[]
+foo{{? bar | default('baz') }}baz
+foo{{ baz | max(100) }}baz
+foo{{ baz | min(5) }}baz
+foo{{ boo | first }}baz

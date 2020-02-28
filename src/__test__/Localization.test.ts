@@ -276,7 +276,7 @@ describe('Using template pipes', () =>
 			.toThrow('LocalizationPipeFunction \'nonExistantFn\' does not exist');
 	});
 
-	it('Should return expected results from base pipe functions ', () =>
+	it('Should return expected results from base pipe functions', () =>
 	{
 		expect(Localization.resource('test', 'test18', { bar: 'bar' })).toBe(
 			[
@@ -293,6 +293,15 @@ describe('Using template pipes', () =>
 				'foofoobarbaz'
 			].join('\n')
 		);
+
+		expect(Localization.resource('test', 'test19', { baz: 50, boo: ['first', 'second'] })).toBe(
+			[
+				'foobazbaz',
+				'foo100baz',
+				'foo5baz',
+				'foofirstbaz'
+			].join('\n')
+		);
 	});
 });
 
@@ -305,7 +314,7 @@ describe('Misc.', () =>
 				.fill(0)
 				.map((_, i) => `test${i + 1}`);
 
-		expect(Localization.getKeys('test')).toStrictEqual(genTestNames(18));
+		expect(Localization.getKeys('test')).toStrictEqual(genTestNames(19));
 		expect(Localization.getKeys(['test', 'args'])).toStrictEqual(genTestNames(7));
 		expect(Localization.getKeys(['test', 'oneLine'])).toStrictEqual(genTestNames(2));
 		expect(Localization.getKeys(['test', 'testCat', 'testSub'])).toStrictEqual(genTestNames(1));

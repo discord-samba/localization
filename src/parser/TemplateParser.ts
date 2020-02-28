@@ -241,6 +241,7 @@ export class TemplateParser
 				// Append string character to result if it is escaped
 				if (reader.peek(1) === stringChar && reader.peek() === '\\')
 				{
+					// Discard escape char
 					reader.discard();
 					result += reader.consume();
 				}
