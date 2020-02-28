@@ -229,7 +229,6 @@ export class TemplateParser
 		const { line, column } = reader;
 		let result: string = '';
 		let stringChar: string = '';
-		let foundDecimal: boolean = false;
 
 		// Handle strings
 		if (/['"`]/.test(reader.peek()))
@@ -267,26 +266,14 @@ export class TemplateParser
 		}
 
 		// Handle numbers
-		if (/[\d.]/.test(reader.peek()))
+		if (/[-\d.]/.test(reader.peek()))
 		{
-			while (true)
-			{
-				if (reader.peek() === '.' && foundDecimal)
-					throw new ParseError(
-						'Invalid number',
-						parent.container,
-						line,
-						column
-					);
+			result = reader.consumeUntil(/[^-\d.]/);
 
-				if (reader.peek() === '.')
-					foundDecimal = true;
-
-				if (/[^\d.]/.test(reader.peek()))
-					break;
-
-				result += reader.consume();
-			}
+			// TODO: Return to ! when highlighting is fixed
+			// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
+			if (/^-?(?:\d+|\.\d+|\d+\.\d+)$/.test(result) === false)
+				throw new ParseError(`Invalid number '${result}'`, parent.container, line, column);
 
 			return Number.parseFloat(result);
 		}

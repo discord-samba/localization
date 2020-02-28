@@ -57,9 +57,36 @@ describe('TemplateParser template pipe tests', () =>
 
 	it('Should successfully parse pipe targets with extra arguments', () =>
 	{
-		expect(TemplateParser.parse(parent, new StringReader('{{ foo | bar(1, true, "three") }}'))).toEqual({
+		expect(TemplateParser.parse(parent, new StringReader('{{ foo | bar(1, 1) }}'))).toEqual({
 			...baseTemplateNode,
-			pipes: [{ ident: 'bar', line: 1, column: 10, args: [1, true, 'three'] }]
+			pipes: [{ ident: 'bar', line: 1, column: 10, args: [1, 1] }]
+		});
+	});
+
+	it('Should successfully parse valid number, string, and boolean literals', () =>
+	{
+		expect(TemplateParser.parse(
+			parent,
+			new StringReader('{{ foo | bar(1, .1, 0.1, 10.10, -1, -.1, -0.1, -10.10) }}')
+		)).toEqual({
+			...baseTemplateNode,
+			pipes: [{ ident: 'bar', line: 1, column: 10, args: [1, 0.1, 0.1, 10.10, -1, -0.1, -0.1, -10.10] }]
+		});
+
+		expect(TemplateParser.parse(
+			parent,
+			new StringReader('{{ foo | bar(\'foo\', "bar", `baz`, "boo \\"far\\" faz") }}')
+		)).toEqual({
+			...baseTemplateNode,
+			pipes: [{ ident: 'bar', line: 1, column: 10, args: ['foo', 'bar', 'baz', 'boo "far" faz'] }]
+		});
+
+		expect(TemplateParser.parse(
+			parent,
+			new StringReader('{{ foo | bar(true, false) }}')
+		)).toEqual({
+			...baseTemplateNode,
+			pipes: [{ ident: 'bar', line: 1, column: 10, args: [true, false] }]
 		});
 	});
 
@@ -122,7 +149,10 @@ describe('TemplateParser template pipe tests', () =>
 	it('Should error on invalid pipe argument numbers', () =>
 	{
 		expect(() => TemplateParser.parse(parent, new StringReader('{{ foo | bar(10.05.0 }}')))
-			.toThrow('Invalid number');
+			.toThrow('Invalid number \'10.05.0\'');
+
+		expect(() => TemplateParser.parse(parent, new StringReader('{{ foo | bar(10-05.0 }}')))
+			.toThrow('Invalid number \'10-05.0\'');
 	});
 
 	it('Should error when missing an expected value', () =>
