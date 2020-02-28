@@ -442,8 +442,8 @@ As you would expect, the transformers detailed above expect the piped-in value t
 are analogous to the JavaScript `String` prototype functions of the same name. You can create your
 own transformer functions that you can pipe values into as well, which are not limited to receiving
 strictly strings for the piped-in value. You could write a transformer that sorts arrays of values,
-for example. Writing your own transformers is detailed in
-[*Using the Localization Module*](/localization/guides/writing_localization_files/).
+for example. Supplying your own transformers is detailed in
+[*Using the Localization Module*](/localization/guides/using_the_localization_module/#providing-custom-transformers).
 
 > **Tip:** Whitespace, including linebreaks and tabs, is allowed within templates. If you are piping
 > a template value through many transformers, you can freely use linebreaks, etc. to make it look cleaner.
