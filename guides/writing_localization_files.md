@@ -463,7 +463,7 @@ for example. Supplying your own transformers is detailed in
 #### Base Transformer List
 Transformer function signature syntax for the purposes of this section is as follows:
 ```
-pipeValueType | ([argType[, argType? ...]]) -> returnType
+[<TypeParams[, ...]>] pipeValueType | ([argType[, argType? ...]]) -> resultType
 ```
 
 Optional argument types are followed by `?` and repeatable/rest argument types are prefixed by `...`
@@ -493,13 +493,20 @@ foo{{ bar | padStart(10, '#') }}baz
 {% endraw %}
 <br>
 
+> **Note:** An unfamiliar type you may see in the transformer signatures is `primitive`. This type
+> represents any of the valid primitive type literals that can be represented in the Localization
+> "language" (`string`, `number`, `boolean`). You may also notice `undef`. This is just shorthand
+> for `undefined`.
+
 The following is a list of all base transformer functions that can be used:
 
 {%
 	include pipe_signature.html
 	name="default"
-	signature="<T: string | number | boolean, U> U | (T) -> U or T"
-	description="Returns given value if the piped value is undefined, otherwise returns the piped value"
+	signature="<T: primitive, U: any> U | (T) -> U or T"
+	description="
+Returns the given value if the piped value is <code>undefined</code>, otherwise returns the piped value
+"
 	example="{{? foo | default(5) }}"
 %}
 
@@ -584,12 +591,16 @@ The following is a list of all base transformer functions that can be used:
 	example=example
 %}
 
-{% capture example %}{% raw %}{{ foo | slice(1, -1) }}{% endraw %}{% endcapture %}
+{% capture example %}{% raw %}
+## Slice the piped string, removing the first and last characters
+
+{{ foo | slice(1, -1) }}
+{% endraw %}{% endcapture %}
 {%
 	include pipe_signature.html
 	name="slice"
 	signature="string | (number?, number?) -> string"
-	description="Returns a slice of the piped string value"
+	description="Results in a slice of the piped string value"
 	example=example
 %}
 
@@ -624,8 +635,54 @@ The following is a list of all base transformer functions that can be used:
 {%
 	include pipe_signature.html
 	name="first"
-	signature="&lt;T&gt; T[] | () -> T"
-	description="Takes the first item from the piped array"
+	signature="&lt;T&gt; T[] | () -> T / undef"
+	description="
+Takes the first item from a piped array. Can result in <code>undefined</code> if the piped array is empty
+"
+	example=example
+%}
+
+{% capture example %}{% raw %}
+## Pick a property from an object by string key
+
+{{ foo | pick("bar") }}
+
+## Pick an item from an array by numerical index
+
+{{ foo | pick(5) }}
+{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="pick"
+	signature="object / array | (string / number) -> any / undef"
+	description="
+Picks a value from the piped object using the given key. Can also be used to pick an item from an array
+via numerical index. Can result in <code>undefined</code> if the key does not exist on a piped object
+or the index is out of range on a piped array.
+"
+	example=example
+%}
+
+{% capture example %}{% raw %}
+## Filter an array of objects for objects that have a "bar" property
+## which holds a truthy value, then take the first item from the array
+
+{{ foo | where("bar") | first }}
+
+## Filter an array of objects for those that have a "foo" property
+## that equals "bar", take the first item from the filtered array,
+## and pick the value of "baz" from the resulting object
+
+{{ foo | where("foo", "bar") | first | pick("baz") }}
+{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="where"
+	signature="&lt;T&gt; T[] | (string, primitive?) -> T[]"
+	description="
+Filters a piped array of objects by the given key. If the key on the object is truthy value (or
+matches the second argument if given) then the item will be kept in the resulting array
+"
 	example=example
 %}
 

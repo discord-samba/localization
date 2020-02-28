@@ -49,3 +49,13 @@ foo{{? bar | default('baz') }}baz
 foo{{ baz | max(100) }}baz
 foo{{ baz | min(5) }}baz
 foo{{ boo | first }}baz
+
+[test20]
+## Test pipe functions that accept objects/arrays of objects
+foo{{
+	bar
+	| where("foo", "bar")
+	| first
+	| pick("baz")
+}}baz
+foo{{ baz | pick(1) }}baz

@@ -49,6 +49,14 @@ export class LocalizationCache
 		this._pipeCache.set('max', (pipeVal: number, max: number) => Math.max(pipeVal, max));
 		this._pipeCache.set('min', (pipeVal: number, min: number) => Math.min(pipeVal, min));
 		this._pipeCache.set('first', <T>(pipeVal: T[]) => pipeVal[0]);
+
+		this._pipeCache.set('pick', (pipeVal: any, key: string) => pipeVal[key]);
+		this._pipeCache.set('where', (pipeVal: any[], key: string, val?: string) =>
+			pipeVal.filter(o =>
+				typeof val === 'undefined'
+					? Boolean(o[key])
+					: o[key] === val));
+
 	}
 
 	/**
