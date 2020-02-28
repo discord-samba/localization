@@ -593,7 +593,7 @@ The following is a list of all base transformer functions that can be used:
 	example=example
 %}
 
-{% capture example %}{% raw %}{{ foo | prefix('bar') }}{% endraw %}{% endcapture %}
+{% capture example %}{% raw %}{{ foo | prefix("bar") }}{% endraw %}{% endcapture %}
 {%
 	include pipe_signature.html
 	name="prefix"
