@@ -1,0 +1,18 @@
+<div class="tsd-panel">
+	<div class="tsd-name"><b>{{ include.name }}</b></div>
+	<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+		<li class="tsd-signature tsd-kind-icon"><b>{{ include.signature }}</b></li>
+	</ul>
+	<ul class="tsd-descriptions">
+		<li class="tsd-description">
+			<div>
+				<p>{{ include.description }}</p>
+				{% if include.example %}
+					<div class="highlight">
+						<pre class="highlight">{{ include.example }}</pre>
+					</div>
+				{% endif %}
+			</div>
+		</li>
+	</ul>
+</div>
