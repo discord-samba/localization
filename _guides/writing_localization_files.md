@@ -528,6 +528,15 @@ Returns the given value if the piped value is <code>undefined</code>, otherwise 
 	example=example
 %}
 
+{% capture example %}{% raw %}{{ foo | capitalize }}{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="capitalize"
+	signature="string | () -> string"
+	description="Capitalizes the first character of the piped string value"
+	example=example
+%}
+
 {% capture example %}{% raw %}{{ foo | repeat(5) }}{% endraw %}{% endcapture %}
 {%
 	include pipe_signature.html
@@ -618,7 +627,7 @@ Returns the given value if the piped value is <code>undefined</code>, otherwise 
 	include pipe_signature.html
 	name="max"
 	signature="number | (number) -> number"
-	description="Takes the mininum between the piped in number and the given number"
+	description="Ensures the piped number is <i>at most</i> the given number"
 	example=example
 %}
 
@@ -627,11 +636,28 @@ Returns the given value if the piped value is <code>undefined</code>, otherwise 
 	include pipe_signature.html
 	name="min"
 	signature="number | (number) -> number"
-	description="Takes the mininum between the piped in number and the given number"
+	description="Ensures the piped number is <i>at least</i> the given number"
 	example=example
 %}
 
-{% capture example %}{% raw %}{{ foo | first }}{% endraw %}{% endcapture %}
+{% capture example %}{% raw %}
+{{ foo | clamp(10, 20) }}
+## 30 | (10, 20) -> 20
+## 5  | (10, 20) -> 10
+## etc.
+{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="clamp"
+	signature="number | (number, number) -> number"
+	description="Clamps the piped number to the given range"
+	example=example
+%}
+
+{% capture example %}{% raw %}
+##! foo: String[]
+{{ foo | first }}
+{% endraw %}{% endcapture %}
 {%
 	include pipe_signature.html
 	name="first"
@@ -639,6 +665,30 @@ Returns the given value if the piped value is <code>undefined</code>, otherwise 
 	description="
 Takes the first item from a piped array. Can result in <code>undefined</code> if the piped array is empty
 "
+	example=example
+%}
+
+{% capture example %}{% raw %}
+##! foo: String[]
+{{ foo | join(";") }}
+{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="join"
+	signature="any[] | (string?) -> string"
+	description="Joins all items of a piped array with the given string. Defaults to <code>','</code>"
+	example=example
+%}
+
+{% capture example %}{% raw %}
+##! foo: Any[]
+{{ foo | unique }}
+{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="unique"
+	signature="&lt;T&gt; T[] | () -> T[]"
+	description="Creates an array of all unique items from the piped array"
 	example=example
 %}
 
@@ -682,6 +732,28 @@ or the index is out of range on a piped array.
 	description="
 Filters a piped array of objects by the given key. If the key on the object is truthy value (or
 matches the second argument if given) then the item will be kept in the resulting array
+"
+	example=example
+%}
+
+{% capture example %}{% raw %}
+##! foo: Any
+{{ foo | inspect }}
+
+## Or, with a specified depth
+
+{{ foo | inspect(3) }}
+{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="inspect"
+	signature="any | (number?) -> string"
+	description="
+Calls <a href=\"https://nodejs.org/api/util.html#util_util_inspect_object_options\"><code>util.inspect()</code></a>
+on the piped value. Can be given a number for inspection depth (defaults to 1).<br>
+<blockquote><b>Note:</b> This can be used for debugging complex values before piping them to transformers
+that simplify the value. Obviously this kind of debugging is better suited to the debugger in your editor
+but some might find this helpful.</blockquote>
 "
 	example=example
 %}
