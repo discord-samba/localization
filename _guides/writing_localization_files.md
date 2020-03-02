@@ -500,6 +500,41 @@ foo{{ bar | padStart(10, '#') }}baz
 
 The following is a list of all base transformer functions that can be used:
 
+{% capture example %}{% raw %}{{ foo | capitalize }}{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="capitalize"
+	signature="string | () -> string"
+	description="Capitalizes the first character of the piped string value"
+	example=example
+%}
+
+
+{% capture example %}{% raw %}
+{{ foo | clamp(10, 20) }}
+## 30 | (10, 20) -> 20
+## 5  | (10, 20) -> 10
+## etc.
+{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="clamp"
+	signature="number | (number, number) -> number"
+	description="Clamps the piped number to the given range"
+	example=example
+%}
+
+
+{% capture example %}{% raw %}{{ foo | concat("bar", "baz") }}{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="concat"
+	signature="string | (...string) -> string"
+	description="Concatenates the given string values with the piped string value"
+	example=example
+%}
+
+
 {%
 	include pipe_signature.html
 	name="default"
@@ -510,41 +545,86 @@ Returns the given value if the piped value is <code>undefined</code>, otherwise 
 	example="{{? foo | default(5) }}"
 %}
 
-{% capture example %}{% raw %}{{ foo | toUpperCase }}{% endraw %}{% endcapture %}
+
+{% capture example %}{% raw %}
+##! foo: String[]
+{{ foo | first }}
+{% endraw %}{% endcapture %}
 {%
 	include pipe_signature.html
-	name="toUpperCase"
-	signature="string | () -> string"
-	description="Uppercases the entire piped string value"
+	name="first"
+	signature="&lt;T&gt; T[] | () -> T / undef"
+	description="
+Takes the first item from a piped array. Can result in <code>undefined</code> if the piped array is empty
+"
 	example=example
 %}
 
-{% capture example %}{% raw %}{{ foo | toLowerCase }}{% endraw %}{% endcapture %}
+
+{% capture example %}{% raw %}
+##! foo: Any
+{{ foo | inspect }}
+
+## Or, with a specified depth
+
+{{ foo | inspect(3) }}
+{% endraw %}{% endcapture %}
 {%
 	include pipe_signature.html
-	name="toLowerCase"
-	signature="string | () -> string"
-	description="Lowercases the entire piped string value"
+	name="inspect"
+	signature="any | (number?) -> string"
+	description="
+Calls <a href=\"https://nodejs.org/api/util.html#util_util_inspect_object_options\"><code>util.inspect()</code></a>
+on the piped value. Can be given a number for inspection depth (defaults to 1).<br>
+<blockquote><b>Note:</b> This can be used for debugging complex values before piping them to transformers
+that simplify the value. Obviously this kind of debugging is better suited to the debugger in your editor
+but some might find this helpful.</blockquote>
+"
 	example=example
 %}
 
-{% capture example %}{% raw %}{{ foo | capitalize }}{% endraw %}{% endcapture %}
+
+{% capture example %}{% raw %}
+##! foo: String[]
+{{ foo | join(";") }}
+{% endraw %}{% endcapture %}
 {%
 	include pipe_signature.html
-	name="capitalize"
-	signature="string | () -> string"
-	description="Capitalizes the first character of the piped string value"
+	name="join"
+	signature="any[] | (string?) -> string"
+	description="Joins all items of a piped array with the given string. Defaults to <code>','</code>"
 	example=example
 %}
 
-{% capture example %}{% raw %}{{ foo | repeat(5) }}{% endraw %}{% endcapture %}
+{% capture example %}{% raw %}{{ foo | max(100) }}{% endraw %}{% endcapture %}
 {%
 	include pipe_signature.html
-	name="repeat"
-	signature="string | (number) -> string"
-	description="Repeats the piped string value <code>n</code> times"
+	name="max"
+	signature="number | (number) -> number"
+	description="Ensures the piped number is <i>at most</i> the given number"
 	example=example
 %}
+
+
+{% capture example %}{% raw %}{{ foo | min(10) }}{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="min"
+	signature="number | (number) -> number"
+	description="Ensures the piped number is <i>at least</i> the given number"
+	example=example
+%}
+
+
+{% capture example %}{% raw %}{{ foo | padEnd(5, "*") }}{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="padEnd"
+	signature="string | (number, string?) -> string"
+	description="Pads the end of the piped string to the given length with the given filler, or <code>' '</code>"
+	example=example
+%}
+
 
 {% capture example %}{% raw %}{{ foo | padStart(5, "#") }}{% endraw %}{% endcapture %}
 {%
@@ -555,14 +635,82 @@ Returns the given value if the piped value is <code>undefined</code>, otherwise 
 	example=example
 %}
 
-{% capture example %}{% raw %}{{ foo | padEnd(5, "*") }}{% endraw %}{% endcapture %}
+
+{% capture example %}{% raw %}
+## Pick a property from an object by string key
+
+{{ foo | pick("bar") }}
+
+## Pick an item from an array by numerical index
+
+{{ foo | pick(5) }}
+{% endraw %}{% endcapture %}
 {%
 	include pipe_signature.html
-	name="padEnd"
-	signature="string | (number, string?) -> string"
-	description="Pads the end of the piped string to the given length with the given filler, or <code>' '</code>"
+	name="pick"
+	signature="object / array | (string / number) -> any / undef"
+	description="
+Picks a value from the piped object using the given key. Can also be used to pick an item from an array
+via numerical index. Can result in <code>undefined</code> if the key does not exist on a piped object
+or the index is out of range on a piped array.
+"
 	example=example
 %}
+
+
+{% capture example %}{% raw %}{{ foo | prefix("bar") }}{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="prefix"
+	signature="string | (string) -> string"
+	description="Prefixes the piped string value with the given string"
+	example=example
+%}
+
+
+{% capture example %}{% raw %}{{ foo | repeat(5) }}{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="repeat"
+	signature="string | (number) -> string"
+	description="Repeats the piped string value <code>n</code> times"
+	example=example
+%}
+
+
+{% capture example %}{% raw %}
+## Slice the piped string, removing the first and last characters
+
+{{ foo | slice(1, -1) }}
+{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="slice"
+	signature="string | (number?, number?) -> string"
+	description="Results in a slice of the piped string value"
+	example=example
+%}
+
+
+{% capture example %}{% raw %}{{ foo | toLowerCase }}{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="toLowerCase"
+	signature="string | () -> string"
+	description="Lowercases the entire piped string value"
+	example=example
+%}
+
+
+{% capture example %}{% raw %}{{ foo | toUpperCase }}{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="toUpperCase"
+	signature="string | () -> string"
+	description="Uppercases the entire piped string value"
+	example=example
+%}
+
 
 {% capture example %}{% raw %}{{ foo | trim }}{% endraw %}{% endcapture %}
 {%
@@ -591,94 +739,6 @@ Returns the given value if the piped value is <code>undefined</code>, otherwise 
 	example=example
 %}
 
-{% capture example %}{% raw %}{{ foo | concat("bar", "baz") }}{% endraw %}{% endcapture %}
-{%
-	include pipe_signature.html
-	name="concat"
-	signature="string | (...string) -> string"
-	description="Concatenates the given string values with the piped string value"
-	example=example
-%}
-
-{% capture example %}{% raw %}
-## Slice the piped string, removing the first and last characters
-
-{{ foo | slice(1, -1) }}
-{% endraw %}{% endcapture %}
-{%
-	include pipe_signature.html
-	name="slice"
-	signature="string | (number?, number?) -> string"
-	description="Results in a slice of the piped string value"
-	example=example
-%}
-
-{% capture example %}{% raw %}{{ foo | prefix("bar") }}{% endraw %}{% endcapture %}
-{%
-	include pipe_signature.html
-	name="prefix"
-	signature="string | (string) -> string"
-	description="Prefixes the piped string value with the given string"
-	example=example
-%}
-
-{% capture example %}{% raw %}{{ foo | max(100) }}{% endraw %}{% endcapture %}
-{%
-	include pipe_signature.html
-	name="max"
-	signature="number | (number) -> number"
-	description="Ensures the piped number is <i>at most</i> the given number"
-	example=example
-%}
-
-{% capture example %}{% raw %}{{ foo | min(10) }}{% endraw %}{% endcapture %}
-{%
-	include pipe_signature.html
-	name="min"
-	signature="number | (number) -> number"
-	description="Ensures the piped number is <i>at least</i> the given number"
-	example=example
-%}
-
-{% capture example %}{% raw %}
-{{ foo | clamp(10, 20) }}
-## 30 | (10, 20) -> 20
-## 5  | (10, 20) -> 10
-## etc.
-{% endraw %}{% endcapture %}
-{%
-	include pipe_signature.html
-	name="clamp"
-	signature="number | (number, number) -> number"
-	description="Clamps the piped number to the given range"
-	example=example
-%}
-
-{% capture example %}{% raw %}
-##! foo: String[]
-{{ foo | first }}
-{% endraw %}{% endcapture %}
-{%
-	include pipe_signature.html
-	name="first"
-	signature="&lt;T&gt; T[] | () -> T / undef"
-	description="
-Takes the first item from a piped array. Can result in <code>undefined</code> if the piped array is empty
-"
-	example=example
-%}
-
-{% capture example %}{% raw %}
-##! foo: String[]
-{{ foo | join(";") }}
-{% endraw %}{% endcapture %}
-{%
-	include pipe_signature.html
-	name="join"
-	signature="any[] | (string?) -> string"
-	description="Joins all items of a piped array with the given string. Defaults to <code>','</code>"
-	example=example
-%}
 
 {% capture example %}{% raw %}
 ##! foo: Any[]
@@ -692,26 +752,6 @@ Takes the first item from a piped array. Can result in <code>undefined</code> if
 	example=example
 %}
 
-{% capture example %}{% raw %}
-## Pick a property from an object by string key
-
-{{ foo | pick("bar") }}
-
-## Pick an item from an array by numerical index
-
-{{ foo | pick(5) }}
-{% endraw %}{% endcapture %}
-{%
-	include pipe_signature.html
-	name="pick"
-	signature="object / array | (string / number) -> any / undef"
-	description="
-Picks a value from the piped object using the given key. Can also be used to pick an item from an array
-via numerical index. Can result in <code>undefined</code> if the key does not exist on a piped object
-or the index is out of range on a piped array.
-"
-	example=example
-%}
 
 {% capture example %}{% raw %}
 ## Filter an array of objects for objects that have a "bar" property
@@ -732,28 +772,6 @@ or the index is out of range on a piped array.
 	description="
 Filters a piped array of objects by the given key. If the key on the object is truthy value (or
 matches the second argument if given) then the item will be kept in the resulting array
-"
-	example=example
-%}
-
-{% capture example %}{% raw %}
-##! foo: Any
-{{ foo | inspect }}
-
-## Or, with a specified depth
-
-{{ foo | inspect(3) }}
-{% endraw %}{% endcapture %}
-{%
-	include pipe_signature.html
-	name="inspect"
-	signature="any | (number?) -> string"
-	description="
-Calls <a href=\"https://nodejs.org/api/util.html#util_util_inspect_object_options\"><code>util.inspect()</code></a>
-on the piped value. Can be given a number for inspection depth (defaults to 1).<br>
-<blockquote><b>Note:</b> This can be used for debugging complex values before piping them to transformers
-that simplify the value. Obviously this kind of debugging is better suited to the debugger in your editor
-but some might find this helpful.</blockquote>
 "
 	example=example
 %}
