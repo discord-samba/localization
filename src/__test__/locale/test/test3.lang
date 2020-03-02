@@ -8,54 +8,60 @@ foo{{? bar | toUpperCase }}baz
 
 [test14]
 ## Test piping forward template results
-foo{{> test12 | toUpperCase }}baz
+{{> test12 | toUpperCase }}
 
 [test15]
 ## Test chaining pipes
-foo{{ bar | toUpperCase | toLowerCase }}baz
+{{ foo | toUpperCase | toLowerCase }}
 
 [test16]
 ## Test pipe functions with additional parameters
-foo{{ bar | repeat(3) }}baz
+{{ foo | repeat(3) }}
 
 [test17]
 ## Test non existant pipe functions and also free formatting of templates
-foo{{
+{{
 	bar
 	| toUpperCase
 	| repeat(5)
 	| nonExistantFn
-}}baz
+}}
 
 [test18]
 ## Test base pipe functions that accept strings
-##! bar: String
-foo{{ bar | toUpperCase }}baz
-foo{{ bar | toLowerCase }}baz
-foo{{ bar | repeat(3) }}baz
-foo{{ bar | padStart(5, '@') }}baz
-foo{{ bar | padEnd(5, '@') }}baz
-foo{{ bar | padStart(10) | padEnd(20) | trim }}baz
-foo{{ bar | padStart(10) | trimLeft }}baz
-foo{{ bar | padEnd(10) | trimRight }}baz
-foo{{ bar | concat('a', 'b', 'cd') }}baz
-foo{{ bar | slice(0, 2) }}baz
-foo{{ bar | prefix('foo') }}baz
+##! foo: String
+{{ foo | toUpperCase }}
+{{ foo | toLowerCase }}
+{{ foo | capitalize }}
+{{ foo | repeat(3) }}
+{{ foo | padStart(5, '@') }}
+{{ foo | padEnd(5, '@') }}
+{{ foo | padStart(10) | padEnd(20) | trim }}
+{{ foo | padStart(10) | trimLeft }}
+{{ foo | padEnd(10) | trimRight }}
+{{ foo | concat('a', 'b', 'cd') }}
+{{ foo | slice(0, 2) }}
+{{ foo | prefix('foo') }}
 
 [test19]
 ## Test other base pipe functions
-##! bar?: String, baz: Number, boo: String[]
-foo{{? bar | default('baz') }}baz
-foo{{ baz | max(100) }}baz
-foo{{ baz | min(5) }}baz
-foo{{ boo | first }}baz
+##! foo?: String, bar: Number
+{{? foo | default('baz') }}
+{{ bar | max(10) }}
+{{ bar | min(50) }}
 
 [test20]
 ## Test pipe functions that accept objects/arrays of objects
-foo{{
-	bar
+{{
+	foo
 	| where("foo", "bar")
 	| first
 	| pick("baz")
-}}baz
-foo{{ baz | pick(1) }}baz
+}}
+{{ bar | pick(1) }}
+
+[test21]
+## Test pipe functions that accept general arrays
+{{ foo | first }}
+{{ foo | unique }}
+{{ foo | join('+') }}

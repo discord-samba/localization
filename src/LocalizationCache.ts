@@ -1,3 +1,4 @@
+import { inspect } from 'util';
 import { LocalizationPipeFunction } from './types/LocalizationPipeFunction';
 import { LocalizationResourceProxy } from './types/LocalizationResourceProxy';
 import { LocalizationStringBuilder } from './LocalizationStringBuilder';
@@ -37,6 +38,7 @@ export class LocalizationCache
 		this._pipeCache.set('default', <T, U>(pipeVal: T, d: U): T | U => typeof pipeVal === 'undefined' ? d : pipeVal);
 		this._pipeCache.set('toUpperCase', (pipeVal: string) => pipeVal.toUpperCase());
 		this._pipeCache.set('toLowerCase', (pipeVal: string) => pipeVal.toLowerCase());
+		this._pipeCache.set('capitalize', (pipeVal: string) => pipeVal[0].toUpperCase() + pipeVal.slice(1));
 		this._pipeCache.set('repeat', (pipeVal: string, n: number) => pipeVal.repeat(n));
 		this._pipeCache.set('padStart', (pipeVal: string, n: number, s: string = ' ') => pipeVal.padStart(n, s));
 		this._pipeCache.set('padEnd', (pipeVal: string, n: number, s: string = ' ') => pipeVal.padEnd(n, s));
@@ -46,10 +48,16 @@ export class LocalizationCache
 		this._pipeCache.set('concat', (pipeVal: string, ...v: string[]) => pipeVal.concat(...v));
 		this._pipeCache.set('slice', (pipeVal: string, s: number, e: number) => pipeVal.slice(s, e));
 		this._pipeCache.set('prefix', (pipeVal: string, p: string) => p + pipeVal);
-		this._pipeCache.set('max', (pipeVal: number, max: number) => Math.max(pipeVal, max));
-		this._pipeCache.set('min', (pipeVal: number, min: number) => Math.min(pipeVal, min));
-		this._pipeCache.set('first', <T>(pipeVal: T[]) => pipeVal[0]);
+		this._pipeCache.set('max', (pipeVal: number, max: number) => Math.min(pipeVal, max));
+		this._pipeCache.set('min', (pipeVal: number, min: number) => Math.max(pipeVal, min));
+		this._pipeCache.set('clamp', (pipeVal: number, min: number, max: number) =>
+			min < max
+				? Math.max(max, Math.min(min, pipeVal))
+				: Math.min(min, Math.max(max, pipeVal)));
 
+		this._pipeCache.set('first', <T>(pipeVal: T[]) => pipeVal[0]);
+		this._pipeCache.set('join', (pipeVal: any[], s: string = ',') => pipeVal.join(s));
+		this._pipeCache.set('unique', (pipeVal: any[]) => Array.from(new Set(pipeVal)));
 		this._pipeCache.set('pick', (pipeVal: any, key: string) => pipeVal[key]);
 		this._pipeCache.set('where', (pipeVal: any[], key: string, val?: string) =>
 			pipeVal.filter(o =>
@@ -57,6 +65,7 @@ export class LocalizationCache
 					? Boolean(o[key])
 					: o[key] === val));
 
+		this._pipeCache.set('inspect', (pipeVal: any, depth: number = 1) => inspect(pipeVal, { depth }));
 	}
 
 	/**

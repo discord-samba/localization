@@ -258,17 +258,17 @@ describe('Using template pipes', () =>
 
 	it('Should properly pipe forward template results', () =>
 	{
-		expect(Localization.resource('test', 'test14', { bar: 'bar' })).toBe('fooFOOBARBAZbaz');
+		expect(Localization.resource('test', 'test14', { bar: 'bar' })).toBe('FOOBARBAZ');
 	});
 
 	it('Should properly pipe to multiple functions', () =>
 	{
-		expect(Localization.resource('test', 'test15', { bar: 'bar' })).toBe('foobarbaz');
+		expect(Localization.resource('test', 'test15', { foo: 'bar' })).toBe('bar');
 	});
 
 	it('Should properly pipe to functions accepting additional parameters', () =>
 	{
-		expect(Localization.resource('test', 'test16', { bar: 'bar' })).toBe('foobarbarbarbaz');
+		expect(Localization.resource('test', 'test16', { foo: 'bar' })).toBe('barbarbar');
 	});
 
 	it('Should error for non-existant pipe functions', () =>
@@ -277,46 +277,52 @@ describe('Using template pipes', () =>
 			.toThrow('LocalizationPipeFunction \'nonExistantFn\' does not exist');
 	});
 
-	it('Should return expected results from base pipe functions ', () =>
+	it('Should return expected results from base pipe functions', () =>
 	{
-		expect(Localization.resource('test', 'test18', { bar: 'bar' })).toBe(
-			[
-				'fooBARbaz',
-				'foobarbaz',
-				'foobarbarbarbaz',
-				'foo@@barbaz',
-				'foobar@@baz',
-				'foobarbaz',
-				'foobarbaz',
-				'foobarbaz',
-				'foobarabcdbaz',
-				'foobabaz',
-				'foofoobarbaz'
-			].join('\n')
-		);
+		expect(Localization.resource(
+			'test', 'test18', { foo: 'bar' }
+		)).toBe([
+			'BAR',
+			'bar',
+			'Bar',
+			'barbarbar',
+			'@@bar',
+			'bar@@',
+			'bar',
+			'bar',
+			'bar',
+			'barabcd',
+			'ba',
+			'foobar'
+		].join('\n'));
 
-		expect(Localization.resource('test', 'test19', { baz: 50, boo: ['first', 'second'] })).toBe(
-			[
-				'foobazbaz',
-				'foo100baz',
-				'foo5baz',
-				'foofirstbaz'
-			].join('\n')
-		);
+		expect(Localization.resource(
+			'test', 'test19', { bar: 20 }
+		)).toBe([
+			'baz',
+			'10',
+			'50'
+		].join('\n'));
 
 		expect(Localization.resource(
 			'test',
 			'test20',
 			{
-				bar: [{ foo: 'baz', baz: 'far' }, { foo: 'bar', baz: 'boo' }],
-				baz: ['foo', 'bar', 'baz']
+				foo: [{ foo: 'baz', baz: 'far' }, { foo: 'bar', baz: 'boo' }],
+				bar: ['foo', 'bar', 'baz']
 			}
-		)).toBe(
-			[
-				'fooboobaz',
-				'foobarbaz'
-			].join('\n')
-		);
+		)).toBe([
+			'boo',
+			'bar'
+		].join('\n'));
+
+		expect(Localization.resource(
+			'test', 'test21', { foo: ['foo', 'bar', 'baz', 'baz'] }
+		)).toBe([
+			'foo',
+			'foo,bar,baz',
+			'foo+bar+baz+baz'
+		].join('\n'));
 	});
 });
 
@@ -329,7 +335,7 @@ describe('Misc.', () =>
 				.fill(0)
 				.map((_, i) => `test${i + 1}`);
 
-		expect(Localization.getKeys('test')).toStrictEqual(genTestNames(20));
+		expect(Localization.getKeys('test')).toStrictEqual(genTestNames(21));
 		expect(Localization.getKeys(['test', 'args'])).toStrictEqual(genTestNames(7));
 		expect(Localization.getKeys(['test', 'oneLine'])).toStrictEqual(genTestNames(2));
 		expect(Localization.getKeys(['test', 'testCat', 'testSub'])).toStrictEqual(genTestNames(1));
