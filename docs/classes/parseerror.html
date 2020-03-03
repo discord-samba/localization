@@ -2398,14 +2398,17 @@ img {
 				<li class=" tsd-kind-constructor tsd-parent-kind-class">
 					<a href="parseerror.html#constructor" class="tsd-kind-icon">constructor</a>
 				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class">
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 					<a href="parseerror.html#message" class="tsd-kind-icon">message</a>
 				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class">
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 					<a href="parseerror.html#name" class="tsd-kind-icon">name</a>
 				</li>
-				<li class=" tsd-kind-property tsd-parent-kind-class">
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 					<a href="parseerror.html#stack" class="tsd-kind-icon">stack</a>
+				</li>
+				<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a href="parseerror.html#error" class="tsd-kind-icon">Error</a>
 				</li>
 			</ul>
 		</li>
@@ -2439,7 +2442,12 @@ img {
 			<h3>Hierarchy</h3>
 			<ul class="tsd-hierarchy">
 				<li>
-					<span class="target">ParseError</span>
+					<a href="localizationstringerror.html#error" class="tsd-signature-type">Error</a>
+					<ul class="tsd-hierarchy">
+						<li>
+							<span class="target">ParseError</span>
+						</li>
+					</ul>
 				</li>
 			</ul>
 		</section>
@@ -2456,9 +2464,10 @@ img {
 					<section class="tsd-index-section ">
 						<h3>Properties</h3>
 						<ul class="tsd-index-list">
-							<li class="tsd-kind-property tsd-parent-kind-class"><a href="parseerror.html#message" class="tsd-kind-icon">message</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class"><a href="parseerror.html#name" class="tsd-kind-icon">name</a></li>
-							<li class="tsd-kind-property tsd-parent-kind-class"><a href="parseerror.html#stack" class="tsd-kind-icon">stack</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="parseerror.html#message" class="tsd-kind-icon">message</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="parseerror.html#name" class="tsd-kind-icon">name</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="parseerror.html#stack" class="tsd-kind-icon">stack</a></li>
+							<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="parseerror.html#error" class="tsd-kind-icon">Error</a></li>
 						</ul>
 					</section>
 				</div>
@@ -2476,7 +2485,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/3f923fa/src/parser/ParseError.ts#L10">parser/ParseError.ts:10</a></li>
+								<li>Defined in <a href="https://github.com/discord-samba/localization/blob/7d1b22b/src/parser/ParseError.ts#L10">src/parser/ParseError.ts:10</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
@@ -2501,33 +2510,46 @@ img {
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Properties</h2>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 				<a name="message" class="tsd-anchor"></a>
 				<h3>message</h3>
 				<div class="tsd-signature tsd-kind-icon">message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 				<aside class="tsd-sources">
+					<p>Overrides Error.message</p>
 					<ul>
-						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/3f923fa/src/parser/ParseError.ts#L9">parser/ParseError.ts:9</a></li>
+						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/7d1b22b/src/parser/ParseError.ts#L9">src/parser/ParseError.ts:9</a></li>
 					</ul>
 				</aside>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 				<a name="name" class="tsd-anchor"></a>
 				<h3>name</h3>
 				<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 				<aside class="tsd-sources">
+					<p>Overrides Error.name</p>
 					<ul>
-						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/3f923fa/src/parser/ParseError.ts#L8">parser/ParseError.ts:8</a></li>
+						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/7d1b22b/src/parser/ParseError.ts#L8">src/parser/ParseError.ts:8</a></li>
 					</ul>
 				</aside>
 			</section>
-			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
 				<a name="stack" class="tsd-anchor"></a>
 				<h3>stack</h3>
 				<div class="tsd-signature tsd-kind-icon">stack<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 				<aside class="tsd-sources">
+					<p>Overrides Error.stack</p>
 					<ul>
-						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/3f923fa/src/parser/ParseError.ts#L10">parser/ParseError.ts:10</a></li>
+						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/7d1b22b/src/parser/ParseError.ts#L10">src/parser/ParseError.ts:10</a></li>
+					</ul>
+				</aside>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+				<a name="error" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagStatic">Static</span> Error</h3>
+				<div class="tsd-signature tsd-kind-icon">Error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ErrorConstructor</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:984</li>
 					</ul>
 				</aside>
 			</section>
