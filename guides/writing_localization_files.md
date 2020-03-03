@@ -694,13 +694,34 @@ or the index is out of range on a piped array.
 {% capture example %}{% raw %}
 ## Slice the piped string, removing the first and last characters
 
+##! foo: String
 {{ foo | slice(1, -1) }}
+
+## Slice the piped array, skipping the first 2 items, and take the first
+## item from the resulting array
+
+##! bar: any[]
+{{ bar | slice(2) | first }}
 {% endraw %}{% endcapture %}
 {%
 	include pipe_signature.html
 	name="slice"
-	signature="string | (number?, number?) -> string"
-	description="Results in a slice of the piped string value"
+	signature="string / any[] | (number?, number?) -> string / any[]"
+	description="Returns a slice of the piped string or array value"
+	example=example
+%}
+
+
+{% capture example %}{% raw %}
+## Split the given string and pick the first item from the resulting array
+
+{{ foo | split(', ') | first }}
+{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="split"
+	signature="string | (string) -> string[]"
+	description="Splits the piped string value into an array of substrings by the given separator"
 	example=example
 %}
 
