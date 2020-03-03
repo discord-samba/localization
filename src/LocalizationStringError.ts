@@ -4,10 +4,10 @@ import { LocalizationResrouceMetaData } from './types/LocalizationResourceMetaDa
 /**
  * Represents a runtime error in the Localization engine
  */
-export class LocalizationStringError
+export class LocalizationStringError extends Error
 {
 	public readonly name: string;
-	public readonly message: string;
+	public readonly message!: string;
 	public readonly stack!: string;
 
 	public constructor(
@@ -18,13 +18,8 @@ export class LocalizationStringError
 		_meta: LocalizationResrouceMetaData = {}
 	)
 	{
+		super(message);
 		this.name = this.constructor.name;
-		this.message = message;
-
-		// We're not extending the base Error class to avoid local filesystem
-		// information being included in typedoc output, since it will link
-		// inherited things to their source in the local node_modules
-		Error.captureStackTrace(this);
 
 		let fileContents!: string;
 		try { fileContents = FS.readFileSync(container)?.toString(); }
