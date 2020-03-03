@@ -616,6 +616,16 @@ but some might find this helpful.</blockquote>
 %}
 
 
+{% capture example %}{% raw %}{{ foo | normalizeWhitespace }}{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="normalizeWhitespace"
+	signature="string | () -> string"
+	description="Replaces all consecutive whitespace with a single space"
+	example=example
+%}
+
+
 {% capture example %}{% raw %}{{ foo | padEnd(5, "*") }}{% endraw %}{% endcapture %}
 {%
 	include pipe_signature.html
