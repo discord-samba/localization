@@ -29,7 +29,7 @@ foo{{? bar | toUpperCase }}baz
 
 [test18]
 ## Test base pipe functions that accept strings
-##! foo: String
+##! foo: String, bar: string
 {{ foo | toUpperCase }}
 {{ foo | toLowerCase }}
 {{ foo | capitalize }}
@@ -42,6 +42,7 @@ foo{{? bar | toUpperCase }}baz
 {{ foo | concat('a', 'b', 'cd') }}
 {{ foo | slice(0, 2) }}
 {{ foo | prefix('foo') }}
+{{ bar | normalizeWhitespace }}
 
 [test19]
 ## Test other base pipe functions
