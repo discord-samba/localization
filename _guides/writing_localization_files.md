@@ -575,10 +575,13 @@ Takes the first item from a piped array. Can result in <code>undefined</code> if
 	signature="any | (number?) -> string"
 	description="
 Calls <a href=\"https://nodejs.org/api/util.html#util_util_inspect_object_options\"><code>util.inspect()</code></a>
-on the piped value. Can be given a number for inspection depth (defaults to 1).<br>
-<blockquote><b>Note:</b> This can be used for debugging complex values before piping them to transformers
-that simplify the value. Obviously this kind of debugging is better suited to the debugger in your editor
-but some might find this helpful.</blockquote>
+on the piped value. Can be given a number for inspection depth (defaults to 1).
+<br>
+<blockquote>
+<b>Note:</b> This can be used for debugging complex values before piping them to transformers that
+simplify the value. Obviously this kind of debugging is better suited to the debugger in your editor
+but some might find this helpful.
+</blockquote>
 "
 	example=example
 %}
@@ -621,7 +624,7 @@ but some might find this helpful.</blockquote>
 	include pipe_signature.html
 	name="normalizeWhitespace"
 	signature="string | () -> string"
-	description="Replaces all consecutive whitespace with a single space"
+	description="Replaces all consecutive whitespace with a single space and trims surrounding whitespace"
 	example=example
 %}
 
@@ -746,6 +749,41 @@ or the index is out of range on a piped array.
 	name="trimRight"
 	signature="string | () -> string"
 	description="Trims whitespace on the right side of the piped string value"
+	example=example
+%}
+
+
+{% capture example %}{% raw %}
+## Truncate to 10 characters with '...'
+
+{{ foo | truncate(10) }}
+
+## Truncate to 20 characters with custom filler
+
+{{ foo | truncate(20, '-snip-') }}
+
+## Truncate to 10 characters with no filler
+
+{{ foo | truncate(10, '') }}
+{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="truncate"
+	signature="string | (number, string?) -> string"
+	description="
+Truncates the piped string value to the given number of characters and appends the given fill string,
+or <code>'...'</code> if none is given. The string will not be truncated nor will the fill string be
+appended if the given length is longer than the total length of the piped string value.
+<br>
+<blockquote>
+<b>Note:</b> The fill string is included in the truncated length. If you want to truncate the string
+to 20 characters before the fill string then you must specify 20 + the length of the fill string, so
+23 for the default <code>'...'</code>.
+<br><br>
+The piped string can also be explicitly truncated to the specified length with no fill string simply
+by passing an empty string as the fill string.
+</blockquote>
+"
 	example=example
 %}
 
