@@ -294,7 +294,10 @@ describe('Using template pipes', () =>
 			'barabcd',
 			'ba',
 			'foobar',
-			'foo bar baz'
+			'foo bar baz',
+			'foo bar...',
+			'bar',
+			'foo b'
 		].join('\n'));
 
 		expect(Localization.resource(

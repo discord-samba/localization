@@ -43,6 +43,9 @@ foo{{? bar | toUpperCase }}baz
 {{ foo | slice(0, 2) }}
 {{ foo | prefix('foo') }}
 {{ bar | normalizeWhitespace }}
+{{ bar | normalizeWhitespace | truncate(10) }}
+{{ foo | truncate(10) }}
+{{ bar | normalizeWhitespace | truncate(5, '') }}
 
 [test19]
 ## Test other base pipe functions

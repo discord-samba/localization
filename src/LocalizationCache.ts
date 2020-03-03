@@ -50,8 +50,16 @@ export class LocalizationCache
 		this._pipeCache.set('concat', (pipeVal: string, ...v: string[]) => pipeVal.concat(...v));
 		this._pipeCache.set('slice', (pipeVal: string, s: number, e: number) => pipeVal.slice(s, e));
 		this._pipeCache.set('prefix', (pipeVal: string, p: string) => p + pipeVal);
+
+		this._pipeCache.set('truncate', (pipeVal: string, len: number, fill: string = '...') =>
+			len < pipeVal.length
+				? pipeVal.slice(0, Math.max(len - fill.length, 0)) + fill
+				: pipeVal);
+
 		this._pipeCache.set('normalizeWhitespace', (pipeVal: string) =>
-			pipeVal.replace(LocalizationCache._whitespace, ' '));
+			pipeVal
+				.replace(LocalizationCache._whitespace, ' ')
+				.trim());
 
 		this._pipeCache.set('max', (pipeVal: number, max: number) => Math.min(pipeVal, max));
 		this._pipeCache.set('min', (pipeVal: number, min: number) => Math.max(pipeVal, min));
