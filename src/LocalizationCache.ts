@@ -49,7 +49,7 @@ export class LocalizationCache
 		this._pipeCache.set('trimRight', (pipeVal: string) => pipeVal.trimRight());
 		this._pipeCache.set('concat', (pipeVal: string, ...v: string[]) => pipeVal.concat(...v));
 		this._pipeCache.set('slice', (pipeVal: string | any[], s?: number, e?: number) => pipeVal.slice(s, e));
-		this._pipeCache.set('prefix', (pipeVal: string, p: string) => p + pipeVal);
+		this._pipeCache.set('prepend', (pipeVal: string, p: string) => p + pipeVal);
 		this._pipeCache.set('split', (pipeVal: string, s: string) => pipeVal.split(s));
 
 		this._pipeCache.set('truncate', (pipeVal: string, len: number, fill: string = '...') =>

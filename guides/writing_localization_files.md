@@ -671,12 +671,12 @@ or the index is out of range on a piped array.
 %}
 
 
-{% capture example %}{% raw %}{{ foo | prefix("bar") }}{% endraw %}{% endcapture %}
+{% capture example %}{% raw %}{{ foo | prepend("bar") }}{% endraw %}{% endcapture %}
 {%
 	include pipe_signature.html
-	name="prefix"
+	name="prepend"
 	signature="string | (string) -> string"
-	description="Prefixes the piped string value with the given string"
+	description="Adds the given string to beginning of the piped string value"
 	example=example
 %}
 
