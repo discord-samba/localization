@@ -41,7 +41,7 @@ foo{{? bar | toUpperCase }}baz
 {{ foo | padEnd(10) | trimRight }}
 {{ foo | concat('a', 'b', 'cd') }}
 {{ foo | slice(0, 2) }}
-{{ foo | prefix('foo') }}
+{{ foo | prepend('foo') }}
 {{ bar | normalizeWhitespace }}
 {{ bar | normalizeWhitespace | truncate(10) }}
 {{ foo | truncate(10) }}
