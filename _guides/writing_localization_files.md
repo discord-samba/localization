@@ -500,12 +500,32 @@ foo{{ bar | padStart(10, '#') }}baz
 
 The following is a list of all base transformer functions that can be used:
 
+{% capture example %}{% raw %}{{ foo | add(10) }}{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="add"
+	signature="number | (number) -> number"
+	description="Adds the given number value to the piped number value"
+	example=example
+%}
+
+
 {% capture example %}{% raw %}{{ foo | capitalize }}{% endraw %}{% endcapture %}
 {%
 	include pipe_signature.html
 	name="capitalize"
 	signature="string | () -> string"
 	description="Capitalizes the first character of the piped string value"
+	example=example
+%}
+
+
+{% capture example %}{% raw %}{{ foo | ceil }}{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="ceil"
+	signature="number | () -> number"
+	description="Rounds the piped number value up to the nearest integer"
 	example=example
 %}
 
@@ -546,6 +566,16 @@ Returns the given value if the piped value is <code>undefined</code>, otherwise 
 %}
 
 
+{% capture example %}{% raw %}{{ foo | divideBy(2) }}{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="divideBy"
+	signature="number | (number) -> number"
+	description="Divides the piped number value by the given number value"
+	example=example
+%}
+
+
 {% capture example %}{% raw %}
 ##! foo: String[]
 {{ foo | first }}
@@ -557,6 +587,16 @@ Returns the given value if the piped value is <code>undefined</code>, otherwise 
 	description="
 Takes the first item from a piped array. Can result in <code>undefined</code> if the piped array is empty
 "
+	example=example
+%}
+
+
+{% capture example %}{% raw %}{{ foo | floor }}{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="floor"
+	signature="number | () -> number"
+	description="Rounds the piped number value down to the nearest integer"
 	example=example
 %}
 
@@ -599,6 +639,17 @@ but some might find this helpful.
 	example=example
 %}
 
+
+{% capture example %}{% raw %}{{ foo | length }}{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="length"
+	signature="string / any[] | () -> number"
+	description="Returns the length of the piped string or array value"
+	example=example
+%}
+
+
 {% capture example %}{% raw %}{{ foo | max(100) }}{% endraw %}{% endcapture %}
 {%
 	include pipe_signature.html
@@ -615,6 +666,16 @@ but some might find this helpful.
 	name="min"
 	signature="number | (number) -> number"
 	description="Ensures the piped number is <i>at least</i> the given number"
+	example=example
+%}
+
+
+{% capture example %}{% raw %}{{ foo | multiplyBy(10) }}{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="multiplyBy"
+	signature="number | (number) -> number"
+	description="Multiply the piped number value by the given number value"
 	example=example
 %}
 
@@ -788,6 +849,16 @@ backslashes. For example, if you want to pass a regex to replace a single digit,
 	name="split"
 	signature="string | (string) -> string[]"
 	description="Splits the piped string value into an array of substrings by the given separator"
+	example=example
+%}
+
+
+{% capture example %}{% raw %}{{ foo | subtract(10) }}{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="subtract"
+	signature="number | (number) -> number"
+	description="Subtracts the given number value from the piped number value"
 	example=example
 %}
 
