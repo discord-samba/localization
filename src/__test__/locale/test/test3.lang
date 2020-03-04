@@ -47,6 +47,8 @@ foo{{? bar | toUpperCase }}baz
 {{ foo | truncate(10) }}
 {{ bar | normalizeWhitespace | truncate(5, '') }}
 {{ bar | normalizeWhitespace | split(' ') | pick(1) }}
+{{ baz | replace('a', 'foo') }}
+{{ baz | replaceOnce('a', 'foo') }}
 
 [test19]
 ## Test other base pipe functions

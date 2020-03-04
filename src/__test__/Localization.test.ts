@@ -280,7 +280,7 @@ describe('Using template pipes', () =>
 	it('Should return expected results from base pipe functions', () =>
 	{
 		expect(Localization.resource(
-			'test', 'test18', { foo: 'bar', bar: 'foo        \n\n\nbar\n    \n    \nbaz' }
+			'test', 'test18', { foo: 'bar', bar: 'foo        \n\n\nbar\n    \n    \nbaz', baz: 'ababab' }
 		)).toBe([
 			'BAR',
 			'bar',
@@ -298,7 +298,9 @@ describe('Using template pipes', () =>
 			'foo bar...',
 			'bar',
 			'foo b',
-			'bar'
+			'bar',
+			'foobfoobfoob',
+			'foobabab'
 		].join('\n'));
 
 		expect(Localization.resource(

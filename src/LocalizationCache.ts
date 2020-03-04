@@ -51,6 +51,11 @@ export class LocalizationCache
 		this._pipeCache.set('slice', (pipeVal: string | any[], s?: number, e?: number) => pipeVal.slice(s, e));
 		this._pipeCache.set('prepend', (pipeVal: string, p: string) => p + pipeVal);
 		this._pipeCache.set('split', (pipeVal: string, s: string) => pipeVal.split(s));
+		this._pipeCache.set('replace', (pipeVal: string, r: string, val: string) =>
+			pipeVal.replace(new RegExp(r, 'g'), val));
+
+		this._pipeCache.set('replaceOnce', (pipeVal: string, r: string, val: string) =>
+			pipeVal.replace(new RegExp(r), val));
 
 		this._pipeCache.set('truncate', (pipeVal: string, len: number, fill: string = '...') =>
 			len < pipeVal.length

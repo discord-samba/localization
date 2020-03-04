@@ -692,6 +692,56 @@ or the index is out of range on a piped array.
 
 
 {% capture example %}{% raw %}
+## foo = 'foofoofoo'
+
+{{ foo | replace('foo', 'bar') }}
+
+## Results in 'barbarbar'
+{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="replace"
+	signature="string | (string, string) -> string"
+	description="
+Replaces all occurrences of the first given string with the second within the piped string value.
+
+<br>
+<blockquote>
+<b>Note:</b> The first argument is compiled as a regular expression with the global flag. This means
+you must treat the string as though you were using the JavaScript RegExp constructor, meaning you
+need to escape all backslashes. For example, if you want to pass a regex to replace all digits, you
+must use <code>'\\d'</code>. This also means to match a literal backslash you must use <code>'\\\\'</code>
+</blockquote>
+"
+	example=example
+%}
+
+{% capture example %}{% raw %}
+## foo = 'foofoofoo'
+
+{{ foo | replaceOnce('foo', 'bar') }}
+
+## Results in 'barfoofoo'
+{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="replaceOnce"
+	signature="string | (string, string) -> string"
+	description="
+Replaces the first occurrence of the first given string with the second within the piped string value.
+<br>
+<blockquote>
+<b>Note:</b> The first argument is compiled as a regular expression. This means you must treat the
+string as though you were using the JavaScript RegExp constructor, meaning you need to escape all
+backslashes. For example, if you want to pass a regex to replace a single digit, you must use
+<code>'\\d'</code>. This also means to match a literal backslash you must use <code>'\\\\'</code>
+</blockquote>
+"
+	example=example
+%}
+
+
+{% capture example %}{% raw %}
 ## foo = [{ foo: 'foo' }, { foo: 'bar' }, { foo: 'baz' }]
 
 {{ foo | select('foo') | join(', ') }}
