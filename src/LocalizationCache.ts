@@ -73,6 +73,7 @@ export class LocalizationCache
 		this._pipeCache.set('join', (pipeVal: any[], s: string = ',') => pipeVal.join(s));
 		this._pipeCache.set('unique', (pipeVal: any[]) => Array.from(new Set(pipeVal)));
 		this._pipeCache.set('pick', (pipeVal: any, key: string) => pipeVal[key]);
+		this._pipeCache.set('select', (pipeVal: any[], key: string) => pipeVal.map(v => v[key]));
 		this._pipeCache.set('where', (pipeVal: any[], key: string, val?: string) =>
 			pipeVal.filter(o =>
 				typeof val === 'undefined'

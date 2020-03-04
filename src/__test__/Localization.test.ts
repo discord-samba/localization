@@ -314,11 +314,13 @@ describe('Using template pipes', () =>
 			'test20',
 			{
 				foo: [{ foo: 'baz', baz: 'far' }, { foo: 'bar', baz: 'boo' }],
-				bar: ['foo', 'bar', 'baz']
+				bar: ['foo', 'bar', 'baz'],
+				baz: [{ bar: 'foo' }, { bar: 'bar' }, { bar: 'baz' }]
 			}
 		)).toBe([
 			'boo',
-			'bar'
+			'bar',
+			'foo, bar, baz'
 		].join('\n'));
 
 		expect(Localization.resource(

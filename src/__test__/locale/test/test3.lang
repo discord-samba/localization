@@ -57,13 +57,15 @@ foo{{? bar | toUpperCase }}baz
 
 [test20]
 ## Test pipe functions that accept objects/arrays of objects
+##! foo: any[], bar: string[], baz: any[]
 {{
 	foo
-	| where("foo", "bar")
+	| where('foo', 'bar')
 	| first
-	| pick("baz")
+	| pick('baz')
 }}
 {{ bar | pick(1) }}
+{{ baz | select('bar') | join(', ') }}
 
 [test21]
 ## Test pipe functions that accept general arrays
