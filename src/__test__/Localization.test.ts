@@ -304,11 +304,17 @@ describe('Using template pipes', () =>
 		].join('\n'));
 
 		expect(Localization.resource(
-			'test', 'test19', { bar: 20 }
+			'test', 'test19', { bar: 20, baz: 10.5 }
 		)).toBe([
 			'baz',
 			'10',
-			'50'
+			'50',
+			'30',
+			'18',
+			'100',
+			'10',
+			'10',
+			'11'
 		].join('\n'));
 
 		expect(Localization.resource(
@@ -330,7 +336,8 @@ describe('Using template pipes', () =>
 		)).toBe([
 			'foo',
 			'foo,bar,baz',
-			'foo+bar+baz+baz'
+			'foo+bar+baz+baz',
+			'4'
 		].join('\n'));
 	});
 });

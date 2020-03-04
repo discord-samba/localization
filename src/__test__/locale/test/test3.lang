@@ -52,10 +52,16 @@ foo{{? bar | toUpperCase }}baz
 
 [test19]
 ## Test other base pipe functions
-##! foo?: String, bar: Number
+##! foo?: String, bar: Number, baz: Number
 {{? foo | default('baz') }}
 {{ bar | max(10) }}
 {{ bar | min(50) }}
+{{ bar | add(10) }}
+{{ bar | subtract(2) }}
+{{ bar | multiplyBy(5) }}
+{{ bar | divideBy(2) }}
+{{ baz | floor }}
+{{ baz | ceil }}
 
 [test20]
 ## Test pipe functions that accept objects/arrays of objects
@@ -74,3 +80,4 @@ foo{{? bar | toUpperCase }}baz
 {{ foo | first }}
 {{ foo | unique }}
 {{ foo | join('+') }}
+{{ foo | length }}

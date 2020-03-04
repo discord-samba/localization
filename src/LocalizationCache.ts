@@ -51,6 +51,7 @@ export class LocalizationCache
 		this._pipeCache.set('slice', (pipeVal: string | any[], s?: number, e?: number) => pipeVal.slice(s, e));
 		this._pipeCache.set('prepend', (pipeVal: string, p: string) => p + pipeVal);
 		this._pipeCache.set('split', (pipeVal: string, s: string) => pipeVal.split(s));
+		this._pipeCache.set('length', (pipeVal: string | any[]) => pipeVal.length);
 		this._pipeCache.set('replace', (pipeVal: string, r: string, val: string) =>
 			pipeVal.replace(new RegExp(r, 'g'), val));
 
@@ -69,6 +70,12 @@ export class LocalizationCache
 
 		this._pipeCache.set('max', (pipeVal: number, max: number) => Math.min(pipeVal, max));
 		this._pipeCache.set('min', (pipeVal: number, min: number) => Math.max(pipeVal, min));
+		this._pipeCache.set('add', (pipeVal: number, n: number) => pipeVal + n);
+		this._pipeCache.set('subtract', (pipeVal: number, n: number) => pipeVal - n);
+		this._pipeCache.set('multiplyBy', (pipeVal: number, n: number) => pipeVal * n);
+		this._pipeCache.set('divideBy', (pipeVal: number, n: number) => pipeVal / n);
+		this._pipeCache.set('floor', (pipeVal: number) => Math.floor(pipeVal));
+		this._pipeCache.set('ceil', (pipeVal: number) => Math.ceil(pipeVal));
 		this._pipeCache.set('clamp', (pipeVal: number, min: number, max: number) =>
 			min < max
 				? Math.max(max, Math.min(min, pipeVal))
