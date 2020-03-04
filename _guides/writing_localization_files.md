@@ -692,6 +692,22 @@ or the index is out of range on a piped array.
 
 
 {% capture example %}{% raw %}
+## foo = [{ foo: 'foo' }, { foo: 'bar' }, { foo: 'baz' }]
+
+{{ foo | select('foo') | join(', ') }}
+
+## Results in 'foo, bar, baz'
+{% endraw %}{% endcapture %}
+{%
+	include pipe_signature.html
+	name="select"
+	signature="any[] | (string) -> any[]"
+	description="Maps the piped array of objects to the value of their property represented by the given key"
+	example=example
+%}
+
+
+{% capture example %}{% raw %}
 ## Slice the piped string, removing the first and last characters
 
 ##! foo: String
