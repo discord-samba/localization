@@ -768,10 +768,10 @@ Replaces all occurrences of the first given string with the second within the pi
 
 <br>
 <blockquote>
-<b>Note:</b> The first argument is compiled as a regular expression with the global flag. This means
-you must treat the string as though you were using the JavaScript RegExp constructor, meaning you
-need to escape all backslashes. For example, if you want to pass a regex to replace all digits, you
-must use <code>'\\d'</code>. This also means to match a literal backslash you must use <code>'\\\\'</code>
+<b>Note:</b> The first argument is compiled as a regular expression with the global flag. Because
+the Localization module does not treat `\` as a special character except in the raw text of a resource
+body you do not need to double-escape within the regular expression as you would in the JavaScript
+RegExp constructor.
 </blockquote>
 "
 	example=example
@@ -792,10 +792,9 @@ must use <code>'\\d'</code>. This also means to match a literal backslash you mu
 Replaces the first occurrence of the first given string with the second within the piped string value.
 <br>
 <blockquote>
-<b>Note:</b> The first argument is compiled as a regular expression. This means you must treat the
-string as though you were using the JavaScript RegExp constructor, meaning you need to escape all
-backslashes. For example, if you want to pass a regex to replace a single digit, you must use
-<code>'\\d'</code>. This also means to match a literal backslash you must use <code>'\\\\'</code>
+<b>Note:</b> The first argument is compiled as a regular expression. Because the Localization module
+does not treat `\` as a special character except in the raw text of a resource body you do not need
+to double-escape within the regular expression as you would in the JavaScript RegExp constructor.
 </blockquote>
 "
 	example=example
