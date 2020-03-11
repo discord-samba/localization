@@ -111,12 +111,22 @@ export class TemplateParser
 	}
 
 	/**
-	 * Discards whitespace until hitting a non-whitespace character
+	 * Discards whitespace until hitting a non-whitespace character.
+	 * If the non-whitespace character is a comment, discards that too
+	 * and recursively discards remaining whitespace
 	 */
-	private static _discardWhitespace(reader: StringReader): void
+	private static _discardWhitespaceAndComments(reader: StringReader): void
 	{
 		while (/\s/.test(reader.peek()))
 			reader.discard();
+
+		if (reader.peekSegment(2) === '##')
+		{
+			while (/[^\n]/.test(reader.peek()))
+				reader.discard();
+
+			TemplateParser._discardWhitespaceAndComments(reader);
+		}
 	}
 
 	/**
@@ -142,7 +152,7 @@ export class TemplateParser
 				reader.discard();
 
 			// Discard whitespace following pipe, if any
-			TemplateParser._discardWhitespace(reader);
+			TemplateParser._discardWhitespaceAndComments(reader);
 
 			if (reader.peekSegment(2) === '}}')
 				break;
@@ -163,7 +173,7 @@ export class TemplateParser
 					column
 				);
 
-			TemplateParser._discardWhitespace(reader);
+			TemplateParser._discardWhitespaceAndComments(reader);
 
 			// Handle pipe function arguments
 			if (reader.peek() === '(')
@@ -174,7 +184,7 @@ export class TemplateParser
 				while (true)
 				{
 					// Discard surrounding whirespace
-					TemplateParser._discardWhitespace(reader);
+					TemplateParser._discardWhitespaceAndComments(reader);
 
 					if (reader.peek() === ')')
 					{
@@ -195,7 +205,7 @@ export class TemplateParser
 					templatePipe.args.push(argVal);
 
 					// Discard surrounding whitespace
-					TemplateParser._discardWhitespace(reader);
+					TemplateParser._discardWhitespaceAndComments(reader);
 
 					// Discard comma if present
 					if (reader.peek() === ',')
@@ -206,7 +216,7 @@ export class TemplateParser
 			result.push(templatePipe);
 
 			// Discard ending whitespace
-			TemplateParser._discardWhitespace(reader);
+			TemplateParser._discardWhitespaceAndComments(reader);
 		}
 
 		return result;
@@ -224,7 +234,7 @@ export class TemplateParser
 	): string | number | boolean
 	{
 		// Discard whitespace
-		TemplateParser._discardWhitespace(reader);
+		TemplateParser._discardWhitespaceAndComments(reader);
 
 		const { line, column } = reader;
 		let result: string = '';
@@ -329,7 +339,7 @@ export class TemplateParser
 
 		// Discard the opening braces and whitespace
 		reader.discard(2);
-		TemplateParser._discardWhitespace(reader);
+		TemplateParser._discardWhitespaceAndComments(reader);
 
 		const key: string = reader.consumeUntil(/\s/);
 
@@ -342,7 +352,7 @@ export class TemplateParser
 			);
 
 		// Discard whitespace after key
-		TemplateParser._discardWhitespace(reader);
+		TemplateParser._discardWhitespaceAndComments(reader);
 
 		if (reader.peekSegment(2) !== '}}' && reader.peek() !== '|')
 			throw new ParseError(
@@ -378,7 +388,7 @@ export class TemplateParser
 
 		// Discard `{{?` and following whitespace
 		reader.discard(3);
-		TemplateParser._discardWhitespace(reader);
+		TemplateParser._discardWhitespaceAndComments(reader);
 
 		const key: string = reader.consumeUntil(/\s/);
 
@@ -391,7 +401,7 @@ export class TemplateParser
 			);
 
 		// Discard whitespace after key
-		TemplateParser._discardWhitespace(reader);
+		TemplateParser._discardWhitespaceAndComments(reader);
 
 		if (reader.peekSegment(2) !== '}}' && reader.peek() !== '|')
 			throw new ParseError(
@@ -427,7 +437,7 @@ export class TemplateParser
 
 		// Discard `{{>` and following whitespace
 		reader.discard(3);
-		TemplateParser._discardWhitespace(reader);
+		TemplateParser._discardWhitespaceAndComments(reader);
 
 		const key: string = reader.consumeUntil(/\s/);
 
@@ -440,7 +450,7 @@ export class TemplateParser
 			);
 
 		// Discard whitespace after key
-		TemplateParser._discardWhitespace(reader);
+		TemplateParser._discardWhitespaceAndComments(reader);
 
 		if (reader.peekSegment(2) !== '}}' && reader.peek() !== '|')
 			throw new ParseError(

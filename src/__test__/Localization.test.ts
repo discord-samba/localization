@@ -351,6 +351,20 @@ describe('Using template pipes', () =>
 	});
 });
 
+describe('Comments within templates', () =>
+{
+	it('Should allow line comments within multi-line templates', () =>
+	{
+		expect(Localization.resource(
+			'test', 'test22', { foo: 'FOO', bar: 'bar' }
+		)).toBe([
+			'Foo',
+			'FOOBARBAZ',
+			'bazbazbaz'
+		].join('\n'));
+	});
+});
+
 describe('Misc.', () =>
 {
 	it('Should provide a list of all keys for the given language/path', () =>
@@ -360,7 +374,7 @@ describe('Misc.', () =>
 				.fill(0)
 				.map((_, i) => `test${i + 1}`);
 
-		expect(Localization.getKeys('test')).toStrictEqual(genTestNames(21));
+		expect(Localization.getKeys('test')).toStrictEqual(genTestNames(22));
 		expect(Localization.getKeys(['test', 'args'])).toStrictEqual(genTestNames(7));
 		expect(Localization.getKeys(['test', 'oneLine'])).toStrictEqual(genTestNames(2));
 		expect(Localization.getKeys(['test', 'testCat', 'testSub'])).toStrictEqual(genTestNames(1));

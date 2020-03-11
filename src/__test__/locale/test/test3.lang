@@ -83,3 +83,27 @@ foo{{? bar | toUpperCase }}baz
 {{ foo | unique }}
 {{ foo | join('+') }}
 {{ foo | length }}
+
+[test22]
+## Test line comments within multi-line templates
+##! foo: String, bar: String, baz?: String
+{{
+	## independent comment
+
+	foo ## inline comment
+	| toLowerCase ## inline comment
+	## comment splitting two pipe lines
+	| capitalize
+
+	## independent comment
+}}
+{{>
+	## Argument bar should equal 'bar'
+	test12 ## fooBARbaz
+	| toUpperCase ## FOOBARBAZ
+}}
+{{?
+	baz ## baz won't be passed
+	| default('baz')
+	| repeat(3) ## bazbazbaz
+}}
