@@ -16,6 +16,13 @@ unclear by the end don't be afraid to ask for help on the [Discord server](#) if
 
 *TODO: Make a new Discord server and update the above link*
 
+## Tools and Utilities
+An official Samba Visual Studio Code extension to provide syntax highlighting for Samba Localization
+files is available on the Visual Studio Marketplace
+([samba-localization-highlighter](https://marketplace.visualstudio.com/items?itemName=discord-samba.samba-localization-highlighter)).
+You can also search `samba` in the extension interface within Visual Studio Code and install it directly
+from your editor.
+
 ## File Organization Basics
 The Localization module operates on top of files with the `.lang` format. These files consist of string
 resource declarations for any one arbitrary language (You will specify which language the file represents
