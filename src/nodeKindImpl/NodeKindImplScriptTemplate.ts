@@ -165,6 +165,9 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 
 		if (typeof result === 'undefined' && typeof this._impFn !== 'undefined')
 		{
+			// Remove the call key from the meta call chain if present because
+			// this means we tried the function already and didn't get a result
+			// so now we're trying the coerced return value
 			if (typeof _meta._cc !== 'undefined'
 				&& typeof _meta._ck !== 'undefined'
 				&& Array.isArray(_meta._cc)
