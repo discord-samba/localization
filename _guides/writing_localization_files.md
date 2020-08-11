@@ -327,7 +327,7 @@ Using the example from before, simple pluralization in English could look like:
 ```
 [EXAMPLE_11]
 ##! qty: Number
-I have {{! args.qty === 1 ? 'an' : args.qty !}} apple{{! args.qty === 1 ? '' : 's' }}!
+I have {{! args.qty === 1 ? 'an' : args.qty !}} apple{{! args.qty === 1 ? '' : 's' !}}!
 ```
 {% endraw %}
 
@@ -347,7 +347,7 @@ In the example above, you can see that resource arguments can be accessed within
 > ```
 > [EXAMPLE_11]
 > ##! qty: Number
-> I have {{! $qty === 1 ? 'an' : $qty !}} apple{{! $qty === 1 ? '' : 's' }}!
+> I have {{! $qty === 1 ? 'an' : $qty !}} apple{{! $qty === 1 ? '' : 's' !}}!
 > ```
 > {% endraw %}
 
@@ -562,14 +562,18 @@ The following is a list of all base transformer functions that can be used:
 %}
 
 
+{% capture example %}{% raw %}
+##! foo?: Number
+{{ foo | default(5) }}
+{% endraw %}{% endcapture %}
 {%
 	include pipe_signature.html
 	name="default"
-	signature="<T: primitive, U: any> U | (T) -> U or T"
+	signature="<T: primitive, U: any> U | (T) -> U / T"
 	description="
 Returns the given value if the piped value is <code>undefined</code>, otherwise returns the piped value
 "
-	example="{{? foo | default(5) }}"
+	example=example
 %}
 
 
@@ -776,7 +780,7 @@ Replaces all occurrences of the first given string with the second within the pi
 <br>
 <blockquote>
 <b>Note:</b> The first argument is compiled as a regular expression with the global flag. Because
-the Localization module does not treat `\` as a special character except in the raw text of a resource
+the Localization module does not treat <code>\</code> as a special character except in the raw text of a resource
 body you do not need to double-escape within the regular expression as you would in the JavaScript
 RegExp constructor.
 </blockquote>
@@ -800,7 +804,7 @@ Replaces the first occurrence of the first given string with the second within t
 <br>
 <blockquote>
 <b>Note:</b> The first argument is compiled as a regular expression. Because the Localization module
-does not treat `\` as a special character except in the raw text of a resource body you do not need
+does not treat <code>\</code> as a special character except in the raw text of a resource body you do not need
 to double-escape within the regular expression as you would in the JavaScript RegExp constructor.
 </blockquote>
 "
