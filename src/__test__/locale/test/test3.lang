@@ -7,7 +7,7 @@ foo{{ bar | toUpperCase }}baz
 foo{{? bar | toUpperCase }}baz
 
 [test14]
-## Test piping forward template results
+## Test piping include template results
 {{> test12 | toUpperCase }}
 
 [test15]

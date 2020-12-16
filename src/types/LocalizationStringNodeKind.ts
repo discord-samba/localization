@@ -9,6 +9,6 @@ export enum LocalizationStringNodeKind
 	StringChunk,
 	RegularTemplate,
 	OptionalTemplate,
-	ForwardTemplate,
+	IncludeTemplate,
 	ScriptTemplate
 }

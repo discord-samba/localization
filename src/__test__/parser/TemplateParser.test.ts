@@ -32,12 +32,12 @@ describe('TemplateParser template pipe tests', () =>
 		});
 	});
 
-	it('Should successfully parse forward template with pipe', () =>
+	it('Should successfully parse include template with pipe', () =>
 	{
 		expect(TemplateParser.parse(parent, new StringReader('{{> foo | bar }}'))).toEqual({
-			kind: LocalizationStringNodeKind.ForwardTemplate,
+			kind: LocalizationStringNodeKind.IncludeTemplate,
 			parent,
-			forwardKey: 'foo',
+			includeKey: 'foo',
 			line: 1,
 			column: 1,
 			pipes: [{ ident: 'bar', line: 1, column: 11, args: [] }]
@@ -110,9 +110,9 @@ describe('TemplateParser template pipe tests', () =>
 		});
 
 		expect(TemplateParser.parse(parent, new StringReader('{{>\n\tfoo\n\t| bar\n\t| baz\n}}'))).toEqual({
-			kind: LocalizationStringNodeKind.ForwardTemplate,
+			kind: LocalizationStringNodeKind.IncludeTemplate,
 			parent,
-			forwardKey: 'foo',
+			includeKey: 'foo',
 			line: 1,
 			column: 1,
 			pipes: [

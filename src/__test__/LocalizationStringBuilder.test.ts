@@ -44,7 +44,7 @@ describe('Building strings from abstract localization nodes', () =>
 		LocalizationCache.clear();
 	});
 
-	it('Should build a string with forward templates', () =>
+	it('Should build a string with include templates', () =>
 	{
 		LocalizationCache.set(p, 'test1', Parser.parse(c, '[test1]\nfoobarbaz')[0]);
 		LocalizationCache.set(p, 'test2', Parser.parse(c, '[test2]\nfoo{{> test1 }}baz')[0]);
@@ -71,7 +71,7 @@ describe('Building strings from abstract localization nodes', () =>
 	// effectively testing LocalizationStringBuilder in the end
 	describe('Localization resource build errors', () =>
 	{
-		it('Should error on recursive forward templates', () =>
+		it('Should error on recursive include templates', () =>
 		{
 			LocalizationCache.set(p, 'test1', Parser.parse(c, '[test1]\nfoo{{> test2 }}baz')[0]);
 			LocalizationCache.set(p, 'test2', Parser.parse(c, '[test2]\nfoo{{> test3 }}baz')[0]);

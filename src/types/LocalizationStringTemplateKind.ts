@@ -7,7 +7,7 @@ export enum LocalizationStringTemplateKind
 {
 	Regular,
 	Optional,
-	Forward,
+	Include,
 	Script,
 	Invalid
 }

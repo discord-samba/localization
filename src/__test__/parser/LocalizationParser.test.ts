@@ -25,7 +25,7 @@ describe('Parsing valid localization text', () =>
 		expect(() => Parser.parse(c, '[test]\nfoo{{? bar }}baz')).not.toThrow(ParseError);
 	});
 
-	it('Should parse forward templates', () =>
+	it('Should parse include templates', () =>
 	{
 		expect(() => Parser.parse(c, '[test]\nfoo{{> test2 }}bar')).not.toThrow(ParseError);
 	});

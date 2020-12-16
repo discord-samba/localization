@@ -7,7 +7,7 @@ import { LocalizationStringError } from './LocalizationStringError';
 import { LocalizationStringNodeKind } from './types/LocalizationStringNodeKind';
 import { LocalizationStringParentNode } from './interfaces/LocalizationStringParentNode';
 import { LocalizationStringTypeDeclaration } from './types/LocalizationStringTypeDeclaration';
-import { NodeKindImplForwardTemplate } from './nodeKindImpl/NodeKindImplForwardTemplate';
+import { NodeKindImplIncludeTemplate } from './nodeKindImpl/NodeKindImplIncludeTemplate';
 import { NodeKindImplOptionalTemplate } from './nodeKindImpl/NodeKindImplOptionalTemplate';
 import { NodeKindImplRegularTemplate } from './nodeKindImpl/NodeKindImplRegularTemplate';
 import { NodeKindImplScriptTemplate } from './nodeKindImpl/NodeKindImplScriptTemplate';
@@ -67,13 +67,13 @@ export class LocalizationStringBuilder
 					results.push(this._makeResult(child.kind, templateArgValue));
 					break;
 
-				case LocalizationStringNodeKind.ForwardTemplate:
-					this._childIs<NodeKindImplForwardTemplate>(child);
+				case LocalizationStringNodeKind.IncludeTemplate:
+					this._childIs<NodeKindImplIncludeTemplate>(child);
 
-					if (!Localization.resourceExists(path, child.forwardKey))
+					if (!Localization.resourceExists(path, child.includeKey))
 						throw new LocalizationStringError(
 							[
-								`Localization string key '${child.forwardKey}'`,
+								`Localization string key '${child.includeKey}'`,
 								`does not exist for language '${this._language}'`
 							].join(' '),
 							this.node.container,
@@ -84,7 +84,7 @@ export class LocalizationStringBuilder
 
 					// Recursion protection. Will work as long as _meta is forwarded.
 					// If not, may the Node gods have mercy on your code
-					if (_meta._cc?.includes(child.forwardKey))
+					if (_meta._cc?.includes(child.includeKey))
 						throw new LocalizationStringError(
 							'A localization resource cannot refer to any previous parent',
 							this.node.container,
@@ -93,13 +93,13 @@ export class LocalizationStringBuilder
 							_meta
 						);
 
-					const forwardTemplateValue: any = this._runPipes(
-						(Localization.resource as any)(path, child.forwardKey, args, _meta),
+					const includeTemplateValue: any = this._runPipes(
+						(Localization.resource as any)(path, child.includeKey, args, _meta),
 						child.pipes,
 						_meta
 					);
 
-					results.push(this._makeResult(child.kind, forwardTemplateValue));
+					results.push(this._makeResult(child.kind, includeTemplateValue));
 
 					break;
 

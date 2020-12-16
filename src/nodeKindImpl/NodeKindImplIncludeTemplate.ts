@@ -9,25 +9,25 @@ import { TemplatePipe } from '../types/TemplatePipe';
  * is loaded at runtime
  * @internal
  */
-export class NodeKindImplForwardTemplate implements LocalizationStringChildNode
+export class NodeKindImplIncludeTemplate implements LocalizationStringChildNode
 {
-	public readonly kind: LocalizationStringNodeKind = LocalizationStringNodeKind.ForwardTemplate;
+	public readonly kind: LocalizationStringNodeKind = LocalizationStringNodeKind.IncludeTemplate;
 
-	public readonly forwardKey: string;
+	public readonly includeKey: string;
 	public readonly parent: LocalizationStringParentNode;
 	public readonly line: number;
 	public readonly column: number;
 	public readonly pipes: TemplatePipe[];
 
 	public constructor(
-		forwardKey: string,
+		includeKey: string,
 		parent: LocalizationStringParentNode,
 		line: number,
 		column: number,
 		pipes: TemplatePipe[]
 	)
 	{
-		this.forwardKey = forwardKey;
+		this.includeKey = includeKey;
 		this.parent = parent;
 		this.line = line;
 		this.column = column;

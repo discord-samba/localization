@@ -1,7 +1,7 @@
 import { LocalizationStringChildNode } from '../interfaces/LocalizationStringChildNode';
 import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 import { LocalizationStringTemplateKind } from '../types/LocalizationStringTemplateKind';
-import { NodeKindImplForwardTemplate } from '../nodeKindImpl/NodeKindImplForwardTemplate';
+import { NodeKindImplIncludeTemplate } from '../nodeKindImpl/NodeKindImplIncludeTemplate';
 import { NodeKindImplOptionalTemplate } from '../nodeKindImpl/NodeKindImplOptionalTemplate';
 import { NodeKindImplRegularTemplate } from '../nodeKindImpl/NodeKindImplRegularTemplate';
 import { NodeKindImplScriptTemplate } from '../nodeKindImpl/NodeKindImplScriptTemplate';
@@ -31,8 +31,8 @@ export class TemplateParser
 			case LocalizationStringTemplateKind.Optional:
 				return TemplateParser._consumeOptionalTemplate(parent, reader);
 
-			case LocalizationStringTemplateKind.Forward:
-				return TemplateParser._consumeForwardTemplate(parent, reader);
+			case LocalizationStringTemplateKind.Include:
+				return TemplateParser._consumeIncludeTemplate(parent, reader);
 
 			case LocalizationStringTemplateKind.Script:
 				return TemplateParser._consumeScriptTemplate(parent, reader);
@@ -65,7 +65,7 @@ export class TemplateParser
 			kind = LocalizationStringTemplateKind.Script;
 
 		else if (reader.peek(2) === '>')
-			kind = LocalizationStringTemplateKind.Forward;
+			kind = LocalizationStringTemplateKind.Include;
 
 		else if (reader.peek(2) === '?')
 			kind = LocalizationStringTemplateKind.Optional;
@@ -424,13 +424,13 @@ export class TemplateParser
 	}
 
 	/**
-	 * Consumes a forward template from the input, including its content and braces,
+	 * Consumes a include template from the input, including its content and braces,
 	 * and returns it
 	 */
-	private static _consumeForwardTemplate(
+	private static _consumeIncludeTemplate(
 		parent: LocalizationStringParentNode,
 		reader: StringReader
-	): NodeKindImplForwardTemplate
+	): NodeKindImplIncludeTemplate
 	{
 		let pipes!: TemplatePipe[];
 		const { line, column } = reader;
@@ -443,7 +443,7 @@ export class TemplateParser
 
 		if (!TemplateParser._validIdent.test(key))
 			throw new ParseError(
-				'Invalid forward template identifier',
+				'Invalid include template identifier',
 				parent.container,
 				line,
 				column
@@ -466,8 +466,8 @@ export class TemplateParser
 		// Discard closing braces
 		reader.discard(2);
 
-		const node: NodeKindImplForwardTemplate =
-			new NodeKindImplForwardTemplate(key, parent, line, column, pipes ?? []);
+		const node: NodeKindImplIncludeTemplate =
+			new NodeKindImplIncludeTemplate(key, parent, line, column, pipes ?? []);
 
 		return node;
 	}

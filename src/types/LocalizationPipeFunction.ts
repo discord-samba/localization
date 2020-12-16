@@ -10,8 +10,9 @@
  * equivalents
  *
  * In the case of regular templates and optional templates, the piped-in value is
- * of whatever type the template argument value is. In the case of forward templates
- * the piped-in value is always a string
+ * of whatever type the template argument value is. In the case of include templates
+ * the piped-in value is always a string, given that the value is an included resource
+ * which is a fully-built localization string
  *
  * Realistically pipe functions can transform the piped in data in many ways and
  * can accept piped-in data of any type, given anything can be passed to Localization

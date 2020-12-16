@@ -56,7 +56,7 @@ describe('Loading string resources', () =>
 		expect(proxy.test4({ bar: '' })).toBe('foo\n\nbaz');
 	});
 
-	it('Should handle forward templates', () =>
+	it('Should handle include templates', () =>
 	{
 		expect(Localization.resource('test', 'test5', { bar: 'bar' })).toBe('foofoobarbazbaz');
 		expect(Localization.resource('test', 'test5')).toBe('foofoobazbaz');
@@ -92,7 +92,7 @@ describe('Loading string resources', () =>
 		expect(proxy.test9({ bar: '' })).toBe('foo\n\nbaz');
 	});
 
-	it('Should error when given non-existant forward template key', () =>
+	it('Should error when given non-existant include template key', () =>
 	{
 		const fn: Function = () => proxy.test10();
 		expect(fn).toThrow(LocalizationStringError);
@@ -256,7 +256,7 @@ describe('Using template pipes', () =>
 			.toThrow('Cannot read property \'toUpperCase\' of undefined');
 	});
 
-	it('Should properly pipe forward template results', () =>
+	it('Should properly pipe include template results', () =>
 	{
 		expect(Localization.resource('test', 'test14', { bar: 'bar' })).toBe('FOOBARBAZ');
 	});

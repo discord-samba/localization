@@ -35,7 +35,7 @@ foo
 baz
 
 [test5]
-## Test forward template and forward template args forwarding
+## Test include template and include template args forwarding
 ## Should equal: foofoobarbazbaz
 ## When bar === 'bar'
 ## Should equal: foofoobazbaz
