@@ -127,7 +127,7 @@ to use within your localization resources:
 
  - Regular
  - Optional
- - Forward
+ - Include
  - Script
 
 The different template kinds will be discussed later.
@@ -268,10 +268,10 @@ baz
 In the example above, `EXAMPLE_5` will return `'foo\nbaz'`, whereas `EXAMPLE_6` will return `'foo\n \nbaz'`.
 The empty line can, however, be preserved if the value of the optional argument is an empty string (`''`).
 
-### Forward Templates
+### Include Templates
 > Syntax: {% raw %}`{{> resource_name }}`{% endraw %}
 
-Forward Templates provide an easy way for a localization resource to embed another localization resource.
+Include Templates provide an easy way for a localization resource to embed another localization resource.
 
 {% raw %}
 ```
@@ -284,10 +284,10 @@ foo{{> EXAMPLE_7 }}baz
 {% endraw %}
 
 Using the example above, calling resource `EXAMPLE_8` will return `'foobarbaz'`, because `EXAMPLE_7` has
-been called as well via the forward template.
+been called as well via the include template.
 
-Arguments will be forwarded to the resource called by the forward template, so be sure to provide the
-arguments for all resources that will be called when calling a resource containing forward templates.
+Arguments will be forwarded to the resource called by the include template, so be sure to provide the
+arguments for all resources that will be called when calling a resource containing include templates.
 
 {% raw %}
 ```
@@ -302,7 +302,7 @@ foo{{> EXAMPLE_9 }}
 In the example above, `EXAMPLE_9` expects an argument called `baz`, so this must be passed when calling
 `EXAMPLE_10` so that the argument may be forwarded to `EXAMPLE_9` when it is loaded as well.
 
-> **Note:** Forward templates cannot call any chain of forward templates that will eventually load its
+> **Note:** Include templates cannot call any chain of include templates that will eventually load its
 > own containing parent resource. This prevents infinite loops. You will receive an error when you attempt
 > to call a resource that does not adhere to this restriction.
 
@@ -354,7 +354,7 @@ In the example above, you can see that resource arguments can be accessed within
 In addition to `args`, script templates also receive `res` which is a
 [`LocalizationResourceProxy`](/localization/docs/globals.html#localizationresourceproxy) that can be
 used for loading other localization resources, similarly to, and as mentioned in
-[Forward Templates](#forward-templates).
+[Include Templates](#include-templates).
 
 {% raw %}
 ```
@@ -368,7 +368,7 @@ Guess what? {{> EXAMPLE_11 }}
 ```
 {% endraw %}
 
-> **Note:** Just like with forward templates, there is recursion protection in place for loading other
+> **Note:** Just like with include templates, there is recursion protection in place for loading other
 > localization resources via `res`. Also note that when calling other resources via `res`, you do not
 > need to explicitly pass the arguments to the resource function. They are forwarded automatically.
 > You can, however, pass an arguments object specific to that script template if desired.
@@ -410,7 +410,7 @@ with optional templates, this behavior can be circumvented by returning an empty
 
 ### Transformer Functions (Pipes)
 Transformer functions are functions that you can pipe data into to transform it in some way. Regular and
-Optional Template values, as well as Forward Template results can be piped into transformer functions in
+Optional Template values, as well as Include Template results can be piped into transformer functions in
 your Localization files using the pipe operator (`|`):
 
 {% raw %}
