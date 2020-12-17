@@ -52,6 +52,20 @@ describe('Building strings from abstract localization nodes', () =>
 		LocalizationCache.clear();
 	});
 
+	it('Should build a string with match templates', () =>
+	{
+		LocalizationCache.set(p, 'test', Parser.parse(c, '[test]\nfoo{{# foo: "foo" => "bar" }}baz')[0]);
+		expect(LocalizationCache.get(p, 'test')!.build({ foo: 'foo' }, {})).toBe('foobarbaz');
+		LocalizationCache.clear();
+	});
+
+	it('Should properly handle isolated match templates', () =>
+	{
+		LocalizationCache.set(p, 'test', Parser.parse(c, '[test]\nfoo\n{{# foo: }}\nbaz')[0]);
+		expect(LocalizationCache.get(p, 'test')!.build({}, {})).toBe('foo\nbaz');
+		LocalizationCache.clear();
+	});
+
 	it('Should build a string with script templates', () =>
 	{
 		LocalizationCache.set(p, 'test', Parser.parse(c, '[test]\nfoo{{! \'bar\' // return !}}baz')[0]);

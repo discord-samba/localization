@@ -1,0 +1,30 @@
+[test23]
+## Test basic match template
+foo{{#
+	foo:
+		'foo' => 'bar',
+		'bar' => 'baz',
+		_ => 'boo'
+}}baz
+foo{{#
+	bar:
+		1 => 2,
+		3 => 4,
+		_ => 5
+}}baz
+foo{{#
+	baz:
+		true => false,
+		false => true,
+		_ => true
+}}baz
+
+[test24]
+## Test isolated match template
+foo
+{{# foo: 'foo' => 'bar', 'bar' => '' }}
+baz
+
+[test25]
+## Test piping match template argument
+foo{{# bar | toUpperCase: 'FOO' => 'BAR' }}baz

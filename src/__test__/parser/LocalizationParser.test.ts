@@ -30,6 +30,11 @@ describe('Parsing valid localization text', () =>
 		expect(() => Parser.parse(c, '[test]\nfoo{{> test2 }}bar')).not.toThrow(ParseError);
 	});
 
+	it('Should parse match templates', () =>
+	{
+		expect(() => Parser.parse(c, '[test]\nfoo{{# bar: "foo" => "bar" }}baz')).not.toThrow(ParseError);
+	});
+
 	it('Should parse script templates', () =>
 	{
 		expect(() => Parser.parse(c, '[test]\nfoo{{! \'bar\' !}}baz')).not.toThrow(ParseError);
@@ -87,6 +92,7 @@ describe('Throwing parser errors', () =>
 		expect(() => Parser.parse(c, '[test]\nfoo{{? bar !}}baz')).toThrow(e);
 		expect(() => Parser.parse(c, '[test]\nfoo{{> bar ?}}baz')).toThrow(e);
 		expect(() => Parser.parse(c, '[test]\nfoo{{> bar !}}baz')).toThrow(e);
+		expect(() => Parser.parse(c, '[test]\nfoo{{# bar !}}baz')).toThrow(e);
 		expect(() => Parser.parse(c, '[test]\nfoo{{$ bar }}baz')).toThrow(e);
 	});
 

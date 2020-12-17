@@ -2,10 +2,12 @@ import { LocalizationStringChildNode } from '../interfaces/LocalizationStringChi
 import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
 import { LocalizationStringTemplateKind } from '../types/LocalizationStringTemplateKind';
 import { NodeKindImplIncludeTemplate } from '../nodeKindImpl/NodeKindImplIncludeTemplate';
+import { NodeKindImplMatchTemplate } from '../nodeKindImpl/NodeKindImplMatchTemplate';
 import { NodeKindImplOptionalTemplate } from '../nodeKindImpl/NodeKindImplOptionalTemplate';
 import { NodeKindImplRegularTemplate } from '../nodeKindImpl/NodeKindImplRegularTemplate';
 import { NodeKindImplScriptTemplate } from '../nodeKindImpl/NodeKindImplScriptTemplate';
 import { ParseError } from './ParseError';
+import { Primitive } from '../types/Primitive';
 import { StringReader } from './StringReader';
 import { TemplatePipe } from '../types/TemplatePipe';
 
@@ -34,6 +36,9 @@ export class TemplateParser
 			case LocalizationStringTemplateKind.Include:
 				return TemplateParser._consumeIncludeTemplate(parent, reader);
 
+			case LocalizationStringTemplateKind.Match:
+				return TemplateParser._consumeMatchTemplate(parent, reader);
+
 			case LocalizationStringTemplateKind.Script:
 				return TemplateParser._consumeScriptTemplate(parent, reader);
 
@@ -56,9 +61,7 @@ export class TemplateParser
 		let kind: LocalizationStringTemplateKind = LocalizationStringTemplateKind.Invalid;
 
 		// Check for allowed template opening characters
-		// TODO: Return to ! when highlighting is fixed
-		// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
-		if (/[\w?>!\s]/.test(reader.peek(2)) === false)
+		if (!/[\w?>#!\s]/.test(reader.peek(2)))
 			return LocalizationStringTemplateKind.Invalid;
 
 		if (reader.peek(2) === '!')
@@ -66,6 +69,9 @@ export class TemplateParser
 
 		else if (reader.peek(2) === '>')
 			kind = LocalizationStringTemplateKind.Include;
+
+		else if (reader.peek(2) === '#')
+			kind = LocalizationStringTemplateKind.Match;
 
 		else if (reader.peek(2) === '?')
 			kind = LocalizationStringTemplateKind.Optional;
@@ -93,9 +99,10 @@ export class TemplateParser
 					break;
 				}
 
-				// TODO: Return to ! when highlighting is fixed
-				// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
-				if (/[\w\s]/.test(reader.peek(index - 1)) === false)
+				// Mark as invalid if we see any non-whitespace, non-word characters before the
+				// closing braces, unless we're examining a Match template which will have non-word
+				// characters before the closing braces
+				if (!/[\w\s]/.test(reader.peek(index - 1)) && kind !== LocalizationStringTemplateKind.Match)
 					kind = LocalizationStringTemplateKind.Invalid;
 
 				break;
@@ -133,12 +140,19 @@ export class TemplateParser
 	 * Parses all template pipes and returns them. Should be called when the next character
 	 * is the first pipe (`|`) encountered.
 	 */
-	private static _parsePipes(parent: LocalizationStringParentNode, reader: StringReader): TemplatePipe[]
+	private static _parsePipes(
+		parent: LocalizationStringParentNode,
+		reader: StringReader,
+		isMatchTemplate: boolean = false
+	): TemplatePipe[]
 	{
 		const result: TemplatePipe[] = [];
 
 		while (true)
 		{
+			if (isMatchTemplate && reader.peek() === ':')
+				break;
+
 			if (reader.peekSegment(2) !== '}}' && reader.peek() !== '|')
 				throw new ParseError(
 					`Unexpected token '${reader.peek()}', expected '}}' or '|'`,
@@ -201,7 +215,7 @@ export class TemplateParser
 							column
 						);
 
-					const argVal: string | number | boolean = TemplateParser._parsePipeArgument(parent, reader);
+					const argVal: Primitive = TemplateParser._parsePrimitive(parent, reader);
 					templatePipe.args.push(argVal);
 
 					// Discard surrounding whitespace
@@ -228,10 +242,10 @@ export class TemplateParser
 	 * though all string types will capture whitespace indiscriminately, including
 	 * newlines
 	 */
-	private static _parsePipeArgument(
+	private static _parsePrimitive(
 		parent: LocalizationStringParentNode,
 		reader: StringReader
-	): string | number | boolean
+	): Primitive
 	{
 		// Discard whitespace
 		TemplateParser._discardWhitespaceAndComments(reader);
@@ -341,7 +355,7 @@ export class TemplateParser
 		reader.discard(2);
 		TemplateParser._discardWhitespaceAndComments(reader);
 
-		const key: string = reader.consumeUntil(/\s/);
+		const key: string = reader.consumeUntil(/[^\w]/);
 
 		if (!TemplateParser._validIdent.test(key))
 			throw new ParseError(
@@ -390,7 +404,7 @@ export class TemplateParser
 		reader.discard(3);
 		TemplateParser._discardWhitespaceAndComments(reader);
 
-		const key: string = reader.consumeUntil(/\s/);
+		const key: string = reader.consumeUntil(/[^\w]/);
 
 		if (!TemplateParser._validIdent.test(key))
 			throw new ParseError(
@@ -424,7 +438,7 @@ export class TemplateParser
 	}
 
 	/**
-	 * Consumes a include template from the input, including its content and braces,
+	 * Consumes an include template from the input, including its content and braces,
 	 * and returns it
 	 */
 	private static _consumeIncludeTemplate(
@@ -439,7 +453,7 @@ export class TemplateParser
 		reader.discard(3);
 		TemplateParser._discardWhitespaceAndComments(reader);
 
-		const key: string = reader.consumeUntil(/\s/);
+		const key: string = reader.consumeUntil(/[^\w]/);
 
 		if (!TemplateParser._validIdent.test(key))
 			throw new ParseError(
@@ -470,6 +484,151 @@ export class TemplateParser
 			new NodeKindImplIncludeTemplate(key, parent, line, column, pipes ?? []);
 
 		return node;
+	}
+
+	/**
+	 * Consumes a match template from the input, including its content and braces,
+	 * and returns it
+	 */
+	private static _consumeMatchTemplate(
+		parent: LocalizationStringParentNode,
+		reader: StringReader
+	): NodeKindImplMatchTemplate
+	{
+		let pipes!: TemplatePipe[];
+		let defaultMatch!: Primitive;
+		const matchers: [Primitive, Primitive][] = [];
+		const { line, column } = reader;
+
+		// Discard `{{#` and following whitespace
+		reader.discard(3);
+		TemplateParser._discardWhitespaceAndComments(reader);
+
+		const key: string = reader.consumeUntil(/[^\w]/);
+
+		if (!TemplateParser._validIdent.test(key))
+			throw new ParseError(
+				'Invalid match template identifier',
+				parent.container,
+				line,
+				column
+			);
+
+		// Discard whitespace after key
+		TemplateParser._discardWhitespaceAndComments(reader);
+
+		if (reader.peekSegment(2) !== '}}' && reader.peek() !== '|' && reader.peek() !== ':')
+			throw new ParseError(
+				`Unexpected token '${reader.peek()}', expected '}}', '|' or ':'`,
+				parent.container,
+				reader.line,
+				reader.column
+			);
+
+		if (reader.peek() === '|')
+			pipes = TemplateParser._parsePipes(parent, reader, true);
+
+		// Discard whitespace after pipes
+		TemplateParser._discardWhitespaceAndComments(reader);
+
+		if (reader.peek() !== ':')
+			throw new ParseError(
+				`Unexpected token '${reader.peek()}', expected ':''`,
+				parent.container,
+				reader.line,
+				reader.column
+			);
+
+		// Discard `:`
+		else
+			reader.discard();
+
+		while (true)
+		{
+			// Discard whitespace before match condition
+			TemplateParser._discardWhitespaceAndComments(reader);
+
+			if (reader.peekSegment(2) === '}}')
+				break;
+
+			if (reader.peek() === '_' && !/\s/.test(reader.peek(1)) && reader.peekSegment(2, 1) !== '=>')
+			{
+				const { line: identLine, column: identColumn } = reader;
+				throw new ParseError(
+					`Unexpected segment '${reader.consumeUntil(/\s/)}', expected primitive value or '_'`,
+					parent.container,
+					identLine,
+					identColumn
+				);
+			}
+
+			if (reader.peek() !== '_')
+			{
+				// Parse the match condition
+				const matchCondition: Primitive = TemplateParser._parsePrimitive(parent, reader);
+
+				TemplateParser._discardWhitespaceAndComments(reader);
+
+				if (reader.peekSegment(2) !== '=>')
+					throw new ParseError(
+						`Unexpected token '${reader.peek()}', expected '=>'`,
+						parent.container,
+						reader.line,
+						reader.column
+					);
+
+				// Discard `=>` and following whitespace/comments
+				reader.discard(2);
+				TemplateParser._discardWhitespaceAndComments(reader);
+
+				// Parse the match value
+				const matchValue: Primitive = TemplateParser._parsePrimitive(parent, reader);
+
+				TemplateParser._discardWhitespaceAndComments(reader);
+
+				if (reader.peek() !== ',' && reader.peekSegment(2) !== '}}')
+					throw new ParseError(
+						`Unexpected token '${reader.peek()}', expected ',' or '}}'`,
+						parent.container,
+						reader.line,
+						reader.column
+					);
+
+				matchers.push([matchCondition, matchValue]);
+
+				// Discard `,`
+				if (reader.peek() === ',')
+					reader.discard();
+
+				continue;
+			}
+			else
+			{
+				// Discard `_` and whitespace/comments
+				reader.discard();
+				TemplateParser._discardWhitespaceAndComments(reader);
+
+				if (reader.peekSegment(2) !== '=>')
+					throw new ParseError(
+						`Unexpected token '${reader.peek()}', expected '=>'`,
+						parent.container,
+						reader.line,
+						reader.column
+					);
+
+				// Discard `=>` and whitespace/comments
+				reader.discard(2);
+				TemplateParser._discardWhitespaceAndComments(reader);
+
+				defaultMatch = TemplateParser._parsePrimitive(parent, reader);
+				continue;
+			}
+		}
+
+		// Discard closing braces
+		reader.discard(2);
+
+		return new NodeKindImplMatchTemplate(key, parent, line, column, pipes ?? [], matchers, defaultMatch);
 	}
 
 	/**

@@ -44,6 +44,21 @@ describe('TemplateParser template pipe tests', () =>
 		});
 	});
 
+	it('Should successfully parse match template with pipe', () =>
+	{
+		expect(TemplateParser.parse(parent, new StringReader('{{# foo | bar: "foo" => "bar", _ => "baz" }}')))
+			.toEqual({
+				kind: LocalizationStringNodeKind.MatchTemplate,
+				parent,
+				key: 'foo',
+				line: 1,
+				column: 1,
+				pipes: [{ ident: 'bar', line: 1, column: 11, args: [] }],
+				matchers: [['foo', 'bar']],
+				defaultMatch: 'baz'
+			});
+	});
+
 	it('Should successfully parse chained pipes', () =>
 	{
 		expect(TemplateParser.parse(parent, new StringReader('{{ foo | bar | baz }}'))).toEqual({

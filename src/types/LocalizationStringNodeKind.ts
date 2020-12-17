@@ -10,5 +10,6 @@ export enum LocalizationStringNodeKind
 	RegularTemplate,
 	OptionalTemplate,
 	IncludeTemplate,
+	MatchTemplate,
 	ScriptTemplate
 }

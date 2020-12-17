@@ -64,6 +64,43 @@ describe('Loading string resources', () =>
 		expect(proxy.test5()).toBe('foofoobazbaz');
 	});
 
+	it('Should handle match templates', () =>
+	{
+		expect(Localization.resource('test', 'test23', { foo: 'foo', bar: 1, baz: true }))
+			.toBe('foobarbaz\nfoo2baz\nfoofalsebaz');
+
+		expect(Localization.resource('test', 'test23', { foo: 'bar', bar: 3, baz: false }))
+			.toBe('foobazbaz\nfoo4baz\nfootruebaz');
+
+		expect(Localization.resource('test', 'test23', { foo: 'boo', bar: 5, baz: 'foo' }))
+			.toBe('fooboobaz\nfoo5baz\nfootruebaz');
+
+		expect(Localization.resource('test', 'test23'))
+			.toBe('fooboobaz\nfoo5baz\nfootruebaz');
+
+		expect(proxy.test23({ foo: 'foo', bar: 1, baz: true }))
+			.toBe('foobarbaz\nfoo2baz\nfoofalsebaz');
+
+		expect(proxy.test23({ foo: 'bar', bar: 3, baz: false }))
+			.toBe('foobazbaz\nfoo4baz\nfootruebaz');
+
+		expect(proxy.test23({ foo: 'boo', bar: 5, baz: 'foo' }))
+			.toBe('fooboobaz\nfoo5baz\nfootruebaz');
+
+		expect(proxy.test23())
+			.toBe('fooboobaz\nfoo5baz\nfootruebaz');
+	});
+
+	it('Should handle isolated match templates', () =>
+	{
+		expect(Localization.resource('test', 'test24', { foo: 'foo' })).toBe('foo\nbar\nbaz');
+		expect(Localization.resource('test', 'test24', { foo: 'bar' })).toBe('foo\n\nbaz');
+		expect(Localization.resource('test', 'test24')).toBe('foo\nbaz');
+		expect(proxy.test24({ foo: 'foo' })).toBe('foo\nbar\nbaz');
+		expect(proxy.test24({ foo: 'bar' })).toBe('foo\n\nbaz');
+		expect(proxy.test24()).toBe('foo\nbaz');
+	});
+
 	it('Should handle script templates', () =>
 	{
 		expect(Localization.resource('test', 'test6')).toBe('foobarbaz');
@@ -261,6 +298,11 @@ describe('Using template pipes', () =>
 		expect(Localization.resource('test', 'test14', { bar: 'bar' })).toBe('FOOBARBAZ');
 	});
 
+	it('Should properly pipe match template arguments', () =>
+	{
+		expect(Localization.resource('test', 'test25', { bar: 'foo' })).toBe('fooBARbaz');
+	});
+
 	it('Should properly pipe to multiple functions', () =>
 	{
 		expect(Localization.resource('test', 'test15', { foo: 'bar' })).toBe('bar');
@@ -374,7 +416,7 @@ describe('Misc.', () =>
 				.fill(0)
 				.map((_, i) => `test${i + 1}`);
 
-		expect(Localization.getKeys('test')).toStrictEqual(genTestNames(22));
+		expect(Localization.getKeys('test')).toStrictEqual(genTestNames(25));
 		expect(Localization.getKeys(['test', 'args'])).toStrictEqual(genTestNames(7));
 		expect(Localization.getKeys(['test', 'oneLine'])).toStrictEqual(genTestNames(2));
 		expect(Localization.getKeys(['test', 'testCat', 'testSub'])).toStrictEqual(genTestNames(1));

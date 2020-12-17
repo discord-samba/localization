@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Localization } from './Localization';
 import { LocalizationPipeFunction } from './types/LocalizationPipeFunction';
 import { LocalizationResrouceMetaData } from './types/LocalizationResourceMetaData';
@@ -8,10 +9,12 @@ import { LocalizationStringNodeKind } from './types/LocalizationStringNodeKind';
 import { LocalizationStringParentNode } from './interfaces/LocalizationStringParentNode';
 import { LocalizationStringTypeDeclaration } from './types/LocalizationStringTypeDeclaration';
 import { NodeKindImplIncludeTemplate } from './nodeKindImpl/NodeKindImplIncludeTemplate';
+import { NodeKindImplMatchTemplate } from './nodeKindImpl/NodeKindImplMatchTemplate';
 import { NodeKindImplOptionalTemplate } from './nodeKindImpl/NodeKindImplOptionalTemplate';
 import { NodeKindImplRegularTemplate } from './nodeKindImpl/NodeKindImplRegularTemplate';
 import { NodeKindImplScriptTemplate } from './nodeKindImpl/NodeKindImplScriptTemplate';
 import { NodeKindImplStringChunk } from './nodeKindImpl/NodeKindImplStringChunk';
+import { Primitive } from './types/Primitive';
 import { TemplateArguments } from './types/TemplateArguments';
 import { TemplatePipe } from './types/TemplatePipe';
 
@@ -39,6 +42,7 @@ export class LocalizationStringBuilder
 	{
 		const maybeKinds: LocalizationStringNodeKind[] = [
 			LocalizationStringNodeKind.OptionalTemplate,
+			LocalizationStringNodeKind.MatchTemplate,
 			LocalizationStringNodeKind.ScriptTemplate
 		];
 
@@ -100,7 +104,26 @@ export class LocalizationStringBuilder
 					);
 
 					results.push(this._makeResult(child.kind, includeTemplateValue));
+					break;
 
+				case LocalizationStringNodeKind.MatchTemplate:
+					this._childIs<NodeKindImplMatchTemplate>(child);
+					const matchTemplateArgValue: any = this._runPipes(args[child.key], child.pipes, _meta);
+					let matchValue!: Primitive;
+
+					for (const matcher of child.matchers)
+					{
+						if (matchTemplateArgValue === matcher[0])
+						{
+							matchValue = matcher[1];
+							break;
+						}
+					}
+
+					if (typeof matchValue === 'undefined' && typeof child.defaultMatch !== 'undefined')
+						matchValue = child.defaultMatch;
+
+					results.push(this._makeResult(child.kind, matchValue?.toString()));
 					break;
 
 				case LocalizationStringNodeKind.ScriptTemplate:

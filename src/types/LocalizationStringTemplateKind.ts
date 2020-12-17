@@ -8,6 +8,7 @@ export enum LocalizationStringTemplateKind
 	Regular,
 	Optional,
 	Include,
+	Match,
 	Script,
 	Invalid
 }
