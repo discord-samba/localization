@@ -50,7 +50,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 	 */
 	private static _functionWrap(code: string): string
 	{
-		return `function _(args, res) {\n${code}\n}`;
+		return `function _(args, res) {\n${code.replace(/^\n/, '')}\n}`;
 	}
 
 	/**
@@ -64,7 +64,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 		const args: string[] = Array.from(new Set(fnBody.match(NodeKindImplScriptTemplate._argRegex)))
 			.map(arg => `let $${arg.slice(1)} = args.${arg.slice(1)};`);
 
-		return [`${args.join('\n')}${args.length > 0 ? '\n' : ''}${fnBody}`, args.length];
+		return [`${args.join('\n')}\n${fnBody.replace(/^\n/, '')}`, args.length];
 	}
 
 	/**
@@ -110,20 +110,24 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 				.split('\n')
 				.slice(0, 5);
 
-			// Offset by the number of additional lines created by the function wrapper,
-			// the number of used template args that will have shortcut vars created,
-			// and the .lang file line the script starts on
-			const lineOffset: number = 3 - numArgs + this.bodyStartLine;
+			// Offset by the number of additional lines counted by the function wrapper in the vm Script
+			// instance, the number of $arg lines added by _argsWrap, and the line number the script template
+			// opens on. Then, if the template line and the line the script body start on are the same, add 1,
+			// unless the original function body begins with whitespace other than a newline, in which case
+			// we add 0. For some reason, if the originalFnBody starts with non-linebreak whitespace, it adds
+			// a line to the reported line number in the original error message, so we have to ignore that
+			// extra line in those cases to get an accurate error line number for our custom error here
 
-			let scriptLine: number = parseInt(errStackLines[0].split(':')[1]) - lineOffset;
+			const lineOffset: number = -2 - numArgs + this.line	+ (
+				this.line !== this.bodyStartLine
+					? /^[\t\f\v ]+/.test(originalFnBody)
+						? 0
+						: 1
+					: 0
+			);
 
-			// If the error is an unexpected `}`, chances are the line will be off
-			// since it is affected by the braces of the function wrapper itself
-			// which aren't present in the .lang file so we'll just give the line
-			// the script starts on. Accounting for all possible cases with `}` to
-			// give an accurate line just isn't worth it.
-			if (errStackLines[4].includes('Unexpected token }'))
-				scriptLine = this.line;
+			// Calculate the line the error occurs on in the localization file
+			const scriptLine: number = parseInt(errStackLines[0].split(':')[1]) + lineOffset;
 
 			errStackLines[0] = 'Error compiling script template:\n';
 			errStackLines.push(`    at Script Template (${this.parent.container}:${scriptLine})`);
