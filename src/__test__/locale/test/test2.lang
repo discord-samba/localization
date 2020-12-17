@@ -9,7 +9,7 @@ foo{{! ['b', 'a', 'r'].join('') !}}baz
 ## When bar === 'bar'
 ## Should equal: foofoobazbaz
 ## When bar === undefined
-foo{{! res.test3() !}}baz
+foo{{! return res.test3() !}}baz
 
 [test8]
 ## Test script template returning undefined

@@ -17,7 +17,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 
 	private static readonly _argRegex: RegExp = /\B\$(?:(?=[a-zA-Z_][\w]*)[\w]+|[a-zA-Z])\b/g;
 
-	private _fn!: Function;
+	private _fn?: Function;
 	private _impFn?: Function;
 
 	// Should be the line that the script template body actually begins on.
@@ -76,11 +76,26 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 
 		const [fnBody, numArgs]: [string, number] = this._argsWrap(originalFnBody);
 
-		// Defer syntax error handling to the vm Script because
-		// it will actually detail the code in question in the error
-		// eslint-disable-next-line no-new-func
-		try { fn = new Function('args', 'res', fnBody); }
-		catch {}
+		// Only create the function if it contains the `return` keyword. This is a naive tactic
+		// but a reasonable assumption to make. If it doesn't contain `return` it simply cannot
+		// return a value on its own, so we will immediately fall back to the implicit return
+		// function when this script is called. This approach prevents us from compiling twice
+		// for every script that exclusively leverages implict returns, and from calling them
+		// twice whenever their containing resource is loaded
+
+		// That being said, a script leveraging implicit returns could still have a comment
+		// after the implicitly returned value that contains the keyword `return` which would
+		// cause us to create an unassuming function here but that occurrence should be far
+		// more infrequent than genuine non-implicit scripts in real-life scenarios
+
+		if (fnBody.includes('return'))
+		{
+			// Defer syntax error handling to the vm Script because
+			// it will actually detail the code in question in the error
+			// eslint-disable-next-line no-new-func
+			try { fn = new Function('args', 'res', fnBody); }
+			catch {}
+		}
 
 		let error!: Error;
 
@@ -160,15 +175,26 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 		let result: any;
 		let error!: Error;
 
-		try { result = this._fn(args, _meta._mp); }
-		catch (err) { error = this._newErr(err, _meta); }
+		// Try the regular function if it exists
+		if (typeof this._fn !== 'undefined')
+		{
+			try { result = this._fn(args, _meta._mp); }
+			catch (err) { error = this._newErr(err, _meta); }
+		}
 
+		// Try the implicit return function if we did not receive a value from the first function
 		if (typeof result === 'undefined' && typeof this._impFn !== 'undefined')
 		{
-			// Remove the call key from the meta call chain if present because
-			// this means we tried the function already and didn't get a result
-			// so now we're trying the coerced return value
-			if (typeof _meta._cc !== 'undefined'
+			// In the event that a regular function is created for a script that does not explicitly return
+			// a value (likely it contained a comment that contained the word `return`), and that function
+			// includes another resource (via `res`), we need to remove the current key from the call chain
+			// (that was added when that resource was included while running the initial function) before we
+			// can try the implicit return function because otherwise, when that resource is included a second
+			// time by calling the implicit return function, we will receive a recursion error due to the key
+			// for that resource already existing within the call chain from the first function call
+
+			if (typeof this._fn !== 'undefined'
+				&& typeof _meta._cc !== 'undefined'
 				&& typeof _meta._ck !== 'undefined'
 				&& Array.isArray(_meta._cc)
 				&& _meta._cc[_meta._cc.length - 1] === _meta._ck)

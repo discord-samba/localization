@@ -54,7 +54,7 @@ describe('Building strings from abstract localization nodes', () =>
 
 	it('Should build a string with script templates', () =>
 	{
-		LocalizationCache.set(p, 'test', Parser.parse(c, '[test]\nfoo{{! \'bar\' !}}baz')[0]);
+		LocalizationCache.set(p, 'test', Parser.parse(c, '[test]\nfoo{{! \'bar\' // return !}}baz')[0]);
 		expect(LocalizationCache.get(p, 'test')!.build({}, {})).toBe('foobarbaz');
 		LocalizationCache.clear();
 	});
@@ -85,8 +85,8 @@ describe('Building strings from abstract localization nodes', () =>
 		it('Should error on recursive script templates', () =>
 		{
 			LocalizationCache.set(p, 'test1', Parser.parse(c, '[test1]\nfoo{{! res.test2() !}}baz')[0]);
-			LocalizationCache.set(p, 'test2', Parser.parse(c, '[test2]\nfoo{{! res.test3() !}}baz')[0]);
-			LocalizationCache.set(p, 'test3', Parser.parse(c, '[test3]\nfoo{{! res.test1() !}}baz')[0]);
+			LocalizationCache.set(p, 'test2', Parser.parse(c, '[test2]\nfoo{{! res.test3() // return !}}baz')[0]);
+			LocalizationCache.set(p, 'test3', Parser.parse(c, '[test3]\nfoo{{! return res.test1() !}}baz')[0]);
 			expect(() => Localization.resource(p, 'test3'))
 				.toThrow('A localization resource cannot refer to any previous parent');
 
