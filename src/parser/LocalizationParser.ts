@@ -140,9 +140,7 @@ export class LocalizationParser
 			if (reader.eof(index))
 				return false;
 
-			// TODO: Return to ! when highlighting is fixed
-			// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
-			if (/[():\w]/.test(reader.peek(index)) === false)
+			if (!/[():\w]/.test(reader.peek(index)))
 				return false;
 
 			index++;
@@ -166,21 +164,14 @@ export class LocalizationParser
 			if (reader.peek(index) === ']')
 				return false;
 
-			// TODO: Return to ! when highlighting is fixed
-			// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
-			if (/[()\w]/.test(reader.peek(index)) === false)
+			if (!/[()\w]/.test(reader.peek(index)))
 				return false;
 
 			categoryText += reader.peek(index);
 			index++;
 		}
 
-		// TODO: Return to ! when highlighting is fixed
-		// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
-		if (/\w+(?:\(\w+\))?/.test(categoryText) === false)
-			return false;
-
-		return true;
+		return /\w+(?:\(\w+\))?/.test(categoryText);
 	}
 
 	/**
@@ -198,9 +189,7 @@ export class LocalizationParser
 		{
 			while (reader.peek() !== '(' && reader.peek() !== ':')
 			{
-				// TODO: Return to ! when highlighting is fixed
-				// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
-				if (/\w/.test(reader.peek()) === false)
+				if (!/\w/.test(reader.peek()))
 					throw new ParseError(
 						`Unexpected token '${reader.peek()}', expected [a-zA-Z0-9_]`,
 						container,
@@ -217,9 +206,7 @@ export class LocalizationParser
 				reader.discard();
 				while (reader.peek() !== ')')
 				{
-					// TODO: Return to ! when highlighting is fixed
-					// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
-					if (/\w/.test(reader.peek()) === false)
+					if (!/\w/.test(reader.peek()))
 						throw new ParseError(
 							`Unexpected token '${reader.peek()}', expected [a-zA-Z0-9_]`,
 							container,
@@ -263,9 +250,7 @@ export class LocalizationParser
 				reader.discard();
 			}
 
-			// TODO: Return to ! when highlighting is fixed
-			// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
-			if (/[\w]/.test(reader.peek()) === false)
+			if (!/[\w]/.test(reader.peek()))
 				throw new ParseError(
 					`Unexpected token '${reader.peek()}', expected [a-zA-Z0-9_]`,
 					container,
@@ -397,9 +382,7 @@ export class LocalizationParser
 					reader.column
 				);
 
-			// TODO: Return to ! when highlighting is fixed
-			// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
-			if (/\w/.test(reader.peek()) === false && reader.peek() !== '?')
+			if (!/\w/.test(reader.peek()) && reader.peek() !== '?')
 				throw new ParseError(
 					`Unexpected token '${reader.peek()}', expected identifier`,
 					parent.container,
@@ -466,9 +449,7 @@ export class LocalizationParser
 				reader.column
 			);
 
-		// TODO: Return to ! when highlighting is fixed
-		// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
-		if (/^(?:[Ss]tring|[Nn]umber|[Bb]oolean|[Aa]ny)(?:\[\])?$/.test(identType) === false)
+		if (!/^(?:[Ss]tring|[Nn]umber|[Bb]oolean|[Aa]ny)(?:\[\])?$/.test(identType))
 			throw new ParseError(
 				'Invalid type. Must be one of string, number, boolean, or an array of those',
 				parent.container,

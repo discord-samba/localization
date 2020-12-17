@@ -295,9 +295,7 @@ export class TemplateParser
 		{
 			result = reader.consumeUntil(/[^-\d.]/);
 
-			// TODO: Return to ! when highlighting is fixed
-			// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
-			if (/^-?(?:\d+|\.\d+|\d+\.\d+)$/.test(result) === false)
+			if (!/^-?(?:\d+|\.\d+|\d+\.\d+)$/.test(result))
 				throw new ParseError(`Invalid number '${result}'`, parent.container, line, column);
 
 			return Number.parseFloat(result);
@@ -649,9 +647,7 @@ export class TemplateParser
 
 		while (reader.peekSegment(3) !== '!}}')
 		{
-			// TODO: Return to ! when highlighting is fixed
-			// https://github.com/microsoft/TypeScript-TmLanguage/issues/806
-			if (bodyStartLine === 0 && /\s/.test(reader.peek()) === false)
+			if (bodyStartLine === 0 && !/\s/.test(reader.peek()))
 				bodyStartLine = reader.line;
 
 			scriptBody += reader.consume();
