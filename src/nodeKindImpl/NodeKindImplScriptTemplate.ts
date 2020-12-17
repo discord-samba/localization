@@ -112,10 +112,10 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 
 			// Offset by the number of additional lines counted by the function wrapper in the vm Script
 			// instance, the number of $arg lines added by _argsWrap, and the line number the script template
-			// opens on. Then, if the template line and the line the script body start on are the same, add 1,
-			// unless the original function body begins with whitespace other than a newline, in which case
-			// we add 0. For some reason, if the originalFnBody starts with non-linebreak whitespace, it adds
-			// a line to the reported line number in the original error message, so we have to ignore that
+			// opens on. Then, if the template line and the line the script body starts on are not the same,
+			// add 1, unless the original function body begins with whitespace other than a newline, in which
+			// case we add 0. For some reason, if the originalFnBody starts with non-linebreak whitespace, it
+			// adds a line to the reported line number in the original error message, so we have to ignore that
 			// extra line in those cases to get an accurate error line number for our custom error here
 
 			const lineOffset: number = -2 - numArgs + this.line	+ (
