@@ -344,9 +344,9 @@ values, so we can expect the resource to return `'foobazbaz'`.
 > as Optional templates with regards to the handling of blank lines resulting from an empty template value
 > as well.
 >
-> For example, `foo{{# bar: }}baz` will return `'foobaz'` because there are no patterns for the `bar` argument,
-> and `foo\n{{# bar: }}\nbaz` will return `'foo\nbaz'` as the blank line left by the empty match result will
-> not be preserved.
+> For example, {% raw %}`foo{{# bar: }}baz`{% endraw %} will return `'foobaz'` because there are no patterns
+> for the `bar` argument, and {% raw %}`foo\n{{# bar: }}\nbaz`{% endraw %} will return `'foo\nbaz'` as the
+> blank line left by the empty match result will not be preserved.
 
 Script Templates will always be a more powerful and more versatile option, however, so take time to consider
 which is the right fit for what you're trying to accomplish with your external data when writing your
