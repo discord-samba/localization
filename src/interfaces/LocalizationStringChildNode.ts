@@ -1,5 +1,5 @@
-import { LocalizationStringNodeKind } from '../types/LocalizationStringNodeKind';
-import { LocalizationStringParentNode } from './LocalizationStringParentNode';
+import { LocalizationStringNodeKind } from '@/types/LocalizationStringNodeKind';
+import { LocalizationStringParentNode } from '@/interfaces/LocalizationStringParentNode';
 
 /**
  * Interface for an abstract Localization resource child node

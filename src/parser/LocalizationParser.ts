@@ -1,12 +1,12 @@
-import { LocalizationStringChunkKind } from '../types/LocalizationStringChunkKind';
-import { LocalizationStringParentKeyData } from '../types/LocalizationStringParentKeyData';
-import { LocalizationStringParentNode } from '../interfaces/LocalizationStringParentNode';
-import { LocalizationStringTypeDeclarationMapping } from '../types/LocalizationStringTypeDeclarationMapping';
-import { NodeKindImplParentNode } from '../nodeKindImpl/NodeKindImplParentNode';
-import { NodeKindImplStringChunk } from '../nodeKindImpl/NodeKindImplStringChunk';
-import { ParseError } from './ParseError';
-import { StringReader } from './StringReader';
-import { TemplateParser } from './TemplateParser';
+import { LocalizationStringChunkKind } from '@/types/LocalizationStringChunkKind';
+import { LocalizationStringParentKeyData } from '@/types/LocalizationStringParentKeyData';
+import { LocalizationStringParentNode } from '@/interfaces/LocalizationStringParentNode';
+import { LocalizationStringTypeDeclarationMapping } from '@/types/LocalizationStringTypeDeclarationMapping';
+import { NodeKindImplParentNode } from '@/nodeKindImpl/NodeKindImplParentNode';
+import { NodeKindImplStringChunk } from '@/nodeKindImpl/NodeKindImplStringChunk';
+import { ParseError } from '@/parser/ParseError';
+import { StringReader } from '@/parser/StringReader';
+import { TemplateParser } from '@/parser/TemplateParser';
 
 /** @internal */
 export class LocalizationParser

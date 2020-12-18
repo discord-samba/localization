@@ -11,13 +11,18 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
 		"skipLibCheck": true,
-		"stripInternal": true
-    },
+		"stripInternal": true,
+		"rootDir": "./src",
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["src/*"],
+		}
+	},
     "include": [
 		"src/**/*.ts",
 		"src/**/*.test.ts",
-		"./gulpfile.js",
-		"scripts/**/*"
+		"scripts/**/*",
+		"gulpfile.js",
 	],
     "exclude": [
         "**/node_modules",

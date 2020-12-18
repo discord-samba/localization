@@ -1,4 +1,4 @@
-import { LocalizationStringNodeKind } from './LocalizationStringNodeKind';
+import { LocalizationStringNodeKind } from '@/types/LocalizationStringNodeKind';
 
 /**
  * Represents the result of evaluating an abstract Localization string child

@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import * as Path from 'path';
-import { Localization } from '../Localization';
+import { Localization } from '@/Localization';
 
 Localization.loadLangFile('test', Path.join(__dirname, 'locale/manual/manual.lang'));
 

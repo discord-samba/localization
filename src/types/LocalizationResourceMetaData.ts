@@ -1,4 +1,4 @@
-import { LocalizationResourceProxy } from './LocalizationResourceProxy';
+import { LocalizationResourceProxy } from '@/types/LocalizationResourceProxy';
 
 /** @internal */
 export interface LocalizationResrouceMetaData

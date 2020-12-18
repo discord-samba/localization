@@ -1,7 +1,7 @@
-import { CommandInfoProvider } from './types/CommandInfoProvider';
-import { Localization } from './Localization';
-import { LocalizationCache } from './LocalizationCache';
-import { TemplateArguments } from './types/TemplateArguments';
+import { CommandInfoProvider } from '@/types/CommandInfoProvider';
+import { Localization } from '@/Localization';
+import { LocalizationCache } from '@/LocalizationCache';
+import { TemplateArguments } from '@/types/TemplateArguments';
 
 /**
  * CommandInfoProvider function that can provide localized command info

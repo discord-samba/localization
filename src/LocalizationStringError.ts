@@ -1,5 +1,5 @@
 import * as FS from 'fs';
-import { LocalizationResrouceMetaData } from './types/LocalizationResourceMetaData';
+import { LocalizationResrouceMetaData } from '@/types/LocalizationResourceMetaData';
 
 /**
  * Represents a runtime error in the Localization engine

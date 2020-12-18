@@ -1,4 +1,4 @@
-import { LocalizationStringTypeDeclaration } from './LocalizationStringTypeDeclaration';
+import { LocalizationStringTypeDeclaration } from '@/types/LocalizationStringTypeDeclaration';
 
 /**
  * Represents a mapping of type identifiers to types that a

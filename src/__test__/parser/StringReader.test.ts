@@ -1,4 +1,4 @@
-import { StringReader } from '../../parser/StringReader';
+import { StringReader } from '@/parser/StringReader';
 
 describe('Reading strings with StringReader', () =>
 {

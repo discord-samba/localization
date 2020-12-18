@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/typedef */
 const gulp = require('gulp');
 const typescript = require('gulp-typescript');
+const alias = require('gulp-ts-alias');
 const eslint = require('gulp-eslint');
 const sourcemaps = require('gulp-sourcemaps');
 const del = require('del');
@@ -17,6 +18,7 @@ gulp.task('build', () =>
 {
 	del.sync(['bin/**/*.*']);
 	const tsCompile = gulp.src('src/**/*.ts')
+		.pipe(alias({ configuration: project.config }))
 		.pipe(sourcemaps.init({ base: 'src' }))
 		.pipe(project());
 

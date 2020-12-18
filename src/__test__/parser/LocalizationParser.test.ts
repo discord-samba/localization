@@ -1,5 +1,5 @@
-import { ParseError } from '../../parser/ParseError';
-import { LocalizationParser as Parser } from '../../parser/LocalizationParser';
+import { ParseError } from '@/parser/ParseError';
+import { LocalizationParser as Parser } from '@/parser/LocalizationParser';
 
 const c: string = 'parser.test.lang';
 

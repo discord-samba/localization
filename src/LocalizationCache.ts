@@ -1,7 +1,7 @@
-import { LocalizationPipeFunction } from './types/LocalizationPipeFunction';
-import { LocalizationResourceProxy } from './types/LocalizationResourceProxy';
-import { LocalizationStringBuilder } from './LocalizationStringBuilder';
-import { LocalizationStringParentNode } from './interfaces/LocalizationStringParentNode';
+import { LocalizationPipeFunction } from '@/types/LocalizationPipeFunction';
+import { LocalizationResourceProxy } from '@/types/LocalizationResourceProxy';
+import { LocalizationStringBuilder } from '@/LocalizationStringBuilder';
+import { LocalizationStringParentNode } from '@/interfaces/LocalizationStringParentNode';
 import { inspect } from 'util';
 
 /**

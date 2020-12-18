@@ -1,6 +1,6 @@
 import * as Path from 'path';
-import { LocalizationCache } from '../../LocalizationCache';
-import { LocalizationFileLoader } from '../../loader/LocalizationFileLoader';
+import { LocalizationCache } from '@/LocalizationCache';
+import { LocalizationFileLoader } from '@/loader/LocalizationFileLoader';
 
 describe('Loading .lang files', () =>
 {

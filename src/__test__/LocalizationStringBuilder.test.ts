@@ -1,6 +1,6 @@
-import { Localization } from '../Localization';
-import { LocalizationCache } from '../LocalizationCache';
-import { LocalizationParser as Parser } from '../parser/LocalizationParser';
+import { Localization } from '@/Localization';
+import { LocalizationCache } from '@/LocalizationCache';
+import { LocalizationParser as Parser } from '@/parser/LocalizationParser';
 
 const l: string = 'test';
 const c: string = 'parser.test.lang';
