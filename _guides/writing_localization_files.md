@@ -522,7 +522,7 @@ the match template itself, like so:
 foo{{#
 	foo | toLowerCase | replace('\s', ''):
 		'foo' => 'bar',
-		'bar' => 'baz'	
+		'bar' => 'baz'
 }}baz
 ```
 {% endraw %}
