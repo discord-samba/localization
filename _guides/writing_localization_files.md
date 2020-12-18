@@ -128,6 +128,7 @@ to use within your localization resources:
  - Regular
  - Optional
  - Include
+ - Match
  - Script
 
 The different template kinds will be discussed later.
@@ -308,8 +309,51 @@ In the example above, `EXAMPLE_9` expects an argument called `baz`, so this must
 
 Resources can also embed other resources via Script Templates, detailed later.
 
+### Match Templates
+> Syntax: {% raw %}`{{# foo: 'foo' => 'bar', _ => 'baz' }}`{% endraw %}
+
+Match templates allow you to map primitive (string, number, and boolean values) inputs to primitive outputs.
+This can be useful so that you don't have to drop down into embedded scripts via Script Templates to map
+inputs to values, and has the added benefit of being able to pipe the initial value through predefined
+[transformers](#transformer-functions-pipes) (Handy for normalization prior to matching) instead of having
+to write your own solution inside of a Script Template.
+
+{% raw %}
+```
+[EXAMPLE_11]
+##! foo?: String
+foo{{#
+    foo:
+        'foo' => 'bar',
+        _ => 'baz'
+}}baz
+```
+{% endraw %}
+
+You can see in the example above that if `foo` equals `'foo'`, then the value `'bar'` will be returned. A
+match for `_` is a default match which will match any input that does not match any of the other patterns.
+
+Using the example above, given an arguments object consisting of `{ foo: 'foo' }`, we can expect the resource
+to return `'foobarbaz'`, because the value `'foo'` maps to `'bar'`. Given any other value for `foo`, or if `foo`
+is absent, the default matcher will be chosen, since there are no other matchers that would handle any other
+values, so we can expect the resource to return `'foobazbaz'`.
+
+> **Note:** The default match pattern (`_`) is optional. In the event that it is omitted and a match is not
+> found for the given input, the match template will return nothing. This behaves the same way as Optional
+> templates, in that the match template will evaluate to nothing and you can expect the same behavior
+> as Optional templates with regards to the handling of blank lines resulting from an empty template value
+> as well.
+>
+> For example, `foo{{# bar: }}baz` will return `'foobaz'` because there are no patterns for the `bar` argument,
+> and `foo\n{{# bar: }}\nbaz` will return `'foo\nbaz'` as the blank line left by the empty match result will
+> not be preserved.
+
+Script Templates will always be a more powerful and more versatile option, however, so take time to consider
+which is the right fit for what you're trying to accomplish with your external data when writing your
+localizations.
+
 ### Script Templates
-> Syntax: {% raw %}`{{! 'foo' + 'bar' + 'baz' !}}`{% endraw%}<br>
+> Syntax: {% raw %}`{{! 'foo' + 'bar' + 'baz' !}}`{% endraw %}<br>
 > Supports any valid Javascript code between the template braces
 
 Script templates allow you to embed arbitrary Javascript code in your templates. This code will be
@@ -325,7 +369,7 @@ Using the example from before, simple pluralization in English could look like:
 
 {% raw %}
 ```
-[EXAMPLE_11]
+[EXAMPLE_12]
 ##! qty: Number
 I have {{! args.qty === 1 ? 'an' : args.qty !}} apple{{! args.qty === 1 ? '' : 's' !}}!
 ```
@@ -345,7 +389,7 @@ In the example above, you can see that resource arguments can be accessed within
 > 
 > {% raw %}
 > ```
-> [EXAMPLE_11]
+> [EXAMPLE_12]
 > ##! qty: Number
 > I have {{! $qty === 1 ? 'an' : $qty !}} apple{{! $qty === 1 ? '' : 's' !}}!
 > ```
@@ -358,12 +402,12 @@ used for loading other localization resources, similarly to, and as mentioned in
 
 {% raw %}
 ```
-[EXAMPLE_12]
+[EXAMPLE_13]
 ##! qty: Number
 Guess what? {{! res.EXAMPLE_11() !}}
 
 ## This is functionally identical to the following:
-[EXAMPLE_13]
+[EXAMPLE_14]
 Guess what? {{> EXAMPLE_11 }}
 ```
 {% endraw %}
@@ -378,7 +422,7 @@ multi-line script templates can be written as well, but you will need to explici
 
 {% raw %}
 ```
-[EXAMPLE_14]
+[EXAMPLE_15]
 ##! foo: Number, bar: Number
 foo{{!
     let a = $foo * 10;
@@ -397,7 +441,7 @@ Script templates present this same behavior when they return `undefined`.
 
 {% raw %}
 ```
-[EXAMPLE_15]
+[EXAMPLE_16]
 ##! bar?: String
 foo
 {{! $bar !}}
@@ -415,7 +459,7 @@ your Localization files using the pipe operator (`|`):
 
 {% raw %}
 ```
-[EXAMPLE_16]
+[EXAMPLE_17]
 ##! bar: String
 foo{{ bar | toUpperCase }}baz
 ```
@@ -429,7 +473,7 @@ Transformer functions can also accept additional parameters like so:
 
 {% raw %}
 ```
-[EXAMPLE_17]
+[EXAMPLE_18]
 ##! bar: String
 foo{{ bar | padStart(5, '@') | repeat(2) }}baz
 ```
@@ -457,7 +501,7 @@ for example. Supplying your own transformers is detailed in
 > For instance, `EXAMPLE_17` above could be restructured like so:
 > {% raw %}
 > ```
-> [EXAMPLE_17]
+> [EXAMPLE_18]
 > ##! bar: String
 > foo{{
 >     bar
@@ -466,6 +510,28 @@ for example. Supplying your own transformers is detailed in
 > }}baz
 > ```
 > {% endraw %}
+
+Transformers are able to be used in combination with Regular Templates, Optional Templates, Include
+Templates, and Match Templates. The former three bahave identically in terms of their syntax. For
+Match Templates, the transformers are only able to be used on the initial template argument within
+the match template itself, like so:
+
+{% raw %}
+```
+[EXAMPLE_19]
+foo{{#
+	foo | toLowerCase | replace('\s', ''):
+		'foo' => 'bar',
+		'bar' => 'baz'	
+}}baz
+```
+{% endraw %}
+
+Using the example above, given an arguments object consisting of `{ foo: 'F O O' }`, we can expect
+the resource to return `'foobarbaz'` because we're piping the value of `foo` into `toLowerCase` to
+create `'f o o'`, and then into `replace('\s', '')` which will replace every occurrence of whitespace
+with an empty string, giving us `'foo'`, which of course matches the first pattern, so we end up
+with `'bar'`
 
 #### Base Transformer List
 Transformer function signature syntax for the purposes of this section is as follows:
@@ -491,7 +557,7 @@ look like this:
 
 {% raw %}
 ```
-[EXAMPLE_18]
+[EXAMPLE_20]
 ##! bar: String
 foo{{ bar | padStart(10) }}baz
 ## Or with the optional fill string:
