@@ -491,8 +491,8 @@
 
 "@discord-samba/eslint-config@discord-samba/eslint-config":
   version "0.1.0"
-  uid "6314d8c02c387ceee558931ba5afc814a9955ee5"
-  resolved "https://codeload.github.com/discord-samba/eslint-config/tar.gz/6314d8c02c387ceee558931ba5afc814a9955ee5"
+  uid "6f58586637cd7055eea0cede87c82762497ff270"
+  resolved "https://codeload.github.com/discord-samba/eslint-config/tar.gz/6f58586637cd7055eea0cede87c82762497ff270"
   dependencies:
     "@typescript-eslint/eslint-plugin" "^2.25.0"
     "@typescript-eslint/parser" "^2.25.0"
@@ -2982,6 +2982,13 @@ gulp-sourcemaps@^2.6.5:
     strip-bom-string "1.X"
     through2 "2.X"
 
+gulp-ts-alias@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/gulp-ts-alias/-/gulp-ts-alias-1.1.0.tgz#d7edf4f0ddc403d7dbbba2e8e39d096fa177f487"
+  integrity sha512-Kx4a0ZRh1sk5/uERvAxNIueXJ1qBvyJ9BGCV31QjB7FyTWFZl1lkuefXKsKzowBqNFZmETOFYTGqQMyPCkhiTw==
+  dependencies:
+    o-stream "^0.2.2"
+
 gulp-typescript@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/gulp-typescript/-/gulp-typescript-5.0.1.tgz#96c6565a6eb31e08c2aae1c857b1a079e6226d94"
@@ -4623,6 +4630,11 @@ nwsapi@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.0.tgz#204879a9e3d068ff2a55139c2c772780681a38b7"
   integrity sha512-h2AatdwYH+JHiZpv7pt/gSX1XoRGb7L/qSIeuqA6GwYoF9w1vP1cw42TO0aI2pNyshRK5893hNSl+1//vHK7hQ==
+
+o-stream@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/o-stream/-/o-stream-0.2.2.tgz#7fe03af870b8f9537af33b312b381b3034ab410f"
+  integrity sha512-V3j76KU3g/Gyl8rpdi2z72rn5zguMvTCQgAXfBe3pxEefKqXmOUOD7mvx/mNjykdxGqDVfpSoo8r+WdrkWg/1Q==
 
 oauth-sign@~0.9.0:
   version "0.9.0"
