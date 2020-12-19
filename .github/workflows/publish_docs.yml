@@ -41,9 +41,12 @@ jobs:
       - name: Clone gh-pages branch
         run: git clone https://${{ github.actor }}:${{ secrets.DOCS_TOKEN }}@github.com/${{ github.repository }}.git -b gh-pages ../gh-pages
 
-      - name: Prepare docs build
+      - name: Prepare docs and guides for publish
         run: |
-          npx gulp gh-docs-prepare
+          rm -rf ../gh-pages/docs
+          rm -rf ../gh-pages/_guides
+          cp -r docs ../gh-pages/docs
+          cp -r guides ../gh-pages/_guides
           cp README.md ../gh-pages/_includes/README.md
 
       - name: Check if commit is needed
