@@ -45,7 +45,7 @@ jobs:
         run: |
           rm -rf ../gh-pages/docs
           rm -rf ../gh-pages/_guides
-          cp -r docs ../gh-pages/docs
+          cp -r ../docs ../gh-pages/docs
           cp -r guides ../gh-pages/_guides
           cp README.md ../gh-pages/_includes/README.md
 
