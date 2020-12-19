@@ -2982,6 +2982,13 @@ gulp-sourcemaps@^2.6.5:
     strip-bom-string "1.X"
     through2 "2.X"
 
+gulp-ts-alias@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/gulp-ts-alias/-/gulp-ts-alias-1.1.0.tgz#d7edf4f0ddc403d7dbbba2e8e39d096fa177f487"
+  integrity sha512-Kx4a0ZRh1sk5/uERvAxNIueXJ1qBvyJ9BGCV31QjB7FyTWFZl1lkuefXKsKzowBqNFZmETOFYTGqQMyPCkhiTw==
+  dependencies:
+    o-stream "^0.2.2"
+
 gulp-typescript@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/gulp-typescript/-/gulp-typescript-5.0.1.tgz#96c6565a6eb31e08c2aae1c857b1a079e6226d94"
@@ -3090,9 +3097,9 @@ has-values@^1.0.0:
     kind-of "^4.0.0"
 
 highlight.js@^10.2.0:
-  version "10.2.0"
-  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-10.2.0.tgz#367151bcf813adebc54822f1cb51d2e1e599619f"
-  integrity sha512-OryzPiqqNCfO/wtFo619W+nPYALM6u7iCQkum4bqRmmlcTikOkmlL06i009QelynBPAlNByTQU6cBB2cOBQtCw==
+  version "10.4.1"
+  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-10.4.1.tgz#d48fbcf4a9971c4361b3f95f302747afe19dbad0"
+  integrity sha512-yR5lWvNz7c85OhVAEAeFhVCc/GV4C30Fjzc/rCP0aCWzc1UUOPUk55dK/qdwTZHBvMZo+eZ2jpk62ndX/xMFlg==
 
 homedir-polyfill@^1.0.1:
   version "1.0.3"
@@ -4623,6 +4630,11 @@ nwsapi@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.0.tgz#204879a9e3d068ff2a55139c2c772780681a38b7"
   integrity sha512-h2AatdwYH+JHiZpv7pt/gSX1XoRGb7L/qSIeuqA6GwYoF9w1vP1cw42TO0aI2pNyshRK5893hNSl+1//vHK7hQ==
+
+o-stream@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/o-stream/-/o-stream-0.2.2.tgz#7fe03af870b8f9537af33b312b381b3034ab410f"
+  integrity sha512-V3j76KU3g/Gyl8rpdi2z72rn5zguMvTCQgAXfBe3pxEefKqXmOUOD7mvx/mNjykdxGqDVfpSoo8r+WdrkWg/1Q==
 
 oauth-sign@~0.9.0:
   version "0.9.0"
