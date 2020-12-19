@@ -1,8 +1,8 @@
-import { LocalizationStringNodeKind } from '@/types/LocalizationStringNodeKind';
-import { LocalizationStringParentNode } from '@/interfaces/LocalizationStringParentNode';
-import { NodeKindImplRegularTemplate } from '@/nodeKindImpl/NodeKindImplRegularTemplate';
-import { StringReader } from '@/parser/StringReader';
-import { TemplateParser } from '@/parser/TemplateParser';
+import { LocalizationStringNodeKind } from '#type/LocalizationStringNodeKind';
+import { LocalizationStringParentNode } from '#interface/LocalizationStringParentNode';
+import { NodeKindImplRegularTemplate } from '#nodeKindImpl/NodeKindImplRegularTemplate';
+import { StringReader } from '#parser/StringReader';
+import { TemplateParser } from '#parser/TemplateParser';
 
 const parent: LocalizationStringParentNode = { container: 'TemplateParser.test.lang' } as any;
 const baseTemplateNode: NodeKindImplRegularTemplate =

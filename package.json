@@ -3,7 +3,18 @@
 	"version": "0.1.0",
 	"description": "Localization module for Discord-Samba",
 	"main": "bin/index.js",
+	"imports": {
+		"#interface/*": "./bin/interfaces/*.js",
+		"#loader/*": "./bin/loader/*.js",
+		"#nodeKindImpl/*": "./bin/nodeKindImpl/*.js",
+		"#parser/*": "./bin/parser/*.js",
+		"#type/*": "./bin/types/*.js",
+		"#root/*": "./bin/*.js"
+	},
 	"scripts": {
+		"build": "tsc --extendedDiagnostics",
+		"build:vscode": "eslint src --ext ts && jest && tsc --extendedDiagnostics",
+		"lint": "eslint src --ext ts",
 		"test": "jest"
 	},
 	"repository": {
@@ -25,17 +36,10 @@
 		"@types/node": "^14.0.27",
 		"@typescript-eslint/eslint-plugin": "^2.4.0",
 		"@typescript-eslint/parser": "^2.4.0",
-		"del": "^6.0.0",
 		"eslint": "^6.5.1",
-		"gulp": "^4.0.2",
-		"gulp-eslint": "^6.0.0",
-		"gulp-sourcemaps": "^3.0.0",
-		"gulp-ts-alias": "^1.1.0",
-		"gulp-typescript": "^5.0.1",
 		"husky": "^4.2.3",
 		"jest": "^25.1.0",
 		"lint-staged": "^10.0.8",
-		"run-sequence": "^2.2.1",
 		"ts-jest": "^25.2.1",
 		"typedoc": "0.19.2",
 		"typescript": "^3.7.2"
@@ -55,7 +59,9 @@
 		},
 		"testRegex": "/__test__/.+\\.test\\.ts$",
 		"moduleNameMapper": {
-			"^@/(.*)$": "<rootDir>/src/$1"
+			"^#(interface|type)/(.*)$": "<rootDir>/src/$1s/$2",
+			"^#root/(.*)$": "<rootDir>/src/$1",
+			"^#(.*)/(.*)$": "<rootDir>/src/$1/$2"
 		},
 		"verbose": true
 	},

@@ -3,7 +3,7 @@
         "module": "commonjs",
         "target": "es2017",
         "lib": ["es2017"],
-        "sourceMap": true,
+        "inlineSourceMap": true,
         "declaration": true,
         "removeComments": false,
         "experimentalDecorators": true,
@@ -13,16 +13,21 @@
 		"skipLibCheck": true,
 		"stripInternal": true,
 		"rootDir": "./src",
+		"outDir": "./bin",
 		"baseUrl": ".",
 		"paths": {
-			"@/*": ["src/*"],
+			"#interface/*": ["./src/interfaces/*.js"],
+			"#loader/*": ["./src/loader/*.js"],
+			"#nodeKindImpl/*":[ "./src/nodeKindImpl/*.js"],
+			"#parser/*": ["./src/parser/*.js"],
+			"#type/*": ["./src/types/*.js"],
+			"#root/*": ["./src/*"]
 		}
 	},
     "include": [
 		"src/**/*.ts",
 		"src/**/*.test.ts",
-		"scripts/**/*",
-		"gulpfile.js",
+		"scripts/**/*"
 	],
     "exclude": [
         "**/node_modules",

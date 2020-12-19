@@ -1,7 +1,7 @@
 import * as Path from 'path';
-import { Localization } from '@/Localization';
-import { LocalizationResourceProxy } from '@/types/LocalizationResourceProxy';
-import { LocalizationStringError } from '@/LocalizationStringError';
+import { Localization } from '#root/Localization';
+import { LocalizationResourceProxy } from '#type/LocalizationResourceProxy';
+import { LocalizationStringError } from '#root/LocalizationStringError';
 
 Localization.loadFromDirectory('test', Path.join(__dirname, 'locale', 'test'));
 Localization.loadLangFile('fallback', Path.join(__dirname, 'locale', 'fallback', 'test.lang'));

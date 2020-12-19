@@ -1,8 +1,8 @@
-import { LocalizationStringChildNode } from '@/interfaces/LocalizationStringChildNode';
-import { LocalizationStringNodeKind } from '@/types/LocalizationStringNodeKind';
-import { LocalizationStringParentNode } from '@/interfaces/LocalizationStringParentNode';
-import { Primitive } from '@/types/Primitive';
-import { TemplatePipe } from '@/types/TemplatePipe';
+import { LocalizationStringChildNode } from '#interface/LocalizationStringChildNode';
+import { LocalizationStringNodeKind } from '#type/LocalizationStringNodeKind';
+import { LocalizationStringParentNode } from '#interface/LocalizationStringParentNode';
+import { Primitive } from '#type/Primitive';
+import { TemplatePipe } from '#type/TemplatePipe';
 
 /**
  * Represents an abstract Localization resource node for a regular template

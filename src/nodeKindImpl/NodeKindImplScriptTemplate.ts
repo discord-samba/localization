@@ -1,9 +1,9 @@
-import { LocalizationResrouceMetaData } from '@/types/LocalizationResourceMetaData';
-import { LocalizationStringChildNode } from '@/interfaces/LocalizationStringChildNode';
-import { LocalizationStringNodeKind } from '@/types/LocalizationStringNodeKind';
-import { LocalizationStringParentNode } from '@/interfaces/LocalizationStringParentNode';
+import { LocalizationResrouceMetaData } from '#type/LocalizationResourceMetaData';
+import { LocalizationStringChildNode } from '#interface/LocalizationStringChildNode';
+import { LocalizationStringNodeKind } from '#type/LocalizationStringNodeKind';
+import { LocalizationStringParentNode } from '#interface/LocalizationStringParentNode';
 import { Script } from 'vm';
-import { TemplateArguments } from '@/types/TemplateArguments';
+import { TemplateArguments } from '#type/TemplateArguments';
 
 /**
  * Represents an abstract Localization resource node that holds a script

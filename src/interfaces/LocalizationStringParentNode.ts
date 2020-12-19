@@ -1,6 +1,6 @@
-import { LocalizationStringChildNode } from '@/interfaces/LocalizationStringChildNode';
-import { LocalizationStringNodeKind } from '@/types/LocalizationStringNodeKind';
-import { LocalizationStringTypeDeclarationMapping } from '@/types/LocalizationStringTypeDeclarationMapping';
+import { LocalizationStringChildNode } from '#interface/LocalizationStringChildNode';
+import { LocalizationStringNodeKind } from '#type/LocalizationStringNodeKind';
+import { LocalizationStringTypeDeclarationMapping } from '#type/LocalizationStringTypeDeclarationMapping';
 
 /**
  * Interface for an abstract Localization resource parent node

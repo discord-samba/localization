@@ -1,6 +1,6 @@
-import { LocalizationStringChildNode } from '@/interfaces/LocalizationStringChildNode';
-import { LocalizationStringNodeKind } from '@/types/LocalizationStringNodeKind';
-import { LocalizationStringParentNode } from '@/interfaces/LocalizationStringParentNode';
+import { LocalizationStringChildNode } from '#interface/LocalizationStringChildNode';
+import { LocalizationStringNodeKind } from '#type/LocalizationStringNodeKind';
+import { LocalizationStringParentNode } from '#interface/LocalizationStringParentNode';
 
 /**
  * Represents an abstract Localization resource node containing raw text without

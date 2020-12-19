@@ -1,4 +1,4 @@
-import { TemplateArguments } from '@/types/TemplateArguments';
+import { TemplateArguments } from '#type/TemplateArguments';
 
 /**
  * Represents a Proxy object for a specific language where function calls

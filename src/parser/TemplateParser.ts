@@ -1,15 +1,15 @@
-import { LocalizationStringChildNode } from '@/interfaces/LocalizationStringChildNode';
-import { LocalizationStringParentNode } from '@/interfaces/LocalizationStringParentNode';
-import { LocalizationStringTemplateKind } from '@/types/LocalizationStringTemplateKind';
-import { NodeKindImplIncludeTemplate } from '@/nodeKindImpl/NodeKindImplIncludeTemplate';
-import { NodeKindImplMatchTemplate } from '@/nodeKindImpl/NodeKindImplMatchTemplate';
-import { NodeKindImplOptionalTemplate } from '@/nodeKindImpl/NodeKindImplOptionalTemplate';
-import { NodeKindImplRegularTemplate } from '@/nodeKindImpl/NodeKindImplRegularTemplate';
-import { NodeKindImplScriptTemplate } from '@/nodeKindImpl/NodeKindImplScriptTemplate';
-import { ParseError } from '@/parser/ParseError';
-import { Primitive } from '@/types/Primitive';
-import { StringReader } from '@/parser/StringReader';
-import { TemplatePipe } from '@/types/TemplatePipe';
+import { LocalizationStringChildNode } from '#interface/LocalizationStringChildNode';
+import { LocalizationStringParentNode } from '#interface/LocalizationStringParentNode';
+import { LocalizationStringTemplateKind } from '#type/LocalizationStringTemplateKind';
+import { NodeKindImplIncludeTemplate } from '#nodeKindImpl/NodeKindImplIncludeTemplate';
+import { NodeKindImplMatchTemplate } from '#nodeKindImpl/NodeKindImplMatchTemplate';
+import { NodeKindImplOptionalTemplate } from '#nodeKindImpl/NodeKindImplOptionalTemplate';
+import { NodeKindImplRegularTemplate } from '#nodeKindImpl/NodeKindImplRegularTemplate';
+import { NodeKindImplScriptTemplate } from '#nodeKindImpl/NodeKindImplScriptTemplate';
+import { ParseError } from '#parser/ParseError';
+import { Primitive } from '#type/Primitive';
+import { StringReader } from '#parser/StringReader';
+import { TemplatePipe } from '#type/TemplatePipe';
 
 /** @internal */
 export class TemplateParser

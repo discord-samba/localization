@@ -1,22 +1,22 @@
 /* eslint-disable complexity */
-import { Localization } from '@/Localization';
-import { LocalizationPipeFunction } from '@/types/LocalizationPipeFunction';
-import { LocalizationResrouceMetaData } from '@/types/LocalizationResourceMetaData';
-import { LocalizationStringChildNode } from '@/interfaces/LocalizationStringChildNode';
-import { LocalizationStringChildResultNode } from '@/types/LocalizationStringChildResultNode';
-import { LocalizationStringError } from '@/LocalizationStringError';
-import { LocalizationStringNodeKind } from '@/types/LocalizationStringNodeKind';
-import { LocalizationStringParentNode } from '@/interfaces/LocalizationStringParentNode';
-import { LocalizationStringTypeDeclaration } from '@/types/LocalizationStringTypeDeclaration';
-import { NodeKindImplIncludeTemplate } from '@/nodeKindImpl/NodeKindImplIncludeTemplate';
-import { NodeKindImplMatchTemplate } from '@/nodeKindImpl/NodeKindImplMatchTemplate';
-import { NodeKindImplOptionalTemplate } from '@/nodeKindImpl/NodeKindImplOptionalTemplate';
-import { NodeKindImplRegularTemplate } from '@/nodeKindImpl/NodeKindImplRegularTemplate';
-import { NodeKindImplScriptTemplate } from '@/nodeKindImpl/NodeKindImplScriptTemplate';
-import { NodeKindImplStringChunk } from '@/nodeKindImpl/NodeKindImplStringChunk';
-import { Primitive } from '@/types/Primitive';
-import { TemplateArguments } from '@/types/TemplateArguments';
-import { TemplatePipe } from '@/types/TemplatePipe';
+import { Localization } from '#root/Localization';
+import { LocalizationPipeFunction } from '#type/LocalizationPipeFunction';
+import { LocalizationResrouceMetaData } from '#type/LocalizationResourceMetaData';
+import { LocalizationStringChildNode } from '#interface/LocalizationStringChildNode';
+import { LocalizationStringChildResultNode } from '#type/LocalizationStringChildResultNode';
+import { LocalizationStringError } from '#root/LocalizationStringError';
+import { LocalizationStringNodeKind } from '#type/LocalizationStringNodeKind';
+import { LocalizationStringParentNode } from '#interface/LocalizationStringParentNode';
+import { LocalizationStringTypeDeclaration } from '#type/LocalizationStringTypeDeclaration';
+import { NodeKindImplIncludeTemplate } from '#nodeKindImpl/NodeKindImplIncludeTemplate';
+import { NodeKindImplMatchTemplate } from '#nodeKindImpl/NodeKindImplMatchTemplate';
+import { NodeKindImplOptionalTemplate } from '#nodeKindImpl/NodeKindImplOptionalTemplate';
+import { NodeKindImplRegularTemplate } from '#nodeKindImpl/NodeKindImplRegularTemplate';
+import { NodeKindImplScriptTemplate } from '#nodeKindImpl/NodeKindImplScriptTemplate';
+import { NodeKindImplStringChunk } from '#nodeKindImpl/NodeKindImplStringChunk';
+import { Primitive } from '#type/Primitive';
+import { TemplateArguments } from '#type/TemplateArguments';
+import { TemplatePipe } from '#type/TemplatePipe';
 
 /**
  * Stores a localization string parent node and builds a string

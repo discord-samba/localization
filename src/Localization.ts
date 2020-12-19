@@ -1,12 +1,12 @@
-import { LocalizationCache } from '@/LocalizationCache';
-import { LocalizationFileLoader } from '@/loader/LocalizationFileLoader';
-import { LocalizationPipeFunction } from '@/types/LocalizationPipeFunction';
-import { LocalizationResourceProxy } from '@/types/LocalizationResourceProxy';
-import { LocalizationResrouceMetaData } from '@/types/LocalizationResourceMetaData';
-import { LocalizationStringBuilder } from '@/LocalizationStringBuilder';
-import { LocalizationStringError } from '@/LocalizationStringError';
-import { LocalizationStringParentNode } from '@/interfaces/LocalizationStringParentNode';
-import { TemplateArguments } from '@/types/TemplateArguments';
+import { LocalizationCache } from '#root/LocalizationCache';
+import { LocalizationFileLoader } from '#loader/LocalizationFileLoader';
+import { LocalizationPipeFunction } from '#type/LocalizationPipeFunction';
+import { LocalizationResourceProxy } from '#type/LocalizationResourceProxy';
+import { LocalizationResrouceMetaData } from '#type/LocalizationResourceMetaData';
+import { LocalizationStringBuilder } from '#root/LocalizationStringBuilder';
+import { LocalizationStringError } from '#root/LocalizationStringError';
+import { LocalizationStringParentNode } from '#interface/LocalizationStringParentNode';
+import { TemplateArguments } from '#type/TemplateArguments';
 
 /**
  * This is the main class of the Localization module. This class contains all

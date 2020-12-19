@@ -1,8 +1,8 @@
-import { LocalizationStringChildNode } from '@/interfaces/LocalizationStringChildNode';
-import { LocalizationStringNodeKind } from '@/types/LocalizationStringNodeKind';
-import { LocalizationStringParentKeyData } from '@/types/LocalizationStringParentKeyData';
-import { LocalizationStringParentNode } from '@/interfaces/LocalizationStringParentNode';
-import { LocalizationStringTypeDeclarationMapping } from '@/types/LocalizationStringTypeDeclarationMapping';
+import { LocalizationStringChildNode } from '#interface/LocalizationStringChildNode';
+import { LocalizationStringNodeKind } from '#type/LocalizationStringNodeKind';
+import { LocalizationStringParentKeyData } from '#type/LocalizationStringParentKeyData';
+import { LocalizationStringParentNode } from '#interface/LocalizationStringParentNode';
+import { LocalizationStringTypeDeclarationMapping } from '#type/LocalizationStringTypeDeclarationMapping';
 
 /**
  * Represents an abstract Localization resource parent node, of which all other

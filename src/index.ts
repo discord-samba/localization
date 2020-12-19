@@ -1,3 +1,3 @@
-export { Localization } from '@/Localization';
-export { LocalizationPipeFunction } from '@/types/LocalizationPipeFunction';
-export { commandInfoProvider } from '@/commandInfoProvider';
+export { Localization } from '#root/Localization';
+export { LocalizationPipeFunction } from '#type/LocalizationPipeFunction';
+export { commandInfoProvider } from '#root/commandInfoProvider';
