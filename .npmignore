@@ -10,7 +10,6 @@ bin/__test__/*
 
 README.md
 
-gulpfile.js
 tsconfig.json
 yarn.lock
 
