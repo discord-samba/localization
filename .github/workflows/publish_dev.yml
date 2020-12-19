@@ -31,13 +31,17 @@ jobs:
           git clone https://${{ github.actor }}:${{ secrets.DOCS_TOKEN }}@github.com/${{ github.repository }}.git -b staging ../staging
           cd ../staging
 
-          ## Delete everything but .git directory
+          # Delete everything but .git directory
           ls -la | grep -oP '\S+?(?<!\.git|\.)$' | xargs rm -rf
 
+          # Return to main repo directory
           cd ../$(echo '${{ github.repository }}' | grep -oP '/\K.+')
 
           # Copy src files to staging
           cp -a src/. ../staging/.
+
+          # Remove tests from staging, dont need to publish new build for test changes
+          rm -rf ../staging/__test__
 
           cd ../staging
           echo "##[set-output name=status;]$(git status | grep 'nothing to commit')"
