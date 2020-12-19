@@ -25,13 +25,39 @@ jobs:
       - name: Build package
         run: npm run build
 
-      - name: Generate dev version
+      - name: Clone staging, prep, and check for changes
         run: |
+          git clone https://${{ github.actor }}:${{ secrets.DOCS_TOKEN }}@github.com/${{ github.repository }}.git -b staging ../staging
+          cd ../staging
+
+          ## Delete everything but .git directory
+          ls -la | grep -oP '\S+?(?<!\.git|\.)$' | xargs rm -rf
+
+          cd ../$(echo '${{ github.repository }}' | grep -oP '/\K.+')
+
+          # Copy src files to staging
+          cp -a src/. ../staging/.
+
+          cd ../staging
+          echo "##[set-output name=status;]$(git status | grep 'nothing to commit')"
+
+      - name: Update staging
+        if: contains(steps.git_status.outputs.status, 'nothing to commit') != true
+        run: |
+          cd ../staging
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor}}@users.noreply.github.com"
+          git add --all
+          git commit -m "Push staging from: ${{ github.sha }}"
+          git push origin staging
+
+      - name: Generate dev version
+        if: contains(steps.git_status.outputs.status, 'nothing to commit') != true
+        run: |
           npm version $(cat package.json | grep -oP '"version": "\K[^"]+(?=")')-dev.$(git rev-parse --verify HEAD)
 
       - name: Publish to NPM
+        if: contains(steps.git_status.outputs.status, 'nothing to commit') != true
         run: npm publish --tag dev --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
