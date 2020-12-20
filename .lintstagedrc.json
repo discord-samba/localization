@@ -1,7 +1,7 @@
 {
 	"*.ts": [
 		"eslint",
-		"jest --bail --findRelatedTests"
+		"jest --findRelatedTests -c .jestrc.json"
 	],
 	"*.js": "eslint"
 }
