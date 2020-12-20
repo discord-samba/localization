@@ -12,8 +12,11 @@
 		"#root/*": "./bin/*.js"
 	},
 	"scripts": {
+		"clean": "rm -rf bin",
 		"build": "tsc --extendedDiagnostics",
-		"build:vscode": "eslint src --ext ts && jest && tsc --extendedDiagnostics",
+		"prebuild": "npm run clean",
+		"postbuild": "node scripts/postbuild",
+		"build:vscode": "npm run lint && npm run test && tsc --extendedDiagnostics",
 		"lint": "eslint src --ext ts",
 		"test": "jest"
 	},
