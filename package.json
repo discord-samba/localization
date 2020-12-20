@@ -18,7 +18,7 @@
 		"postbuild": "node scripts/postbuild",
 		"build:vscode": "npm run lint && npm run test && tsc --extendedDiagnostics",
 		"lint": "eslint src --ext ts",
-		"test": "jest"
+		"test": "jest -c .jestrc.json"
 	},
 	"repository": {
 		"type": "git",
@@ -49,70 +49,5 @@
 	},
 	"dependencies": {
 		"glob": "^7.1.4"
-	},
-	"eslintConfig": {
-		"extends": "@discord-samba"
-	},
-	"jest": {
-		"roots": [
-			"<rootDir>/src"
-		],
-		"transform": {
-			"^.+\\.ts$": "ts-jest"
-		},
-		"testRegex": "/__test__/.+\\.test\\.ts$",
-		"moduleNameMapper": {
-			"^#(interface|type)/(.*)$": "<rootDir>/src/$1s/$2",
-			"^#root/(.*)$": "<rootDir>/src/$1",
-			"^#(.*)/(.*)$": "<rootDir>/src/$1/$2"
-		},
-		"verbose": true
-	},
-	"husky": {
-		"hooks": {
-			"pre-commit": "lint-staged",
-			"commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-		}
-	},
-	"lint-staged": {
-		"*.ts": [
-			"eslint",
-			"jest --bail --findRelatedTests"
-		],
-		"*.js": "eslint"
-	},
-	"commitlint": {
-		"extends": [
-			"@commitlint/config-angular"
-		],
-		"rules": {
-			"scope-case": [
-				2,
-				"always",
-				[
-					"pascal-case",
-					"lower-case",
-					"kebab-case"
-				]
-			],
-			"type-enum": [
-				2,
-				"always",
-				[
-					"chore",
-					"build",
-					"ci",
-					"docs",
-					"feat",
-					"fix",
-					"perf",
-					"refactor",
-					"revert",
-					"style",
-					"test",
-					"tooling"
-				]
-			]
-		}
 	}
 }

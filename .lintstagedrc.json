@@ -1,0 +1,7 @@
+{
+	"*.ts": [
+		"eslint",
+		"jest --bail --findRelatedTests"
+	],
+	"*.js": "eslint"
+}
