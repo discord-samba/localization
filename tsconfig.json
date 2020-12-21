@@ -16,11 +16,11 @@
 		"outDir": "./bin",
 		"baseUrl": ".",
 		"paths": {
-			"#interface/*": ["./src/interfaces/*.js"],
-			"#loader/*": ["./src/loader/*.js"],
-			"#nodeKindImpl/*":[ "./src/nodeKindImpl/*.js"],
-			"#parser/*": ["./src/parser/*.js"],
-			"#type/*": ["./src/types/*.js"],
+			"#interface/*": ["./src/interfaces/*"],
+			"#loader/*": ["./src/loader/*"],
+			"#nodeKindImpl/*":[ "./src/nodeKindImpl/*"],
+			"#parser/*": ["./src/parser/*"],
+			"#type/*": ["./src/types/*"],
 			"#root/*": ["./src/*"]
 		}
 	},
