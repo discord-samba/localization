@@ -11,7 +11,7 @@ The latest stable release of the module will always be available via the `@lates
 npm install @discord-samba/localization@latest
 ```
 
-Dev builds are published automatically after every commit to the `master` branch and are available
+Dev builds are published automatically after every commit to the `main` branch and are available
 via the `@dev` tag on NPM.
 
 ```
