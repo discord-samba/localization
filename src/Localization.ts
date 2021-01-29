@@ -186,7 +186,7 @@ export class Localization
 	 *     [language, category]              // Defaults to 'default'' subcategory
 	 *     [language]                        // Defaults to 'default' category, 'default' subcategory
 	 */
-	public static getResourceProxy<T = {}>(
+	public static getResourceProxy<T extends Record<string, Record<string, any>> = {}>(
 		path: string | [string] | [string, string] | [string, string, string]
 	): LocalizationResourceProxy<T>
 	{
