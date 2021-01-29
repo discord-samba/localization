@@ -11,7 +11,8 @@
  *
  * ```ts
  * type Resources = { foo: { bar: string, baz?: number } };
- * let foo: LocalizationResourceProxy<Resources>.foo({ bar: 'baz' });
+ * const proxy: LocalizationResourceProxy<Resources> = Localization.getResourceProxy('en-US');
+ * const foo: string = proxy.foo({ bar: 'baz' });
  * // The compiler knows that the value of `bar` should be a string, and
  * // that `baz` expects a number but is optional
  * ```
