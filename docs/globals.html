@@ -2582,7 +2582,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Localization<wbr>Resource<wbr>Proxy&lt;T&gt;<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">object</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/types/LocalizationResourceProxy.ts#L19">src/types/LocalizationResourceProxy.ts:19</a></li>
+						<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/types/LocalizationResourceProxy.ts#L20">src/types/LocalizationResourceProxy.ts:20</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-comment tsd-typography">
@@ -2597,7 +2597,8 @@ img {
 						key names (methods on the proxy) and the template arguments they expect.
 					Example:</p>
 					<pre><code class="language-ts"><span class="hljs-keyword">type</span> Resources = { <span class="hljs-attr">foo</span>: { <span class="hljs-attr">bar</span>: <span class="hljs-built_in">string</span>, baz?: <span class="hljs-built_in">number</span> } };
-<span class="hljs-keyword">let</span> foo: LocalizationResourceProxy&lt;Resources&gt;.foo({ <span class="hljs-attr">bar</span>: <span class="hljs-string">&#x27;baz&#x27;</span> });
+<span class="hljs-keyword">const</span> proxy: LocalizationResourceProxy&lt;Resources&gt; = Localization.getResourceProxy(<span class="hljs-string">&#x27;en-US&#x27;</span>);
+<span class="hljs-keyword">const</span> foo: <span class="hljs-built_in">string</span> = proxy.foo({ <span class="hljs-attr">bar</span>: <span class="hljs-string">&#x27;baz&#x27;</span> });
 <span class="hljs-comment">// The compiler knows that the value of `bar` should be a string, and</span>
 <span class="hljs-comment">// that `baz` expects a number but is optional</span></code></pre>
 				</div>
