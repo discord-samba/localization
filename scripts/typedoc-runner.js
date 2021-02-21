@@ -9,7 +9,7 @@ app.bootstrap({
 	target: 'es2017',
 	mode: 'file',
 	module: 'commonjs',
-	theme: 'node_modules/@discord-samba/typedoc-themes/bin/minimal',
+	theme: 'node_modules/@discord-samba/typedoc-themes/bin/default',
 	exclude: './**/+(node_modules|__test__|)/**/*.ts',
 	excludePrivate: true,
 	out: '../docs',
