@@ -111,11 +111,11 @@ export class LocalizationStringBuilder
 					const matchTemplateArgValue: any = this._runPipes(args[child.key], child.pipes, _meta);
 					let matchValue!: Primitive;
 
-					for (const matcher of child.matchers)
+					for (const [pattern, value] of child.matchers)
 					{
-						if (matchTemplateArgValue === matcher[0])
+						if (matchTemplateArgValue === pattern)
 						{
-							matchValue = matcher[1];
+							matchValue = value;
 							break;
 						}
 					}
