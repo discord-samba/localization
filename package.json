@@ -1,0 +1,52 @@
+{
+	"name": "@discord-samba/localization",
+	"version": "0.1.0",
+	"description": "Localization module for Discord-Samba",
+	"main": "bin/index.js",
+	"imports": {
+		"#interface/*": "./bin/interfaces/*.js",
+		"#loader/*": "./bin/loader/*.js",
+		"#nodeKindImpl/*": "./bin/nodeKindImpl/*.js",
+		"#parser/*": "./bin/parser/*.js",
+		"#type/*": "./bin/types/*.js",
+		"#root/*": "./bin/*.js"
+	},
+	"scripts": {
+		"clean": "rm -rf bin",
+		"build": "tsc --extendedDiagnostics",
+		"prebuild": "npm run clean",
+		"postbuild": "node scripts/postbuild",
+		"build:vscode": "npm run lint && npm run test && tsc --extendedDiagnostics",
+		"lint": "eslint . --ext ts,js --ignore-pattern bin",
+		"test": "jest -c .jestrc.json"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/discord-samba/localization.git"
+	},
+	"author": "Zack Campbell",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/discord-samba/localization/issues"
+	},
+	"homepage": "https://github.com/discord-samba/localization#readme",
+	"devDependencies": {
+		"@commitlint/cli": "^12.0.1",
+		"@commitlint/config-angular": "^12.0.1",
+		"@discord-samba/eslint-config": "github:discord-samba/eslint-config",
+		"@discord-samba/typedoc-patch": "github:discord-samba/typedoc-patch",
+		"@types/glob": "^7.1.1",
+		"@types/jest": "^26.0.9",
+		"@types/node": "^14.14.14",
+		"eslint": "^7.16.0",
+		"husky": "^5.0.9",
+		"jest": "^26.6.3",
+		"lint-staged": "^10.5.3",
+		"ts-jest": "^26.4.4",
+		"typedoc": "^0.20.27",
+		"typescript": "^4.1.3"
+	},
+	"dependencies": {
+		"glob": "^7.1.4"
+	}
+}
