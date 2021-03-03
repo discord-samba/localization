@@ -12,7 +12,6 @@
 		"#root/*": "./bin/*.js"
 	},
 	"scripts": {
-		"postinstall": "husky install",
 		"clean": "rm -rf bin",
 		"build": "tsc --extendedDiagnostics",
 		"prebuild": "npm run clean",
