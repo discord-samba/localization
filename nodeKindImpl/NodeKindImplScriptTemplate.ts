@@ -1,4 +1,4 @@
-import { LocalizationResrouceMetaData } from '#type/LocalizationResourceMetaData';
+import { LocalizationResourceMetaData } from '#type/LocalizationResourceMetaData';
 import { LocalizationStringChildNode } from '#interface/LocalizationStringChildNode';
 import { LocalizationStringNodeKind } from '#type/LocalizationStringNodeKind';
 import { LocalizationStringParentNode } from '#interface/LocalizationStringParentNode';
@@ -154,7 +154,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 	 * Create a new Error from the given Error that reports the file/key
 	 * of the script template that the error was thrown from
 	 */
-	private _newErr(err: Error, _meta: LocalizationResrouceMetaData): Error
+	private _newErr(err: Error, _meta: LocalizationResourceMetaData): Error
 	{
 		const error: Error = new Error();
 		const stack: string[] = [];
@@ -174,7 +174,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 	/**
 	 * Try calling the script template's fn or implFn and return the result
 	 */
-	public fn(args: TemplateArguments, _meta: LocalizationResrouceMetaData): string | undefined
+	public fn(args: TemplateArguments, _meta: LocalizationResourceMetaData): string | undefined
 	{
 		let result: any;
 		let error!: Error;

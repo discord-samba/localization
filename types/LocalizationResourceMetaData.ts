@@ -1,7 +1,7 @@
 import { LocalizationResourceProxy } from '#type/LocalizationResourceProxy';
 
 /** @internal */
-export interface LocalizationResrouceMetaData
+export interface LocalizationResourceMetaData
 {
 	// Call location
 	_cl?: string;

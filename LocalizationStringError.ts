@@ -1,5 +1,5 @@
 import * as FS from 'fs';
-import { LocalizationResrouceMetaData } from '#type/LocalizationResourceMetaData';
+import { LocalizationResourceMetaData } from '#type/LocalizationResourceMetaData';
 
 /**
  * Represents a runtime error in the Localization engine
@@ -15,7 +15,7 @@ export class LocalizationStringError extends Error
 		container: string,
 		line: number,
 		column: number,
-		_meta: LocalizationResrouceMetaData = {}
+		_meta: LocalizationResourceMetaData = {}
 	)
 	{
 		super(message);

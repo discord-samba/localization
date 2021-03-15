@@ -1,4 +1,4 @@
-import { LocalizationResrouceMetaData } from './LocalizationResourceMetaData';
+import { LocalizationResourceMetaData } from './LocalizationResourceMetaData';
 import { ResourcePath } from './ResourcePath';
 import { TemplateArguments } from './TemplateArguments';
 
@@ -13,6 +13,6 @@ export interface InternalLocalization
 		path: ResourcePath,
 		key: string,
 		args: TemplateArguments,
-		_meta: LocalizationResrouceMetaData
+		_meta: LocalizationResourceMetaData
 	): string;
 }

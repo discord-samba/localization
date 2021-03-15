@@ -1,4 +1,4 @@
-import { LocalizationResrouceMetaData } from './LocalizationResourceMetaData';
+import { LocalizationResourceMetaData } from './LocalizationResourceMetaData';
 import { TemplateArguments } from './TemplateArguments';
 
 /**
@@ -7,5 +7,5 @@ import { TemplateArguments } from './TemplateArguments';
  */
 export interface InternalResourceProxy
 {
-	[key: string]: (args: TemplateArguments, _meta: LocalizationResrouceMetaData) => string;
+	[key: string]: (args: TemplateArguments, _meta: LocalizationResourceMetaData) => string;
 }
