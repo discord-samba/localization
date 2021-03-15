@@ -297,26 +297,28 @@ export class LocalizationCache
 	}
 
 	/**
-	 * Returns whether or not the cache has a LocalizationPipeFunction for the given key
+	 * Returns whether or not the cache has a `LocalizationPipeFunction` with the
+	 * given identifier
 	 */
-	public static hasPipeFunction(key: string): boolean
+	public static hasPipeFunction(ident: string): boolean
 	{
-		return LocalizationCache._instance._pipeCache.has(key);
+		return LocalizationCache._instance._pipeCache.has(ident);
 	}
 
 	/**
-	 * Adds a LocalizationPipeFunction for the given key to the cache
+	 * Adds a `LocalizationPipeFunction` with the given identifier to the cache
 	 */
-	public static addPipeFunction(key: string, fn: LocalizationPipeFunction): void
+	public static addPipeFunction(ident: string, fn: LocalizationPipeFunction): void
 	{
-		LocalizationCache._instance._pipeCache.set(key, fn);
+		LocalizationCache._instance._pipeCache.set(ident, fn);
 	}
 
 	/**
-	 * Gets a LocalizationPipeFunction for the given key from the cache and returns it
+	 * Gets the `LocalizationPipeFunction` with the given identifier from the cache
+	 * and returns it
 	 */
-	public static getPipeFunction(key: string): LocalizationPipeFunction | undefined
+	public static getPipeFunction(ident: string): LocalizationPipeFunction | undefined
 	{
-		return LocalizationCache._instance._pipeCache.get(key);
+		return LocalizationCache._instance._pipeCache.get(ident);
 	}
 }

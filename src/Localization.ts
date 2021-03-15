@@ -1,3 +1,5 @@
+import { InternalLocalization } from '#type/InternalLocalization';
+import { InternalResourceProxy } from '#type/InternalResourceProxy';
 import { LocalizationCache } from '#root/LocalizationCache';
 import { LocalizationFileLoader } from '#loader/LocalizationFileLoader';
 import { LocalizationPipeFunction } from '#type/LocalizationPipeFunction';
@@ -58,14 +60,8 @@ export class Localization
 		_meta: LocalizationResrouceMetaData = {}
 	): string
 	{
-		let language: string;
-		let category: string;
-		let subcategory: string;
-
-		if (typeof path === 'string')
-			[language, category, subcategory] = [path, 'default', 'default'];
-		else
-			[language, category = 'default', subcategory = 'default'] = path;
+		const resourcePath: [string, string, string] = Localization._createPath(path);
+		const [language, category, subcategory] = resourcePath;
 
 		if (!LocalizationCache.hasLanguage(language))
 			throw new Error(`No language '${language}' has been loaded`);
@@ -89,49 +85,50 @@ export class Localization
 		// Push key to the current call chain
 		_meta._cc.push(key);
 
-		// Push the current key
+		// Set the current key
 		_meta._ck = key;
 
-		// Create proxy to forward args and _meta for use in script templates
+		// Create meta proxy to forward args and _meta for use in script templates
 		if (typeof _meta._mp === 'undefined')
 		{
 			_meta._mp = new Proxy({}, {
 				get: (_, _key: string) =>
 				{
-					// Handle recursion protection for script templates using the
-					// given resource proxy
-					if (_meta._cc?.includes(_key))
+					// Return resource call fn if this key hasn't been seen before
+					if (!_meta._cc?.includes(_key))
 					{
-						const parent: LocalizationStringParentNode =
-							LocalizationCache.get([language, category, subcategory], key)?.node!;
+						const proxy: InternalResourceProxy = Localization.getResourceProxy(path);
+						return (_args: TemplateArguments = args): string => proxy[_key](_args, _meta);
+					}
 
-						throw new LocalizationStringError(
-							'A localization resource cannot refer to any previous parent',
-							parent?.container,
-							parent?.line,
-							parent?.column,
-							_meta
-						);
-					}
-					else
-					{
-						const proxy: LocalizationResourceProxy = Localization.getResourceProxy(path);
-						return (_args: TemplateArguments = args): string =>
-							(proxy as any)[_key](_args, _meta);
-					}
+					// Parent is guaranteed to exist at this point since this proxy
+					// would never be accessed if it didn't, so this assertion is safe
+					const parent: LocalizationStringParentNode = LocalizationCache.get(resourcePath, key)?.node!;
+
+					// Throw resource recursion error
+					throw new LocalizationStringError(
+						'A localization resource cannot refer to any previous parent',
+						parent?.container,
+						parent?.line,
+						parent?.column,
+						_meta
+					);
 				}
 			}) as LocalizationResourceProxy;
 		}
 
-		let builder: LocalizationStringBuilder =
-			LocalizationCache.get([language, category, subcategory], key)!;
+		// Get string builder for the given resource path & key
+		let builder: LocalizationStringBuilder | undefined = LocalizationCache.get(resourcePath, key);
 
+		// Try fallback lang if builder was not found
 		if (typeof builder === 'undefined' && typeof LocalizationCache.fallbackLanguage !== 'undefined')
-			builder = LocalizationCache.get([LocalizationCache.fallbackLanguage, category, subcategory], key)!;
+			builder = LocalizationCache.get([LocalizationCache.fallbackLanguage, category, subcategory], key);
 
+		// Return default string if fallback builder was not found
 		if (typeof builder === 'undefined')
 			return `${language}::${category}::${subcategory}::${key}`;
 
+		// Build and return the Localization resource
 		return builder.build(args, _meta);
 	}
 
@@ -143,47 +140,31 @@ export class Localization
 	 */
 	public static resourceExists(path: ResourcePath, key: string): boolean
 	{
-		let language: string;
-		let category: string;
-		let subcategory: string;
-
-		if (typeof path === 'string')
-			[language, category, subcategory] = [path, 'default', 'default'];
-		else
-			[language, category = 'default', subcategory = 'default'] = path;
-
-		return LocalizationCache.has([language, category, subcategory], key);
+		return LocalizationCache.has(Localization._createPath(path), key);
 	}
 
 	/**
-	 * Gets a `LocalizationResourceProxy` for the given path. See {@link LocalizationResourceProxy}
-	 * Uses a cached resource proxy if one already exists for the given path
+	 * Gets a [[`LocalizationResourceProxy`]] for the given path. Uses a cached
+	 * resource proxy if one already exists for the given path
 	 */
 	public static getResourceProxy<T extends {} = {}>(path: ResourcePath): LocalizationResourceProxy<T>
 	{
-		let language: string;
-		let category: string;
-		let subcategory: string;
+		const resourcePath: [string, string, string] = Localization._createPath(path);
 
-		if (typeof path === 'string')
-			[language, category, subcategory] = [path, 'default', 'default'];
-		else
-			[language, category = 'default', subcategory = 'default'] = path;
-
-		if (LocalizationCache.hasProxy([language, category, subcategory]))
-			return LocalizationCache.getProxy([language, category, subcategory]) as LocalizationResourceProxy<T>;
+		if (LocalizationCache.hasProxy(resourcePath))
+			return LocalizationCache.getProxy(resourcePath) as LocalizationResourceProxy<T>;
 
 		const proxy: LocalizationResourceProxy<T> = new Proxy({}, {
 			get: (_, key: string) =>
-				(args?: TemplateArguments, _meta: LocalizationResrouceMetaData = {}): string =>
+				(args: TemplateArguments = {}, _meta: LocalizationResrouceMetaData = {}): string =>
 				{
 					_meta._ip = true;
-					return (Localization.resource as any)([language, category, subcategory], key, args, _meta);
+					return (Localization as InternalLocalization).resource(resourcePath, key, args, _meta);
 				}
 		}) as LocalizationResourceProxy<T>;
 
 		// Cache the new proxy for future use
-		LocalizationCache.setProxy([language, category, subcategory], proxy);
+		LocalizationCache.setProxy(resourcePath, proxy);
 
 		return proxy;
 	}
@@ -194,39 +175,49 @@ export class Localization
 	 */
 	public static getKeys(path: ResourcePath): string[]
 	{
+		return LocalizationCache.getKeys(Localization._createPath(path));
+	}
+
+	/**
+	 * Returns whether or not the cache has a [[LocalizationPipeFunction]] with
+	 * the given identifier
+	 */
+	public static hasPipeFunction(ident: string): boolean
+	{
+		return LocalizationCache.hasPipeFunction(ident);
+	}
+
+	/**
+	 * Adds a [[LocalizationPipeFunction]] with the given identifier to the cache
+	 */
+	public static addPipeFunction(idenbt: string, fn: LocalizationPipeFunction): void
+	{
+		LocalizationCache.addPipeFunction(idenbt, fn);
+	}
+
+	/**
+	 * Gets the [[LocalizationPipeFunction]] with the given identifier from the
+	 * cache and returns it
+	 */
+	public static getPipeFunction(ident: string): LocalizationPipeFunction | undefined
+	{
+		return LocalizationCache.getPipeFunction(ident);
+	}
+
+	/**
+	 * Creates a usable path from the given ResourcePath
+	 */
+	private static _createPath(fromPath: ResourcePath): [string, string, string]
+	{
 		let language: string;
 		let category: string;
 		let subcategory: string;
 
-		if (typeof path === 'string')
-			[language, category, subcategory] = [path, 'default', 'default'];
+		if (typeof fromPath === 'string')
+			[language, category, subcategory] = [fromPath, 'default', 'default'];
 		else
-			[language, category = 'default', subcategory = 'default'] = path;
+			[language, category = 'default', subcategory = 'default'] = fromPath;
 
-		return LocalizationCache.getKeys([language, category, subcategory]);
-	}
-
-	/**
-	 * Returns whether or not the cache has a [[LocalizationPipeFunction]] for the given key
-	 */
-	public static hasPipeFunction(key: string): boolean
-	{
-		return LocalizationCache.hasPipeFunction(key);
-	}
-
-	/**
-	 * Adds a [[LocalizationPipeFunction]] for the given key to the cache
-	 */
-	public static addPipeFunction(key: string, fn: LocalizationPipeFunction): void
-	{
-		LocalizationCache.addPipeFunction(key, fn);
-	}
-
-	/**
-	 * Gets a [[LocalizationPipeFunction]] for the given key from the cache and returns it
-	 */
-	public static getPipeFunction(key: string): LocalizationPipeFunction | undefined
-	{
-		return LocalizationCache.getPipeFunction(key);
+		return [language, category, subcategory];
 	}
 }

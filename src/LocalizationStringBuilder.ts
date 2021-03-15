@@ -1,4 +1,5 @@
 /* eslint-disable complexity */
+import { InternalLocalization } from '#type/InternalLocalization';
 import { Localization } from '#root/Localization';
 import { LocalizationPipeFunction } from '#type/LocalizationPipeFunction';
 import { LocalizationResrouceMetaData } from '#type/LocalizationResourceMetaData';
@@ -98,7 +99,7 @@ export class LocalizationStringBuilder
 						);
 
 					const includeTemplateValue: any = this._runPipes(
-						(Localization.resource as any)(path, child.includeKey, args, _meta),
+						(Localization as InternalLocalization).resource(path, child.includeKey, args, _meta),
 						child.pipes,
 						_meta
 					);
