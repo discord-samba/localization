@@ -227,24 +227,24 @@
 					<a name="addpipefunction" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> add<wbr>Pipe<wbr>Function</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Pipe<wbr>Function<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fn<span class="tsd-signature-symbol">: </span><a href="../modules.html#localizationpipefunction" class="tsd-signature-type" data-tsd-kind="Type alias">LocalizationPipeFunction</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Pipe<wbr>Function<span class="tsd-signature-symbol">(</span>idenbt<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, fn<span class="tsd-signature-symbol">: </span><a href="../modules.html#localizationpipefunction" class="tsd-signature-type" data-tsd-kind="Type alias">LocalizationPipeFunction</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L220">Localization.ts:220</a></li>
+									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L193">Localization.ts:193</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Adds a <a href="../modules.html#localizationpipefunction">LocalizationPipeFunction</a> for the given key to the cache</p>
+									<p>Adds a <a href="../modules.html#localizationpipefunction">LocalizationPipeFunction</a> with the given identifier to the cache</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<h5>idenbt: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
 									<h5>fn: <a href="../modules.html#localizationpipefunction" class="tsd-signature-type" data-tsd-kind="Type alias">LocalizationPipeFunction</a></h5>
@@ -264,7 +264,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L195">Localization.ts:195</a></li>
+									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L176">Localization.ts:176</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -287,24 +287,25 @@
 					<a name="getpipefunction" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> get<wbr>Pipe<wbr>Function</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Pipe<wbr>Function<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../modules.html#localizationpipefunction" class="tsd-signature-type" data-tsd-kind="Type alias">LocalizationPipeFunction</a></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Pipe<wbr>Function<span class="tsd-signature-symbol">(</span>ident<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../modules.html#localizationpipefunction" class="tsd-signature-type" data-tsd-kind="Type alias">LocalizationPipeFunction</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L228">Localization.ts:228</a></li>
+									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L202">Localization.ts:202</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Gets a <a href="../modules.html#localizationpipefunction">LocalizationPipeFunction</a> for the given key from the cache and returns it</p>
+									<p>Gets the <a href="../modules.html#localizationpipefunction">LocalizationPipeFunction</a> with the given identifier from the
+									cache and returns it</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<h5>ident: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><a href="../modules.html#localizationpipefunction" class="tsd-signature-type" data-tsd-kind="Type alias">LocalizationPipeFunction</a></h4>
@@ -321,13 +322,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L162">Localization.ts:162</a></li>
+									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L150">Localization.ts:150</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Gets a <code>LocalizationResourceProxy</code> for the given path. See <a href="../modules.html#localizationresourceproxy">LocalizationResourceProxy</a>
-									Uses a cached resource proxy if one already exists for the given path</p>
+									<p>Gets a <a href="../modules.html#localizationresourceproxy"><code>LocalizationResourceProxy</code></a> for the given path. Uses a cached
+									resource proxy if one already exists for the given path</p>
 								</div>
 							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -350,24 +351,25 @@
 					<a name="haspipefunction" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> has<wbr>Pipe<wbr>Function</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">has<wbr>Pipe<wbr>Function<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">has<wbr>Pipe<wbr>Function<span class="tsd-signature-symbol">(</span>ident<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L212">Localization.ts:212</a></li>
+									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L185">Localization.ts:185</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns whether or not the cache has a <a href="../modules.html#localizationpipefunction">LocalizationPipeFunction</a> for the given key</p>
+									<p>Returns whether or not the cache has a <a href="../modules.html#localizationpipefunction">LocalizationPipeFunction</a> with
+									the given identifier</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<h5>ident: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -384,7 +386,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L23">Localization.ts:23</a></li>
+									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L25">Localization.ts:25</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -416,7 +418,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L31">Localization.ts:31</a></li>
+									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L33">Localization.ts:33</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -447,7 +449,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L49">Localization.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L51">Localization.ts:51</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -482,7 +484,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L144">Localization.ts:144</a></li>
+									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L141">Localization.ts:141</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -517,7 +519,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L40">Localization.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/discord-samba/localization/blob/main/src/Localization.ts#L42">Localization.ts:42</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
