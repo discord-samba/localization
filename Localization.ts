@@ -6,6 +6,7 @@ import { LocalizationResrouceMetaData } from '#type/LocalizationResourceMetaData
 import { LocalizationStringBuilder } from '#root/LocalizationStringBuilder';
 import { LocalizationStringError } from '#root/LocalizationStringError';
 import { LocalizationStringParentNode } from '#interface/LocalizationStringParentNode';
+import { ResourcePath } from '#type/ResourcePath';
 import { TemplateArguments } from '#type/TemplateArguments';
 
 /**
@@ -42,27 +43,16 @@ export class Localization
 	}
 
 	/**
-	 * Fetches a Localization string resource for the given path. The string
-	 * will be built using the given arguments.
-	 *
-	 * Accepts a language string, or accepts a string tuple matching
-	 * any of the following patterns:
-	 *
-	 *     [language, category, subcategory] // Self-explanatory
-	 *     [language, category]              // Defaults to 'default'' subcategory
-	 *     [language]                        // Defaults to 'default' category, 'default' subcategory
+	 * Fetches a Localization string resource for the given path and key. The string
+	 * will be built using the given arguments
 	 */
-	public static resource(
-		path: string | [string] | [string, string] | [string, string, string],
-		key: string,
-		args?: TemplateArguments
-	): string;
+	public static resource(path: ResourcePath, key: string, args?: TemplateArguments): string;
 
 	// Cast to `any` for passing _meta as TS will reject it otherwise. Only the first
 	// overload is counted in the public method signature, which is desired as _meta
 	// is a mechanic handled internally
 	public static resource(
-		path: string | [string] | [string, string] | [string, string, string],
+		path: ResourcePath,
 		key: string,
 		args: TemplateArguments = {},
 		_meta: LocalizationResrouceMetaData = {}
@@ -149,19 +139,9 @@ export class Localization
 	 * Returns whether or not a Localization resource exists for the
 	 * given path.
 	 *
-	 * Accepts a language string, or accepts a string tuple matching
-	 * any of the following patterns:
-	 *
-	 *     [language, category, subcategory] // Self-explanatory
-	 *     [language, category]              // Defaults to 'default'' subcategory
-	 *     [language]                        // Defaults to 'default' category, 'default' subcategory
-	 *
 	 * >**NOTE:** Does not check the fallback language
 	 */
-	public static resourceExists(
-		path: string | [string] | [string, string] | [string, string, string],
-		key: string
-	): boolean
+	public static resourceExists(path: ResourcePath, key: string): boolean
 	{
 		let language: string;
 		let category: string;
@@ -178,17 +158,8 @@ export class Localization
 	/**
 	 * Gets a `LocalizationResourceProxy` for the given path. See {@link LocalizationResourceProxy}
 	 * Uses a cached resource proxy if one already exists for the given path
-	 *
-	 * Accepts a language string, or accepts a string tuple matching
-	 * any of the following patterns:
-	 *
-	 *     [language, category, subcategory] // Self-explanatory
-	 *     [language, category]              // Defaults to 'default'' subcategory
-	 *     [language]                        // Defaults to 'default' category, 'default' subcategory
 	 */
-	public static getResourceProxy<T extends Record<string, Record<string, any>> = {}>(
-		path: string | [string] | [string, string] | [string, string, string]
-	): LocalizationResourceProxy<T>
+	public static getResourceProxy<T extends {} = {}>(path: ResourcePath): LocalizationResourceProxy<T>
 	{
 		let language: string;
 		let category: string;
@@ -218,12 +189,10 @@ export class Localization
 	}
 
 	/**
-	 * Returns an array of resource keys for the given language path.
-	 * The array will be empty if none exist.
+	 * Returns an array of resource keys for the given resource path. The array
+	 * will be empty if none exist.
 	 */
-	public static getKeys(
-		path: string | [string] | [string, string] | [string, string, string]
-	): string[]
+	public static getKeys(path: ResourcePath): string[]
 	{
 		let language: string;
 		let category: string;
