@@ -17,7 +17,7 @@
  * // that `baz` expects a number but is optional
  * ```
  */
-export type LocalizationResourceProxy<T extends Record<string, Record<string, any>> = {}> = {
+export type LocalizationResourceProxy<T extends {} = {}> = {
 	[K in keyof T]: T[K] extends Record<string, never>
 		? (args?: T[K] & Record<string, any>) => string
 		: (args: T[K] & Record<string, any>) => string;
