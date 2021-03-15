@@ -118,7 +118,7 @@ export class NodeKindImplScriptTemplate implements LocalizationStringChildNode
 			// adds a line to the reported line number in the original error message, so we have to ignore that
 			// extra line in those cases to get an accurate error line number for our custom error here
 
-			const lineOffset: number = -2 - numArgs + this.line	+ (
+			const lineOffset: number = -2 - numArgs + this.line + (
 				this.line !== this.bodyStartLine
 					? /^[\t\f\v ]+/.test(originalFnBody)
 						? 0
