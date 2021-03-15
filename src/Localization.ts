@@ -3,8 +3,8 @@ import { InternalResourceProxy } from '#type/InternalResourceProxy';
 import { LocalizationCache } from '#root/LocalizationCache';
 import { LocalizationFileLoader } from '#loader/LocalizationFileLoader';
 import { LocalizationPipeFunction } from '#type/LocalizationPipeFunction';
+import { LocalizationResourceMetaData } from '#type/LocalizationResourceMetaData';
 import { LocalizationResourceProxy } from '#type/LocalizationResourceProxy';
-import { LocalizationResrouceMetaData } from '#type/LocalizationResourceMetaData';
 import { LocalizationStringBuilder } from '#root/LocalizationStringBuilder';
 import { LocalizationStringError } from '#root/LocalizationStringError';
 import { LocalizationStringParentNode } from '#interface/LocalizationStringParentNode';
@@ -57,7 +57,7 @@ export class Localization
 		path: ResourcePath,
 		key: string,
 		args: TemplateArguments = {},
-		_meta: LocalizationResrouceMetaData = {}
+		_meta: LocalizationResourceMetaData = {}
 	): string
 	{
 		const resourcePath: [string, string, string] = Localization._createPath(path);
@@ -156,7 +156,7 @@ export class Localization
 
 		const proxy: LocalizationResourceProxy<T> = new Proxy({}, {
 			get: (_, key: string) =>
-				(args: TemplateArguments = {}, _meta: LocalizationResrouceMetaData = {}): string =>
+				(args: TemplateArguments = {}, _meta: LocalizationResourceMetaData = {}): string =>
 				{
 					_meta._ip = true;
 					return (Localization as InternalLocalization).resource(resourcePath, key, args, _meta);

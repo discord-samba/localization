@@ -2,7 +2,7 @@
 import { InternalLocalization } from '#type/InternalLocalization';
 import { Localization } from '#root/Localization';
 import { LocalizationPipeFunction } from '#type/LocalizationPipeFunction';
-import { LocalizationResrouceMetaData } from '#type/LocalizationResourceMetaData';
+import { LocalizationResourceMetaData } from '#type/LocalizationResourceMetaData';
 import { LocalizationStringChildNode } from '#interface/LocalizationStringChildNode';
 import { LocalizationStringChildResultNode } from '#type/LocalizationStringChildResultNode';
 import { LocalizationStringError } from '#root/LocalizationStringError';
@@ -39,7 +39,7 @@ export class LocalizationStringBuilder
 	/**
 	 * Builds the output string from the cached Localization string node
 	 */
-	public build(args: TemplateArguments, _meta: LocalizationResrouceMetaData): string
+	public build(args: TemplateArguments, _meta: LocalizationResourceMetaData): string
 	{
 		const maybeKinds: LocalizationStringNodeKind[] = [
 			LocalizationStringNodeKind.OptionalTemplate,
@@ -165,7 +165,7 @@ export class LocalizationStringBuilder
 	 * Validate the given arguments in the context of the cached parent node,
 	 * erroring on invalid types and missing required arguments
 	 */
-	private _validateArguments(args: TemplateArguments, _meta: LocalizationResrouceMetaData): void
+	private _validateArguments(args: TemplateArguments, _meta: LocalizationResourceMetaData): void
 	{
 		for (const ident of Object.keys(this.node.params))
 		{
@@ -211,7 +211,7 @@ export class LocalizationStringBuilder
 	private _validateType(
 		declaration: LocalizationStringTypeDeclaration,
 		value: any,
-		_meta: LocalizationResrouceMetaData
+		_meta: LocalizationResourceMetaData
 	): void
 	{
 		if (declaration.identType === 'any' || typeof value === declaration.identType)
@@ -262,7 +262,7 @@ export class LocalizationStringBuilder
 	private _runPipes(
 		value: string,
 		pipes: TemplatePipe[],
-		_meta: LocalizationResrouceMetaData
+		_meta: LocalizationResourceMetaData
 	): any
 	{
 		let result: any = value;
