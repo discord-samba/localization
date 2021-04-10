@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/indent */
+
 /**
  * Represnts the kinds of templates we can expect to encounter within a
  * Localization resource
